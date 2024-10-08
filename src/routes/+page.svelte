@@ -1,4 +1,7 @@
 <script>
+    import { markets } from '$lib/marketData.js'; // Importing the market data
+    import MarketList from './MarketList.svelte'; // Importing MarketList component
+
     let isActive = false; // track if the location button has been clicked
 
     let filters = [
@@ -49,32 +52,23 @@
         {/each}
     </div>
 
-	<!-- Filters and Map -->
+	<!-- Main Content Area -->
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 		<!-- Product Cards (Left side) -->
 		<div class="bg-white p-4 rounded-lg shadow-md">
-			<h2 class="font-bold text-lg">K-Market Otaniemi</h2>
-			<p class="text-gray-600">Otaniementie 12, 02150 Espoo</p>
-			<div class="grid grid-cols-2 gap-4 mt-4">
-				<div class="border rounded-lg p-4">
-					<img src="veggie.jpg" alt="Veggie batch" class="w-full rounded-lg" />
-					<p class="font-semibold mt-2">Veggie batch</p>
-					<p>5€</p>
-				</div>
-				<div class="border rounded-lg p-4">
-					<img src="bread.jpg" alt="Bread" class="w-full rounded-lg" />
-					<p class="font-semibold mt-2">Bread</p>
-					<p>5€</p>
-				</div>
-			</div>
+            <MarketList {markets} /> <!-- Displaying market list from external data -->
 		</div>
 
-		<!-- Map (Right side) -->
-		<div>
-			<img src="map.jpg" alt="Map" class="w-full rounded-lg shadow-lg" />
-		</div>
+        <!-- Conditionally Render Map -->
+        {#if isActive}
+            <!-- Map (Right side) -->
+            <div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d53741.55755073594!2d24.772337437262063!3d60.19087801280934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sfi!4v1728405815704!5m2!1sde!2sfi" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        {/if}
 	</div>
 </section>
 
 <style>
+    /* Optional custom styling */
 </style>
