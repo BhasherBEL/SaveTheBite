@@ -12,7 +12,7 @@
 			<span class="ml-2 text-gray-400 text-sm font-bold">{market.address}</span>
 			<div class="gap-4 mt-4 flex overflow-x-auto">
 				{#each market.batches as batch}
-					<div class="border rounded-lg p-2 flex-shrink-0">
+					<div class="border rounded-lg p-2 w-200 flex-shrink-0">
 						<img src={batch.picture} alt={batch.name} class="size-72 mx-auto rounded-lg" />
 						<p class="font-semibold mt-2">{batch.name}</p>
 						<p>{batch.price}€</p>
