@@ -1,7 +1,21 @@
 <script>
     let isActive = false; // track if the location button has been clicked
 
-    // Function to toggle active state
+    let filters = [
+        { name: "Vegetarian", active: false },
+        { name: "Vegan", active: false },
+        { name: "Fish", active: false },
+        { name: "Gluten free", active: false },
+        { name: "Egg free", active: false },
+        { name: "Non-Dairy", active: false }
+    ]; // Array to hold filter options
+
+    // Function to toggle active state for filter buttons
+    function toggleFilter(index) {
+        filters[index].active = !filters[index].active; // Toggle the active state
+    }
+
+    // Function to toggle active state of location icon / button
     function toggleActive() {
         isActive = !isActive; // Toggle the active state
     }
@@ -24,6 +38,16 @@
 			<i class={`fas fa-map-marker-alt ${isActive ? 'text-white' : 'text-gray-400 hover:text-green-500'} transition-colors duration-300`}></i>
 		</button>
 	</div>
+
+    <!-- Filter Options -->
+    <div class="flex justify-center mb-6">
+        {#each filters as filter, index}
+            <button
+                class={`px-1 py-0.5 mx-1 text-xs rounded-full transition-colors duration-300 ${filter.active ? 'bg-green-500 text-white' : 'bg-gray-200 hover:bg-green-500'}`} on:click={() => toggleFilter(index)}>
+                {filter.name}
+            </button>
+        {/each}
+    </div>
 
 	<!-- Filters and Map -->
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
