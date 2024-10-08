@@ -1,4 +1,10 @@
 <script>
+    let isActive = false; // track if the location button has been clicked
+
+    // Function to toggle active state
+    function toggleActive() {
+        isActive = !isActive; // Toggle the active state
+    }
 </script>
 
 <svelte:head>
@@ -7,12 +13,15 @@
 </svelte:head>
 
 <section class="p-8">
+	<!-- Text above the search bar -->
+    <h2 class="text-2xl font-bold mb-4 text-center">Every bite matters!</h2>
+
 	<!-- Search Bar -->
 	<div class="flex justify-center items-center mb-6">
 		<input type="text" class="w-1/2 p-4 border border-gray-300 rounded-lg shadow-sm"
 			placeholder="City, region, address, ..." />
-		<button class="p-4 ml-2 rounded-full bg-green-500 text-white">
-			<i class="fas fa-map-marker-alt"></i>
+		<button class={`p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500' : 'bg-white hover:bg-green-500'} shadow-md`} on:click={toggleActive}>
+			<i class={`fas fa-map-marker-alt ${isActive ? 'text-white' : 'text-gray-400 hover:text-green-500'} transition-colors duration-300`}></i>
 		</button>
 	</div>
 
