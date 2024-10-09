@@ -5,7 +5,7 @@
 	export let filters: { name: string; active: boolean | null }[];
 </script>
 
-<div class="max-h-screen p-4">
+<div class="p-4">
 	{#each markets as market}
 		<div class="bg-white p-4 rounded-lg shadow-md mb-4">
 			<span class="font-bold text-lg">{market.name}</span>
