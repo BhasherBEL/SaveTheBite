@@ -12,12 +12,18 @@
 	/>
 </svelte:head>
 
-<div class="app bg-gray-100 min-h-screen">
-	<Header />
+<div class="app bg-gray-100 min-h-screen flex flex-col">
+	<div class="flex-grow">
+		<Header />
 
-	<main class="container mx-auto p-4">
-		<slot />
-	</main>
+		<main class="container mx-auto p-4">
+			<slot />
+		</main>
+	</div>
+
+	<footer class="bg-gray-800 text-white text-center p-4">
+		<p>&copy; 2024 SaveTheBite. All rights reserved.</p>
+	</footer>
 </div>
 
 <style>

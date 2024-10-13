@@ -86,15 +86,17 @@
 
 		<!-- Map (Right side) - Display map only when isActive is true -->
 		{#if isActive}
-			<div class="transition-all duration-500 w-full md:w-full">
-				<iframe
-					src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d53741.55755073594!2d24.772337437262063!3d60.19087801280934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sfi!4v1728405815704!5m2!1sde!2sfi"
-					width="100%"
-					height="450"
-					style="border:0;"
-					loading="lazy"
-					referrerpolicy="no-referrer-when-downgrade"
-				></iframe>
+			<div class="transition-all duration-500">
+				<div class="sticky top-4">
+					<iframe
+						src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d53741.55755073594!2d24.772337437262063!3d60.19087801280934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sfi!4v1728405815704!5m2!1sde!2sfi"
+						width="100%"
+						height="500"
+						style="border:0;"
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"
+					></iframe>
+				</div>
 			</div>
 		{/if}
 	</div>
