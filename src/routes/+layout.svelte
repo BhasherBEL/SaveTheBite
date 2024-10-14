@@ -12,7 +12,7 @@
 	/>
 </svelte:head>
 
-<div class="app bg-gray-100 min-h-screen flex flex-col">
+<div class="app min-h-screen flex flex-col">
 	<div class="flex-grow">
 		<Header />
 

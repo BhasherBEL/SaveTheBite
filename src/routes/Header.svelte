@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<header class="bg-white shadow-md py-4 px-8 flex justify-between items-center">
+<header class="bg-white  py-4 px-8 flex justify-between items-center">
 	<div class="flex items-center space-x-4">
 		<a href="/">
 			<img src="/images/logo.jpg" alt="SaveTheBite Logo" class="h-12" />
