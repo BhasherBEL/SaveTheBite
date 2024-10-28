@@ -3,3 +3,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Apply font globally */
+h1 {
+    /* Bold with size 64 */
+    @apply font-bold text-4xl;
+}
+
+h2 {
+    /* Bold with size 48 */
+    @apply font-regular text-3xl;
+}
+
+body {
+  @apply font-regular;
+}

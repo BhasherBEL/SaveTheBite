@@ -31,6 +31,7 @@
 	function toggleActive() {
 		isActive = !isActive; // Toggle the active state
 	}
+    
 </script>
 
 <svelte:head>
@@ -40,17 +41,17 @@
 
 <section class="p-8">
 	<!-- Text above the search bar -->
-	<h2 class="text-2xl mb-4 text-center tracking-wide">Every bite matters!</h2>
+	<h2 class="mb-4 text-center tracking-wide">Every bite matters!</h2>
 
 	<!-- Search Bar -->
 	<div class="flex justify-center items-center mb-6">
 		<input
 			type="text"
-			class="w-1/2 p-4 border border-gray-300 rounded-lg shadow-sm"
+			class="w-1/2 p-4 bg-gray-100 border border-gray-300 rounded-3xl shadow-sm placeholder-gray-500 text-sm"
 			placeholder="City, region, address, ..."
 		/>
 		<button
-			class={`p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500' : 'bg-white hover:bg-green-500'} shadow-md`}
+			class={`p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500' : 'bg-gray-100 hover:bg-green-500'} shadow-md`}
 			on:click={toggleActive}
 		>
 			<i
@@ -63,7 +64,7 @@
 	<div class="flex justify-center mb-6 space-x-1 font-bold">
 		{#each filters as filter, index (filter.name)}
 			<button
-				class="button p-2 text-xs rounded-md text-gray-600 border-gray-300 border leading-normal transition-colors duration-100"
+				class="button p-2 text-xs rounded-full text-gray-600 border-gray-300 border leading-normal transition-colors duration-100"
 				class:bg-secondary={filter.active}
 				class:border-secondary={filter.active}
 				class:bg-opposite={filter.active == false}
