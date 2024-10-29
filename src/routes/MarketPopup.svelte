@@ -35,8 +35,8 @@
 			class="bg-white p-6 rounded-3xl shadow-lg w-4/5 h-2/3 relative flex justify-start items-center"
 			role="dialog"
 			aria-label="Market details"
-            on:click|stopPropagation
-            on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
+			on:click|stopPropagation
+			on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
 		>
 			<img
 				src={data.picture}
@@ -50,35 +50,37 @@
 					<i class="fas fa-map-marker-alt text-gray-400"></i>
 					<span class="text-gray-400 text-sm font-bold">{data.address}</span>
 				</div>
-				{#each data.batches as batch}
-					<div
-						role="button"
-						aria-label="Show batch details"
-						on:keydown={(e) => e.key === 'Enter' && showBatch(batch)}
-						tabindex="0"
-						class="rounded-2xl mt-4 w-full p-2 border border-secondary flex flex-start"
-						on:click={() => showBatch(batch)}
-					>
-						<img
-							src={batch.picture}
-							alt={batch.name}
-							class="inset-y-0 left-0 w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
-						/>
+				<div class="overflow-y-auto h-[calc(100%-4rem)]">
+					{#each data.batches as batch}
+						<div
+							role="button"
+							aria-label="Show batch details"
+							on:keydown={(e) => e.key === 'Enter' && showBatch(batch)}
+							tabindex="0"
+							class="rounded-2xl mt-4 w-full p-2 border border-secondary flex flex-start"
+							on:click={() => showBatch(batch)}
+						>
+							<img
+								src={batch.picture}
+								alt={batch.name}
+								class="inset-y-0 left-0 w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
+							/>
 
-						<div class="w-2/3 h-full pl-4 flex flex-col ml-2 justify-start items-start">
-							<div class="flex justify-between w-full mb-2">
-								<h2 class="text-lg font-semibold text-black">{batch.name}</h2>
-								<h2 class="text-primary text-xl">{batch.price}€</h2>
+							<div class="relative w-2/3 h-40 pl-4 ml-2 flex flex-col justify-between">
+								<div class="flex justify-between w-full mb-2">
+									<h2 class="text-lg font-semibold text-black">{batch.name}</h2>
+									<h2 class="text-primary text-xl">{batch.price}€</h2>
+								</div>
+								<p class="text-sm flex-grow">{batch.description}</p>
+								<button
+									class="w-full py-1 bg-primary text-white font-semibold rounded-xl hover:bg-green-600"
+								>
+									Add to cart
+								</button>
 							</div>
-							<p class="text-sm">{batch.description}</p>
-							<button
-								class="mt-auto w-full py-1 bg-primary mb-3 text-white font-semibold rounded-xl hover:bg-green-600"
-							>
-								Add to cart
-							</button>
 						</div>
-					</div>
-				{/each}
+					{/each}
+				</div>
 			</div>
 		</div>
 	</div>

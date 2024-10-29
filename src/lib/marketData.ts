@@ -22,6 +22,22 @@ export const markets: Market[] = [
                 picture: '/images/batches/bakery.jpg', 
                 quantity: 50, 
                 description: 'A loaf of bread'
+            },
+            {
+                id: 5,
+                name: 'Fruit basket',
+                price: 6,
+                picture: '/images/batches/fruit.jpeg',
+                quantity: 10,
+                description: 'A basket of fresh fruits'
+            },
+            {
+                id: 8,
+                name: 'Meat basket',
+                price: 10,
+                picture: '/images/batches/meat.jpg',
+                quantity: 8,
+                description: 'A basket of fresh meat'
             }
         ]
     },
