@@ -31,7 +31,6 @@
 	function toggleActive() {
 		isActive = !isActive; // Toggle the active state
 	}
-    
 </script>
 
 <svelte:head>
@@ -51,22 +50,21 @@
 			placeholder="City, region, address, ..."
 		/>
 		<button
-			class={`p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500' : 'bg-gray-100 hover:bg-green-500'} shadow-md`}
+			class={`group p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500 hover:bg-gray-100' : 'bg-gray-100 hover:bg-green-500'} shadow-md`}
 			on:click={toggleActive}
 		>
 			<i
-				class={`fas fa-map-marker-alt ${isActive ? 'text-white' : 'text-gray-400 hover:text-green-500'} transition-colors duration-300`}
+				class={`fas fa-map-marker-alt ${isActive ? 'text-white group-hover:text-gray-400' : 'text-gray-400 group-hover:text-white'} transition-colors duration-300`}
 			></i>
 		</button>
 	</div>
 
 	<!-- Filter Options -->
-	<div class="flex justify-center mb-6 space-x-1 font-bold">
+	<div class="flex justify-center mb-6 space-x-1">
 		{#each filters as filter, index (filter.name)}
 			<button
-				class="button p-2 text-xs rounded-full text-gray-600 border-gray-300 border leading-normal transition-colors duration-100"
+				class="button p-2 text-xs/[8px] text-gray-900 rounded-full border-black border transition-colors duration-100 hover:scale-105"
 				class:bg-secondary={filter.active}
-				class:border-secondary={filter.active}
 				class:bg-opposite={filter.active == false}
 				on:click={() => toggleFilter(index)}
 			>
@@ -96,6 +94,7 @@
 						style="border:0;"
 						loading="lazy"
 						referrerpolicy="no-referrer-when-downgrade"
+                        class="rounded-3xl"
 					></iframe>
 				</div>
 			</div>

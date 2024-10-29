@@ -4,6 +4,7 @@ export default class Batch {
 	quantity: number;
 	price: number;
 	picture: string;
+    description: string;
 
 	constructor(id: number, name: string, quantity: number, price: number, picture: string) {
 		this.id = id;
@@ -11,5 +12,6 @@ export default class Batch {
 		this.quantity = quantity;
 		this.price = price;
 		this.picture = picture;
+        this.description = "NOT SETUP YET";
 	}
 }
