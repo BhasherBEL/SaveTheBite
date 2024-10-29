@@ -21,6 +21,8 @@
 			class="bg-white p-6 rounded-3xl shadow-lg w-2/3 h-1/2 relative flex justify-start items-center"
 			role="dialog"
 			aria-label="Batch details"
+            on:click|stopPropagation
+            on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
 		>
 			<img
 				src={data.picture}
@@ -32,9 +34,9 @@
 					<h2 class="text-2xl font-semibold text-black">{data.name}</h2>
 					<h2 class="text-primary text-xl">{data.price}€</h2>
 				</div>
-				<p>Not setup yet</p>
+				<p class="text-sm">{data.description}</p>
 				<button
-					class="mt-auto w-full py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
+					class="mt-auto w-full mb-4 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
 				>
 					Add to cart
 				</button>
