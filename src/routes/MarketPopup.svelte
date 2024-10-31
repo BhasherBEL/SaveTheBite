@@ -66,7 +66,7 @@
 								class="inset-y-0 left-0 w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
 							/>
 
-							<div class="relative w-2/3 h-40 pl-4 ml-2 flex flex-col justify-between">
+							<div class="relative w-2/3 pl-4 ml-2 flex flex-col justify-between">
 								<div class="flex justify-between w-full mb-2">
 									<h2 class="text-lg font-semibold text-black">{batch.name}</h2>
 									<h2 class="text-primary text-xl">{batch.price}€</h2>
