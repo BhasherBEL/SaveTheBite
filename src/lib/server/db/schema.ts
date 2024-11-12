@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm';
+import { relations, type InferSelectModel } from 'drizzle-orm';
 import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const timestamp = {
@@ -13,7 +13,7 @@ const timestamp = {
 export const users = sqliteTable('users', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
 	username: text('username', { length: 255 }).notNull(),
-	email: text('email', { length: 255 }).notNull(),
+	email: text('email', { length: 255 }).notNull().unique(),
 	password: text('password', { length: 255 }).notNull(),
 	type: text('type', { length: 255 }).notNull(),
 	language: text('language', { length: 255 }),
@@ -21,6 +21,18 @@ export const users = sqliteTable('users', {
 	defaultLocation: text('default_location', { length: 255 }),
 	...timestamp
 });
+
+export const userSessions = sqliteTable('userSessions', {
+	id: text('id').primaryKey(),
+	userId: integer('user_id')
+		.notNull()
+		.references(() => users.id),
+	expiresAt: integer('expires_at', {
+		mode: 'timestamp'
+	}).notNull()
+});
+
+export type UserSession = InferSelectModel<typeof userSessions>;
 
 export const usersRelations = relations(users, ({ many }) => ({
 	managers: many(managers),

@@ -1,6 +1,8 @@
 <script>
 	import Header from './Header.svelte';
 	import '../app.css';
+
+	export let data;
 </script>
 
 <svelte:head>
@@ -14,7 +16,7 @@
 
 <div class="app min-h-screen flex flex-col">
 	<div class="flex-grow">
-		<Header />
+		<Header {data} />
 
 		<main class="container mx-auto p-4">
 			<slot />
@@ -28,4 +30,3 @@
 
 <style>
 </style>
-
