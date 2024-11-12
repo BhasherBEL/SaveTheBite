@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const timestamp = {
 	createdAt: integer('created_at', { mode: 'timestamp' })
@@ -21,6 +21,13 @@ export const users = sqliteTable('users', {
 	defaultLocation: text('default_location', { length: 255 }),
 	...timestamp
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+	managers: many(managers),
+	orders: many(orders),
+	favorites: many(favorites),
+	reviews: many(reviews)
+}));
 
 export const vendors = sqliteTable('vendors', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
@@ -48,19 +55,39 @@ export const baskets = sqliteTable('baskets', {
 	...timestamp
 });
 
-export const basketsRelations = relations(baskets, ({ one }) => ({
+export const basketsRelations = relations(baskets, ({ one, many }) => ({
 	vendor: one(vendors, {
 		fields: [baskets.vendorId],
 		references: [vendors.id]
-	})
+	}),
+	tags: many(basketTags),
+	sales: many(sales)
 }));
 
-export const managers = sqliteTable('managers', {
-	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	vendorId: integer('vendor_id').notNull(),
-	userId: integer('user_id').notNull(),
-	...timestamp
-});
+export const managers = sqliteTable(
+	'managers',
+	{
+		vendorId: integer('vendor_id')
+			.notNull()
+			.references(() => vendors.id, { onDelete: 'cascade' }),
+		userId: integer('user_id')
+			.notNull()
+			.references(() => users.id, { onDelete: 'cascade' }),
+		...timestamp
+	},
+	(t) => ({ pk: primaryKey({ columns: [t.vendorId, t.userId] }) })
+);
+
+export const managersRelations = relations(managers, ({ one }) => ({
+	vendor: one(vendors, {
+		fields: [managers.vendorId],
+		references: [vendors.id]
+	}),
+	user: one(users, {
+		fields: [managers.userId],
+		references: [users.id]
+	})
+}));
 
 export const tags = sqliteTable('tags', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
@@ -68,16 +95,42 @@ export const tags = sqliteTable('tags', {
 	...timestamp
 });
 
-export const basketTags = sqliteTable('basket_tags', {
-	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	basketId: integer('basket_id').notNull(),
-	tagId: integer('tag_id').notNull(),
-	...timestamp
-});
+export const tagsRelations = relations(tags, ({ many }) => ({
+	baskets: many(basketTags)
+}));
+
+export const basketTags = sqliteTable(
+	'basket_tags',
+	{
+		basketId: integer('basket_id')
+			.notNull()
+			.references(() => baskets.id, { onDelete: 'cascade' }),
+		tagId: integer('tag_id')
+			.notNull()
+			.references(() => tags.id, { onDelete: 'cascade' })
+	},
+	(t) => ({
+		pk: primaryKey({ columns: [t.basketId, t.tagId] })
+	})
+);
+
+export const basketTagsRelations = relations(basketTags, ({ one, many }) => ({
+	basket: one(baskets, {
+		fields: [basketTags.basketId],
+		references: [baskets.id]
+	}),
+	tag: one(tags, {
+		fields: [basketTags.tagId],
+		references: [tags.id]
+	}),
+	reviews: many(reviews)
+}));
 
 export const sales = sqliteTable('sales', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	basketId: integer('basket_id').notNull(),
+	basketId: integer('basket_id')
+		.notNull()
+		.references(() => baskets.id, { onDelete: 'cascade' }),
 	quantity: integer('quantity').notNull(),
 	remain: integer('remain').notNull(),
 	timeout: integer('timeout').notNull(),
@@ -85,20 +138,57 @@ export const sales = sqliteTable('sales', {
 	...timestamp
 });
 
+export const salesRelations = relations(sales, ({ one, many }) => ({
+	basket: one(baskets, {
+		fields: [sales.basketId],
+		references: [baskets.id]
+	}),
+	orders: many(orders)
+}));
+
 export const orders = sqliteTable('orders', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	saleId: integer('sale_id').notNull(),
-	userId: integer('user_id').notNull(),
+	saleId: integer('sale_id')
+		.notNull()
+		.references(() => sales.id, { onDelete: 'cascade' }),
+	userId: integer('user_id')
+		.notNull()
+		.references(() => users.id, { onDelete: 'cascade' }),
 	claimed: integer('claimed').notNull(),
 	...timestamp
 });
 
-export const favorites = sqliteTable('favorites', {
-	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	basketId: integer('basket_id').notNull(),
-	userId: integer('user_id').notNull(),
-	...timestamp
-});
+export const ordersRelations = relations(orders, ({ one }) => ({
+	sale: one(sales, {
+		fields: [orders.saleId],
+		references: [sales.id]
+	}),
+	user: one(users, {
+		fields: [orders.userId],
+		references: [users.id]
+	})
+}));
+
+export const favorites = sqliteTable(
+	'favorites',
+	{
+		basketId: integer('basket_id').notNull(),
+		userId: integer('user_id').notNull(),
+		...timestamp
+	},
+	(t) => ({ pk: primaryKey({ columns: [t.basketId, t.userId] }) })
+);
+
+export const favoritesRelations = relations(favorites, ({ one }) => ({
+	basket: one(baskets, {
+		fields: [favorites.basketId],
+		references: [baskets.id]
+	}),
+	user: one(users, {
+		fields: [favorites.userId],
+		references: [users.id]
+	})
+}));
 
 export const reviews = sqliteTable('reviews', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
@@ -108,3 +198,14 @@ export const reviews = sqliteTable('reviews', {
 	comment: text('comment'),
 	...timestamp
 });
+
+export const reviewsRelations = relations(reviews, ({ one }) => ({
+	basket: one(baskets, {
+		fields: [reviews.basketId],
+		references: [baskets.id]
+	}),
+	user: one(users, {
+		fields: [reviews.userId],
+		references: [users.id]
+	})
+}));

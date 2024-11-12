@@ -1,0 +1,1 @@
+ALTER TABLE `basket_tags` DROP COLUMN `id`;

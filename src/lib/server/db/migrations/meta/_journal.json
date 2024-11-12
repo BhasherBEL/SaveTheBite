@@ -15,6 +15,20 @@
       "when": 1731412173624,
       "tag": "0001_lush_ben_grimm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1731415627589,
+      "tag": "0002_equal_ego",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1731415665705,
+      "tag": "0003_calm_the_leader",
+      "breakpoints": true
     }
   ]
 }
