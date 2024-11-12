@@ -9,5 +9,7 @@ export default {
 	dbCredentials: {
 		url: process.env.DB_URL as string
 	},
-	out: './src/lib/server/db/migrations'
+	out: './src/lib/server/db/migrations',
+	verbose: true,
+	strict: true
 } satisfies Config;

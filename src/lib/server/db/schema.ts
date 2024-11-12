@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const timestamp = {
@@ -31,20 +32,33 @@ export const vendors = sqliteTable('vendors', {
 	...timestamp
 });
 
-export const managers = sqliteTable('managers', {
-	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	vendorId: integer('vendor_id').notNull(),
-	userId: integer('user_id').notNull(),
-	...timestamp
-});
+export const vendorsRelations = relations(vendors, ({ many }) => ({
+	baskets: many(baskets)
+}));
 
 export const baskets = sqliteTable('baskets', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-	vendorId: integer('vendor_id').notNull(),
+	vendorId: integer('vendor_id')
+		.notNull()
+		.references(() => vendors.id, { onDelete: 'cascade' }),
 	name: text('name', { length: 255 }).notNull(),
 	initialPrice: integer('initial_price').notNull(),
 	price: integer('price').notNull(),
 	picture: text('picture'),
+	...timestamp
+});
+
+export const basketsRelations = relations(baskets, ({ one }) => ({
+	vendor: one(vendors, {
+		fields: [baskets.vendorId],
+		references: [vendors.id]
+	})
+}));
+
+export const managers = sqliteTable('managers', {
+	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
+	vendorId: integer('vendor_id').notNull(),
+	userId: integer('user_id').notNull(),
 	...timestamp
 });
 

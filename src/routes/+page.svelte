@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { markets } from '$lib/marketData'; // Import market data
 	import MarketList from './MarketList.svelte'; // Import MarketList component
 
 	let isActive = false; // Track if the location button has been clicked
@@ -26,6 +25,10 @@
 				filters[index].active = true;
 		}
 	}
+
+	export let data: any;
+
+	const vendors = data.vendors;
 
 	// Function to toggle active state of location icon / button
 	function toggleActive() {
@@ -79,7 +82,7 @@
 	>
 		<!-- Product Cards (Left side) -->
 		<div class={`transition-all duration-500 ${isActive ? 'w-full md:col-span-2' : 'w-full'}`}>
-			<MarketList {markets} {filters} />
+			<MarketList {vendors} {filters} />
 			<!-- Pass markets data to MarketList -->
 		</div>
 
@@ -94,7 +97,7 @@
 						style="border:0;"
 						loading="lazy"
 						referrerpolicy="no-referrer-when-downgrade"
-                        class="rounded-3xl"
+						class="rounded-3xl"
 					></iframe>
 				</div>
 			</div>
