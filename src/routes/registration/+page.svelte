@@ -72,7 +72,7 @@
     <meta name="description" content="Register to SaveTheBite" />
 </svelte:head>
 
-<section class="flex flex-wrap items-center justify-center min-h-screen bg-white p-4">
+<section class="container mx-auto p-6 space-y-12">
 
     <!-- User Registration Form -->
 
@@ -83,24 +83,24 @@
             <h2 class="text-3xl font-bold text-green-600 mb-4">Register as User</h2>
 
             <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-            <input type="text" bind:value={name} class="w-full p-2 border rounded-lg" placeholder="Enter your name" />
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" bind:value={name} class="w-full p-2 border rounded-lg" placeholder="Enter your name" />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Surname</label>
-              <input type="text" bind:value={surname} class="w-full p-2 border rounded-lg" placeholder="Enter your surname" />
+                <label class="block text-sm font-medium text-gray-700 mb-1">Surname</label>
+                <input type="text" bind:value={surname} class="w-full p-2 border rounded-lg" placeholder="Enter your surname" />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" bind:value={email} class="w-full p-2 border rounded-lg" placeholder="Enter your email" />
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" bind:value={email} class="w-full p-2 border rounded-lg" placeholder="Enter your email" />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input type="password" bind:value={password} class="w-full p-2 border rounded-lg" placeholder="Enter your password" />
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input type="password" bind:value={password} class="w-full p-2 border rounded-lg" placeholder="Enter your password" />
             </div>
             <div class="flex items-center mb-6">
-              <input type="checkbox" bind:checked={shareLocation} class="mr-2" />
-              <label class="text-sm text-gray-700">Share my Location</label>
+                <input type="checkbox" bind:checked={shareLocation} class="mr-2" />
+                <label class="text-sm text-gray-700">Share my Location</label>
             </div>
 
             <button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition" on:click|preventDefault={registerUser}>Register</button>
