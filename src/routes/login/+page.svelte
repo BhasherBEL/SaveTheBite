@@ -20,10 +20,7 @@
 		<h2 class="text-xl font-semibold mb-2">New here?</h2>
 		<p class="mb-4">Create an account</p>
 		<button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
-			>Sign up as user</button
-		>
-		<button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
-			>Sign up as seller</button
+			>Sign up</button
 		>
 	</div>
 
