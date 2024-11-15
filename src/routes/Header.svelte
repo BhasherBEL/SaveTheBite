@@ -13,7 +13,7 @@
 			<!-- Wrap icon and text in a parent div -->
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
 				<i class="fas fa-home text-2xl"></i>
-				<span class="text-sm">Home</span>
+				<a href="/" class="text-sm">Home</a>
 			</div>
 		</div>
 		<div class="flex flex-col items-center group">
@@ -29,7 +29,7 @@
 		<div class="flex flex-col items-center group">
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
 				<i class="fas fa-info-circle text-2xl"></i>
-				<span class="text-sm">About</span>
+				<a href="/about" class="text-sm">About</a>
 			</div>
 		</div>
 	</nav>

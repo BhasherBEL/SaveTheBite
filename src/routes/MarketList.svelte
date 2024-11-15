@@ -9,10 +9,12 @@
 	let vendorVisible = false;
 	let vendorData: Vendor;
 
+	$: console.log('vendorData updated:', vendorData);
+
 	function showBasket(basket: Basket) {
+        event.stopPropagation()
 		basketData = basket;
 		basketVisible = true;
-		basketVisible = false;
 	}
 
 	function showVendor(vendor: Vendor) {
@@ -83,8 +85,12 @@
 </div>
 
 <!-- Display the batch popup -->
-<BatchPopup show={basketVisible} data={basketData} onClose={() => (basketVisible = false)} />
-<MarketPopup show={vendorVisible} data={vendorData} onClose={() => (vendorVisible = false)} />
+{#if basketVisible}
+	<BatchPopup show={basketVisible} data={basketData} onClose={() => (basketVisible = false)} />
+{/if}
+{#if vendorVisible}
+	<MarketPopup show={vendorVisible} data={vendorData} onClose={() => (vendorVisible = false)} />
+{/if}
 
 <style>
 	/* Ensuring the list takes full height of the viewport */

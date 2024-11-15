@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MarketList from './MarketList.svelte'; // Import MarketList component
+    import { page } from '$app/stores';
 
 	let isActive = false; // Track if the location button has been clicked
 
@@ -26,9 +27,9 @@
 		}
 	}
 
-	export let data: any;
+	const { vendors } = $page.data;
 
-	const vendors = data.vendors;
+    console.log("page data", vendors);
 
 	// Function to toggle active state of location icon / button
 	function toggleActive() {

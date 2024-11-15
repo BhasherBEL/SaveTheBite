@@ -4,10 +4,12 @@
 	import BatchPopup from './BatchPopup.svelte';
 
 	export let show = false;
-	export let vendor: Vendor;
+	export let data: Vendor;
 	export let onClose = () => {
 		show = false;
 	};
+
+    console.log("vendor in popup", data);
 
 	let basketVisible = false;
 	let basketData: Basket;
@@ -35,19 +37,19 @@
 			on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
 		>
 			<img
-				src={vendor.picture}
-				alt={vendor.name}
+				src={data.picture}
+				alt={data.name}
 				class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
 			/>
 			<div class="w-3/5 h-full pl-8 flex flex-col justify-start items-start">
-				<h2 class="text-3xl font-semibold text-primary">{vendor.name}</h2>
+				<h2 class="text-3xl font-semibold text-primary">{data.name}</h2>
 
 				<div class="inline-flex items-center space-x-2">
 					<i class="fas fa-map-marker-alt text-gray-400"></i>
-					<span class="text-gray-400 text-sm font-bold">{vendor.location}</span>
+					<span class="text-gray-400 text-sm font-bold">{data.location}</span>
 				</div>
 				<div class="overflow-y-auto h-[calc(100%-4rem)]">
-					{#each vendor.baskets as basket (basket.id)}
+					{#each data.baskets as basket (basket.id)}
 						<div
 							role="button"
 							aria-label="Show batch details"
