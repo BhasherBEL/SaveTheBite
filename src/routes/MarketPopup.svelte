@@ -9,7 +9,7 @@
 		show = false;
 	};
 
-    console.log("vendor in popup", data);
+	console.log('vendor in popup', data);
 
 	let basketVisible = false;
 	let basketData: Basket;
@@ -30,18 +30,26 @@
 		on:keydown={(e) => e.key === 'Escape' && onClose()}
 	>
 		<div
-			class="bg-white p-6 rounded-3xl shadow-lg w-4/5 h-2/3 relative flex justify-start items-center"
+			class="bg-white p-6 rounded-3xl shadow-lg w-ful sm:w-4/5 h-full sm:h-4/5 relative flex flex-col sm:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Market details"
 			on:click|stopPropagation
 			on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
 		>
+			<!-- Close Button for small screens -->
+			<button
+				class="absolute top-4 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
+				on:click={onClose}
+				aria-label="Close"
+			>
+				×
+			</button>
 			<img
 				src={data.picture}
 				alt={data.name}
-				class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
+				class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
 			/>
-			<div class="w-3/5 h-full pl-8 flex flex-col justify-start items-start">
+			<div class="w-full sm:w-3/5 h-full pl-0 sm:pl-8 flex flex-col justify-start items-start">
 				<h2 class="text-3xl font-semibold text-primary">{data.name}</h2>
 
 				<div class="inline-flex items-center space-x-2">
@@ -55,20 +63,29 @@
 							aria-label="Show batch details"
 							on:keydown={(e) => e.key === 'Enter' && showBasket(basket)}
 							tabindex="0"
-							class="rounded-2xl mt-4 w-full p-2 border border-secondary flex flex-start"
+							class="rounded-2xl mt-4 w-full p-2 border border-secondary flex flex-col sm:flex-row flex-start"
 							on:click={() => showBasket(basket)}
 						>
 							<img
 								src={basket.picture}
 								alt={basket.name}
-								class="inset-y-0 left-0 w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
+								class="inset-y-0 left-0 w-full sm:w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
 							/>
 
-							<div class="relative w-2/3 pl-4 ml-2 flex flex-col justify-between">
+							<div
+								class="relative w-full pt-4 sm:pt-0 sm:w-2/3 pl-0 sm:pl-4 ml-0 sm:ml-2 flex flex-col justify-between"
+							>
 								<div class="flex justify-between w-full mb-2">
 									<h2 class="text-lg font-semibold text-black">{basket.name}</h2>
 									<h2 class="text-primary text-xl">{basket.price}€</h2>
 								</div>
+								<p class="text-gray-400 text-sm flex-1 pb-4">
+									Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+									molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+									numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+									optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+									obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil,
+								</p>
 								<button
 									class="w-full py-1 bg-primary text-white font-semibold rounded-xl hover:bg-green-600"
 								>

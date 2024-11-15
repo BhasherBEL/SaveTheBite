@@ -18,3 +18,14 @@ h2 {
 body {
   @apply font-regular;
 }
+
+
+* {
+  font-size: 0.875rem; /* smaller text for small screens */
+}
+
+@media (min-width: 640px) {
+  * {
+    font-size: 1rem; /* default size for larger screens */
+  }
+}

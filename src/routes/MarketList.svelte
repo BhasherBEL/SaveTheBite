@@ -44,11 +44,11 @@
 			on:click={() => showVendor(vendor)}
 		>
 			<div class="flex justify-between items-center mb-4">
-				<div class="flex justify-start">
+				<div class="flex flex-col sm:flex-row justify-start">
 					<span class="font-bold text-lg">{vendor.name}</span>
 
 					<!-- Display the address of the market with a map logo before -->
-					<div class="inline-flex items-center space-x-2 ml-6">
+					<div class="inline-flex items-center space-x-2 pt-2 sm:pt-0 sm:ml-6">
 						<i class="fas fa-map-marker-alt text-gray-400"></i>
 						<span class="text-gray-400 text-sm font-bold">{vendor.location}</span>
 					</div>
@@ -60,7 +60,7 @@
 			</div>
 
 			<!-- Display the batches of the market -->
-			<div class="gap-4 mt-4 flex overflow-x-auto">
+			<div class="gap-4 mt-4 flex flex-col sm:flex-row overflow-x-auto">
 				{#each vendor.baskets as basket (basket.id)}
 					<div
 						role="button"
