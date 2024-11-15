@@ -63,7 +63,7 @@
 							aria-label="Show batch details"
 							on:keydown={(e) => e.key === 'Enter' && showBasket(basket)}
 							tabindex="0"
-							class="rounded-2xl mt-4 w-full p-2 border border-secondary flex flex-col sm:flex-row flex-start"
+							class="rounded-2xl mt-4 w-full p-0 sm:p-2 border border-secondary flex flex-col sm:flex-row flex-start"
 							on:click={() => showBasket(basket)}
 						>
 							<img
