@@ -73,7 +73,7 @@
 							/>
 
 							<div
-								class="relative w-full pt-4 sm:pt-0 sm:w-2/3 pl-0 sm:pl-4 ml-0 sm:ml-2 flex flex-col justify-between"
+								class="relative w-full p-4 sm:p-0 pt-4 sm:pt-0 sm:w-2/3 pl-4 sm:pl-4 ml-0 sm:ml-2 flex flex-col justify-between"
 							>
 								<div class="flex justify-between w-full mb-2">
 									<h2 class="text-lg font-semibold text-black">{basket.name}</h2>
