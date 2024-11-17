@@ -1,5 +1,5 @@
 import { relations, type InferSelectModel } from 'drizzle-orm';
-import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { blob, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const timestamp = {
 	createdAt: integer('created_at', { mode: 'timestamp' })
@@ -44,15 +44,17 @@ export const usersRelations = relations(users, ({ many }) => ({
 export const vendors = sqliteTable('vendors', {
 	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
 	name: text('name', { length: 255 }).notNull(),
+	description: text('description').notNull(),
 	location: text('location', { length: 255 }).notNull(),
 	longitude: integer('longitude').notNull(),
 	latitude: integer('latitude').notNull(),
-	picture: text('picture'),
+	picture: blob('picture'),
 	...timestamp
 });
 
 export const vendorsRelations = relations(vendors, ({ many }) => ({
-	baskets: many(baskets)
+	baskets: many(baskets),
+	managers: many(managers)
 }));
 
 export const baskets = sqliteTable('baskets', {
@@ -61,9 +63,10 @@ export const baskets = sqliteTable('baskets', {
 		.notNull()
 		.references(() => vendors.id, { onDelete: 'cascade' }),
 	name: text('name', { length: 255 }).notNull(),
+	description: text('description').notNull(),
 	initialPrice: integer('initial_price').notNull(),
 	price: integer('price').notNull(),
-	picture: text('picture'),
+	picture: blob('picture'),
 	...timestamp
 });
 
@@ -146,7 +149,6 @@ export const sales = sqliteTable('sales', {
 	quantity: integer('quantity').notNull(),
 	remain: integer('remain').notNull(),
 	timeout: integer('timeout').notNull(),
-	withdrawn: integer('withdrawn').notNull(),
 	...timestamp
 });
 
@@ -166,6 +168,7 @@ export const orders = sqliteTable('orders', {
 	userId: integer('user_id')
 		.notNull()
 		.references(() => users.id, { onDelete: 'cascade' }),
+	quantity: integer('quantity').notNull(),
 	claimed: integer('claimed').notNull(),
 	...timestamp
 });
@@ -219,5 +222,28 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
 	user: one(users, {
 		fields: [reviews.userId],
 		references: [users.id]
+	})
+}));
+
+export const carts = sqliteTable('carts', {
+	id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
+	userId: integer('user_id')
+		.notNull()
+		.references(() => users.id, { onDelete: 'cascade' }),
+	saleId: integer('sale_id')
+		.notNull()
+		.references(() => sales.id, { onDelete: 'cascade' }),
+	quantity: integer('quantity').notNull(),
+	...timestamp
+});
+
+export const cartsRelations = relations(carts, ({ one }) => ({
+	user: one(users, {
+		fields: [carts.userId],
+		references: [users.id]
+	}),
+	sale: one(sales, {
+		fields: [carts.saleId],
+		references: [sales.id]
 	})
 }));

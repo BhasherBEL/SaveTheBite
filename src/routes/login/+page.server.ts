@@ -1,19 +1,14 @@
-import { createSession, generateSessionToken, validateSessionToken } from '$lib/server/db/sessions';
 import { loginUser } from '$lib/server/db/users';
 import { setSessionTokenCookie } from '$lib/utils/cookies';
 import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
 import type { Actions } from './$types';
+import { createSession, generateSessionToken } from '$lib/server/auth';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-	const token = cookies.get('session');
-
-	if (token) {
-		const { user } = await validateSessionToken(token);
-		return { user };
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user) {
+		redirect(303, '/');
 	}
-
-	return {};
 };
 
 export const actions = {
