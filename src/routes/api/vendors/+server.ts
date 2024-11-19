@@ -18,7 +18,7 @@ export async function POST({ locals, request }: RequestEvent) {
 	const { name, description, location, longitude, latitude, picture } = await request.json();
 
 	if (!name || !description || !location || !longitude || !latitude || !picture) {
-		return error(400, 'Invalid parameters');
+		return error(400, 'Invalid parameters 1');
 	}
 
 	let nLongitude;
@@ -28,7 +28,7 @@ export async function POST({ locals, request }: RequestEvent) {
 		nLongitude = parseFloat(longitude);
 		nLatitude = parseFloat(latitude);
 	} catch (e) {
-		return error(400, 'Invalid parameters');
+		return error(400, 'Invalid parameters 2');
 	}
 
 	const vendor = (

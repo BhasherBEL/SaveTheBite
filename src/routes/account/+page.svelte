@@ -1,4 +1,7 @@
-<script>
+<script lang="ts">
+
+    import { addCompany } from "$lib/utils/company";
+
 	let language = 'English';
 	let theme = 'Light';
 	let location = '';
@@ -47,11 +50,17 @@
 	let showAddCompanyPopup = false;
 	let companyName = '';
 	let companyLocation = '';
+	let companyDescription = '';
 	let companyAdded = false;
+	let companyPhoto;
 
-	function addCompany() {
+
+	function addCompanyPage() {
 		companyAdded = true; // Simulate that the company has been added
 		showAddCompanyPopup = false; // Close the pop-up
+
+		console.log(companyName, companyDescription, companyLocation, companyPhoto);
+		addCompany({ companyName, companyDescription, companyLocation, companyPhoto});
 	}
 </script>
 
@@ -181,6 +190,18 @@
 						/>
 					</div>
 					<div class="mb-4">
+						<label for="companyDescription" class="block text-sm font-medium text-gray-700 mb-2"
+							>Company Description</label
+						>
+						<input
+							type="text"
+							id="companyDescription"
+							bind:value={companyDescription}
+							class="w-full p-2 border rounded"
+							placeholder="Enter company description"
+						/>
+					</div>
+					<div class="mb-4">
 						<label for="companyLocation" class="block text-sm font-medium text-gray-700 mb-2"
 							>Company Location</label
 						>
@@ -209,10 +230,11 @@
 							class="bg-gray-500 text-white px-4 py-2 rounded-md"
 							on:click={() => (showAddCompanyPopup = false)}>Cancel</button
 						>
-						<button class="bg-green-500 text-white px-4 py-2 rounded-md" on:click={addCompany}
+						<button class="bg-green-500 text-white px-4 py-2 rounded-md" on:click={addCompanyPage}
 							>Add Company</button
 						>
 					</div>
+
 				</div>
 			</div>
 		{/if}
@@ -251,7 +273,7 @@
 					<p class="text-gray-600">19h · Collection starts in 2h45</p>
 				</div>
 			</div>
-			<a href="#" class="text-green-500 hover:underline">See past orders</a>
+			<a href="/" class="text-green-500 hover:underline">See past orders</a>
 		</div>
 	</div>
 </section>
