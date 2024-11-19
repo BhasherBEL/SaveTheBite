@@ -84,11 +84,7 @@
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input type="text" bind:value={name} class="w-full p-2 border rounded-lg" placeholder="Enter your name" />
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Surname</label>
-                <input type="text" bind:value={surname} class="w-full p-2 border rounded-lg" placeholder="Enter your surname" />
+                <input type="text" bind:value={name} class="w-full p-2 border rounded-lg" placeholder="Enter your Username" />
             </div>
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -103,7 +99,8 @@
                 <label class="text-sm text-gray-700">Share my Location</label>
             </div>
 
-            <button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition" on:click|preventDefault={registerUser}>Register</button>
+            <button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition" on:click|preventDefault={registerUser}>Register as User</button>
+
       </div>
 
       <!-- Preferences and Allergies Section -->

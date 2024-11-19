@@ -3,8 +3,8 @@
 	let theme = 'Light';
 	let location = '';
 	let foodPreferences = [
-		{ name: 'Lactose-free', active: true },
-		{ name: 'Vegan', active: true },
+		{ name: 'Lactose-free', active: false },
+		{ name: 'Vegan', active: false },
 		{ name: 'Fish', active: false },
 		{ name: 'Vegetarian', active: false },
 		{ name: 'Eggs-free', active: false },
@@ -22,6 +22,28 @@
 	function toggleFoodPreference(index) {
 		foodPreferences[index].active = !foodPreferences[index].active;
 	}
+
+	let allergies = [
+        { name: 'Dairy', active: false },
+        { name: 'Eggs', active: false },
+        { name: 'Fish', active: false },
+        { name: 'Shellfish', active: false },
+        { name: 'Soy', active: false },
+        { name: 'Sesame', active: false },
+        { name: 'Wheat', active: false },
+        { name: 'Treenuts', active: false },
+        { name: 'Gluten', active: false },
+        { name: 'Sulfites', active: false },
+        { name: 'Celery', active: false },
+        { name: 'Strawberry', active: false },
+        { name: 'Kiwi', active: false },
+    ];
+
+	function toggleAllergies(index) {
+		allergies[index].active = !allergies[index].active;
+	}
+
+
 </script>
 
 <svelte:head>
@@ -60,6 +82,11 @@
 					<p class="font-bold mb-2">Default location</p>
 					<input type="text" bind:value={location} placeholder="No default location ..." class="w-full p-2 border rounded" />
 				</div>
+
+				<div class="mt-10">
+                    <button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition">Add a Company</button>
+				</div>
+
 			</div>
 		</div>
 
@@ -78,7 +105,24 @@
 					{/each}
 				</div>
 			</div>
+
+			<h2 class="text-2xl font-semibold mt-6 mb-4">Allergies</h2>
+            <div class="border-l-4 border-green-500 pl-4">
+                <div class="flex flex-wrap gap-2">
+                    {#each allergies as allergy, index}
+                        <button
+                            class={`px-4 py-2 rounded-md ${allergy.active ? 'bg-green-300' : 'bg-white border'} border-gray-300`}
+                            on:click={() => toggleAllergies(index)}
+                        >
+                            {allergy.name}
+                        </button>
+                    {/each}
+                </div>
+             </div>
+
 		</div>
+
+
 	</div>
 
 	<!-- Favorites Section -->
