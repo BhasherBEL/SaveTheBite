@@ -5,14 +5,6 @@
 	export let data;
 </script>
 
-<svelte:head>
-	<link
-		rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-		integrity="sha384-uQakAoW9+U1d4K+6P4x8I6gGp7OlGZgQ/UNRP1sA8HCM3IOMpTytZT9ITW7sqU6h"
-		crossorigin="anonymous"
-	/>
-</svelte:head>
 
 <div class="app min-h-screen flex flex-col">
 	<div class="flex-grow">

@@ -48,7 +48,7 @@ export const vendors = sqliteTable('vendors', {
 	location: text('location', { length: 255 }).notNull(),
 	longitude: integer('longitude').notNull(),
 	latitude: integer('latitude').notNull(),
-	picture: blob('picture'),
+	picture: text('picture'),
 	...timestamp
 });
 
@@ -66,7 +66,7 @@ export const baskets = sqliteTable('baskets', {
 	description: text('description').notNull(),
 	initialPrice: integer('initial_price').notNull(),
 	price: integer('price').notNull(),
-	picture: blob('picture'),
+	picture: text('picture'),
 	...timestamp
 });
 
@@ -247,3 +247,15 @@ export const cartsRelations = relations(carts, ({ one }) => ({
 		references: [sales.id]
 	})
 }));
+
+export type Basket = typeof baskets.$inferSelect;
+export type Cart = typeof carts.$inferSelect;
+export type Favorite = typeof favorites.$inferSelect;
+export type Manager = typeof managers.$inferSelect;
+export type Order = typeof orders.$inferSelect;
+export type Review = typeof reviews.$inferSelect;
+export type Sale = typeof sales.$inferSelect;
+export type Tag = typeof tags.$inferSelect;
+export type Vendor = typeof vendors.$inferSelect;
+export type User = typeof users.$inferSelect;
+
