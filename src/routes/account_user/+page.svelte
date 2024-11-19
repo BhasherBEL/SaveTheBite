@@ -72,10 +72,10 @@
 				<div class="mb-6">
 					<p class="font-bold mb-2">Language</p>
 					<div class="flex space-x-4">
-						<button class={`px-4 py-2 rounded ${language === 'Suomi' ? 'bg-gray-200' : 'bg-white'}`} on:click={() => language = 'Suomi'}>Suomi</button>
+						<button class={`px-4 py-2 rounded ${language === 'Suomi' ? 'bg-green-300' : 'bg-white'}`} on:click={() => language = 'Suomi'}>Suomi</button>
 						<button class={`px-4 py-2 rounded ${language === 'English' ? 'bg-green-300' : 'bg-white'}`} on:click={() => language = 'English'}>English</button>
-						<button class={`px-4 py-2 rounded ${language === 'Deutsch' ? 'bg-gray-200' : 'bg-white'}`} on:click={() => language = 'Deutsch'}>Deutsch</button>
-						<button class={`px-4 py-2 rounded ${language === 'Français' ? 'bg-gray-200' : 'bg-white'}`} on:click={() => language = 'Français'}>Français</button>
+						<button class={`px-4 py-2 rounded ${language === 'Deutsch' ? 'bg-green-300' : 'bg-white'}`} on:click={() => language = 'Deutsch'}>Deutsch</button>
+						<button class={`px-4 py-2 rounded ${language === 'Français' ? 'bg-green-300' : 'bg-white'}`} on:click={() => language = 'Français'}>Français</button>
 					</div>
 				</div>
 
@@ -84,7 +84,7 @@
 					<p class="font-bold mb-2">Theme</p>
 					<div class="flex space-x-4">
 						<button class={`px-4 py-2 rounded ${theme === 'Light' ? 'bg-green-300' : 'bg-white'}`} on:click={() => theme = 'Light'}>Light</button>
-						<button class={`px-4 py-2 rounded ${theme === 'Dark' ? 'bg-gray-200' : 'bg-white'}`} on:click={() => theme = 'Dark'}>Dark</button>
+						<button class={`px-4 py-2 rounded ${theme === 'Dark' ? 'bg-green-300' : 'bg-white'}`} on:click={() => theme = 'Dark'}>Dark</button>
 					</div>
 				</div>
 
