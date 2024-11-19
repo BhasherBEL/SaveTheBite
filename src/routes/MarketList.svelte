@@ -22,11 +22,6 @@
 		vendorData = vendor;
 	}
 
-	console.log('MarketList');
-
-	//console.log('vendors:', vendors);
-	$inspect(basketData);
-
 	// Reactive statement to manage body overflow
 	$effect(() => {
 		if (typeof window !== 'undefined') {

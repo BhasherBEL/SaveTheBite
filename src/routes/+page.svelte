@@ -12,7 +12,6 @@
 		{ name: 'Egg free', active: null },
 		{ name: 'Non-Dairy', active: null }
 	]); // Array to hold filter options
-	$inspect(filters);
 
 	// Function to toggle active state for filter buttons
 	function toggleFilter(index: number) {

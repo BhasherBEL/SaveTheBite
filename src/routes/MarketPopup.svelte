@@ -2,9 +2,7 @@
 	import { type Basket, type Vendor } from '$lib/server/db/schema';
 	import BatchPopup from './BatchPopup.svelte';
 
-    let { data, onClose } : { data: Vendor, onClose: () => {} } = $props();
-
-	console.log('vendor in popup', data);
+	let { data, onClose }: { data: Vendor; onClose: () => {} } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
 
@@ -27,7 +25,7 @@
 			class="bg-white p-6 rounded-3xl shadow-lg w-ful sm:w-4/5 h-full sm:h-4/5 relative flex flex-col sm:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Market details"
-            onclick={e => e.stopPropagation()}
+			onclick={(e) => e.stopPropagation()}
 		>
 			<!-- Close Button for small screens -->
 			<button
@@ -37,13 +35,13 @@
 			>
 				×
 			</button>
-            {#if data.picture}
-                <img
-                    src="data:image/jpeg;base64,{data.picture}"
-                    alt={data.name}
-                    class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
-                />
-            {/if}
+			{#if data.picture}
+				<img
+					src="data:image/jpeg;base64,{data.picture}"
+					alt={data.name}
+					class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
+				/>
+			{/if}
 			<div class="w-full sm:w-3/5 h-full pl-0 sm:pl-8 flex flex-col justify-start items-start">
 				<h2 class="text-3xl font-semibold text-primary">{data.name}</h2>
 

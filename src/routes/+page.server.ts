@@ -9,7 +9,6 @@ export async function load({ url }: LoadEvent) {
 	let distance: number;
 	try {
 		distance = parseFloat(url.searchParams.get('distance') || '');
-		console.log(distance);
 	} catch (e) {
 		distance = 5;
 	}
@@ -20,8 +19,6 @@ export async function load({ url }: LoadEvent) {
 
 	try {
 		if (!search) return { vendors: await getVendors() };
-
-		console.log(search);
 
 		const { longitude, latitude } = await addressToCoordinates(search);
 
@@ -36,10 +33,9 @@ export async function load({ url }: LoadEvent) {
 				getDistanceFromLatLonInKm(vendor.latitude, vendor.longitude, latitude, longitude) <=
 				distance
 		);
-		console.log(longitude, latitude, closeByVendors.length);
 		return { vendors: closeByVendors, longitude, latitude };
 	} catch (error) {
-		console.error('Error fetching vendors:', error);
+		console.log('Error fetching vendors:', error);
 		return { vendors: [] };
 	}
 }
