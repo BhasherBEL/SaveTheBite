@@ -5,25 +5,25 @@
 </script>
 
 {#if data}
-	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center"
 		role="dialog"
 		aria-label="Show batch details"
-		on:click={onClose}
-		on:keydown={(e) => e.key === 'Escape' && onClose()}
+		onclick={onClose}
+		onkeydown={(e) => e.key === 'Escape' && onClose()}
 	>
 		<div
 			class="bg-white pt-12 sm:pt-6 p-6 rounded-3xl shadow-lg w-full sm:w-3/5 h-full sm:h-3/5 relative flex flex-col sm:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Batch details"
-			on:click|stopPropagation
-			on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
+			onclick={e => e.stopPropagation()}
 		>
 			<!-- Close Button for small screens -->
 			<button
 				class="absolute top-2 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
-				on:click={onClose}
+				onclick={onClose}
 				aria-label="Close"
 			>
 				×
@@ -39,11 +39,7 @@
 					<h2 class="text-primary text-xl">{data.price}€</h2>
 				</div>
 				<p class="text-gray-400 text-sm flex-1 pb-4">
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas
-					vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum
-					quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident
-					similique accusantium nemo autem. Veritatis obcaecati tenetur iure eius earum ut molestias
-					architecto voluptate aliquam nihil,
+                    {data.description}
 				</p>
 				<button
 					class="mt-auto w-full mb-4 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
