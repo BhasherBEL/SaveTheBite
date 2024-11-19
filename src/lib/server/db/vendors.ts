@@ -1,7 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { db } from './client';
-import Vendor from '$lib/types/vendor';
-import { vendors } from './schema';
+import { vendors, type Vendor } from './schema';
 
 export async function getVendors(): Promise<Vendor[]> {
 	const rawVendors = await db.query.vendors.findMany({

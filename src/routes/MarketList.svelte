@@ -1,36 +1,33 @@
 <script lang="ts">
 	import BatchPopup from './BatchPopup.svelte';
 	import MarketPopup from './MarketPopup.svelte';
-	import Vendor from '$lib/types/vendor';
-	import Basket from '$lib/types/basket';
+	import { type Basket, type Vendor } from '$lib/server/db/schema';
 
-	let basketVisible = false;
-	let basketData: Basket;
-	let vendorVisible = false;
-	let vendorData: Vendor;
+	let { vendors } : { vendors: Vendor[] } = $props(); // Receive markets as a prop
 
-	$: console.log('vendorData updated:', vendorData);
+	let basketData: Basket | undefined = $state(undefined);
+	let vendorData: Vendor | undefined = $state(undefined);
 
 	function showBasket(basket: Basket) {
-        event.stopPropagation()
+		event?.stopPropagation();
 		basketData = basket;
-		basketVisible = true;
 	}
 
 	function showVendor(vendor: Vendor) {
 		vendorData = vendor;
-		vendorVisible = !basketVisible;
 	}
 
-	export let vendors: Vendor[]; // Receive markets as a prop
-	export let filters: { name: string; active: boolean | null }[];
+    console.log('MarketList');
+
+	//console.log('vendors:', vendors);
+    $inspect(basketData);
 
 	// Reactive statement to manage body overflow
-	$: {
+	$effect(() => {
 		if (typeof window !== 'undefined') {
-			document.body.style.overflow = basketVisible || vendorVisible ? 'hidden' : 'auto';
+			document.body.style.overflow = basketData || vendorData ? 'hidden' : 'auto';
 		}
-	}
+	});
 </script>
 
 <div class="p-4">
@@ -39,9 +36,9 @@
 			class="bg-white p-4 rounded-3xl shadow-md mb-4 border border-secondary"
 			role="button"
 			aria-label="Show market details"
-			on:keydown={(e) => e.key === 'Enter' && showVendor(vendor)}
+			onkeydown={(e) => e.key === 'Enter' && showVendor(vendor)}
 			tabindex="0"
-			on:click={() => showVendor(vendor)}
+			onclick={() => showVendor(vendor)}
 		>
 			<div class="flex justify-between items-center mb-4">
 				<div class="flex flex-col sm:flex-row justify-start">
@@ -65,14 +62,14 @@
 					<div
 						role="button"
 						aria-label="Show batch details"
-						on:keydown={(e) => e.key === 'Enter' && showBasket(basket)}
+						onkeydown={(e) => e.key === 'Enter' && showBasket(basket)}
 						tabindex="0"
 						class="rounded-2xl p-2 flex-shrink-0 border border-secondary"
-						on:click={() => showBasket(basket)}
+						onclick={() => showBasket(basket)}
 					>
 						<img
-							src={basket.picture}
-							alt={basket.name}
+							src="data:image/jpeg;base64, {basket.picture}"
+							alt="Currently no picture for {basket.name}"
 							class="w-72 h-72 mx-auto rounded-xl object-cover"
 						/>
 						<p class="font-semibold mt-2">{basket.name}</p>
@@ -85,11 +82,11 @@
 </div>
 
 <!-- Display the batch popup -->
-{#if basketVisible}
-	<BatchPopup show={basketVisible} data={basketData} onClose={() => (basketVisible = false)} />
+{#if basketData}
+	<BatchPopup data={basketData} onClose={() => (basketData = undefined)} />
 {/if}
-{#if vendorVisible}
-	<MarketPopup show={vendorVisible} data={vendorData} onClose={() => (vendorVisible = false)} />
+{#if vendorData}
+	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} />
 {/if}
 
 <style>
