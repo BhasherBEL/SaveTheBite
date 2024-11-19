@@ -99,7 +99,7 @@
                 <label class="text-sm text-gray-700">Share my Location</label>
             </div>
 
-            <button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition" on:click|preventDefault={registerUser}>Register as User</button>
+            <button class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition" on:click|preventDefault={registerUser}>Sign up</button>
 
       </div>
 
