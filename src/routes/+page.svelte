@@ -13,7 +13,6 @@
 		{ name: 'Egg free', active: null },
 		{ name: 'Non-Dairy', active: null }
 	]); // Array to hold filter options
-    $inspect(filters);
 
 	// Function to toggle active state for filter buttons
 	function toggleFilter(index: number) {
@@ -27,12 +26,11 @@
 			default:
 				filters[index].active = true;
 		}
-        filters = [...filters];
+		filters = [...filters];
 	}
 
-    let vendors: Vendor[] = $page.data.vendors;
+	let { data } = $props();
 
-	// Function to toggle active state of location icon / button
 	function toggleActive() {
 		isActive = !isActive; // Toggle the active state
 	}
@@ -48,15 +46,19 @@
 	<h2 class="mb-4 text-center tracking-wide">Every bite matters!</h2>
 
 	<!-- Search Bar -->
-	<div class="flex justify-center items-center mb-6">
-		<input
-			type="text"
-			class="w-4/5 p-4 bg-gray-100 border border-gray-300 rounded-3xl shadow-sm placeholder-gray-500 text-sm"
-			placeholder="City, region, address, ..."
-		/>
+	<div class="flex justify-center items-center mb-6 w-4/6 m-auto">
+		<form method="GET" class="flex-grow">
+			<input
+				type="text"
+				name="search"
+				class="w-full p-4 bg-gray-100 border border-gray-300 rounded-3xl shadow-sm placeholder-gray-500 text-2xl text-center"
+				placeholder="City, region, address, ..."
+			/>
+		</form>
 		<button
 			class={`group p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500 hover:bg-gray-100' : 'bg-gray-100 hover:bg-green-500'} shadow-md`}
 			onclick={toggleActive}
+			aria-label="Toggle map"
 		>
 			<i
 				class={`fas fa-map-marker-alt ${isActive ? 'text-white group-hover:text-gray-400' : 'text-gray-400 group-hover:text-white'} transition-colors duration-300`}
@@ -84,7 +86,7 @@
 	>
 		<!-- Product Cards (Left side) -->
 		<div class={`transition-all duration-500 ${isActive ? 'w-full md:col-span-2' : 'w-full'}`}>
-			<MarketList {vendors}/>
+			<MarketList vendors={data.vendors} longitude={data.longitude} latitude={data.latitude} />
 			<!-- Pass markets data to MarketList -->
 		</div>
 
