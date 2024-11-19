@@ -2,6 +2,7 @@ import { error, json } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
 import { db } from '$lib/server/db/client';
 import * as table from '$lib/server/db/schema';
+import { addressToCoordinates } from '$lib/utils/search';
 
 export async function GET({ locals }: RequestEvent) {
 	if (!locals.user) {
@@ -15,21 +16,19 @@ export async function POST({ locals, request }: RequestEvent) {
 	if (!locals.user) {
 		return error(401, 'Unauthorized');
 	}
-	const { name, description, location, longitude, latitude, picture } = await request.json();
+	const { name, description, location, picture } = await request.json();
 
-	if (!name || !description || !location || !longitude || !latitude || !picture) {
-		return error(400, 'Invalid parameters 1');
+	if (!name || !description || !location || !picture) {
+		return error(400, 'Invalid parameters');
 	}
 
-	let nLongitude;
-	let nLatitude;
+    let longitude, latitude;
 
-	try {
-		nLongitude = parseFloat(longitude);
-		nLatitude = parseFloat(latitude);
-	} catch (e) {
-		return error(400, 'Invalid parameters 2');
-	}
+    try {
+        ({ longitude, latitude } = await addressToCoordinates(location));
+    } catch (e) {
+        return error(400, 'Invalid location');
+    }
 
 	const vendor = (
 		await db
@@ -38,8 +37,8 @@ export async function POST({ locals, request }: RequestEvent) {
 				name,
 				description,
 				location,
-				longitude: nLongitude,
-				latitude: nLatitude,
+				longitude: longitude,
+				latitude: latitude,
 				picture
 			})
 			.onConflictDoNothing()

@@ -63,8 +63,6 @@ export async function addCompany({
 		name: companyName,
 		description: companyDescription,
 		location: companyLocation,
-		longitude: "0", // Default longitude
-		latitude: "0",  // Default latitude
 		picture: companyPhoto || 'No picture' // Default to an empty string if no photo
 	};
 
