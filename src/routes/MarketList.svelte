@@ -14,25 +14,13 @@
 	}
 
 	function showVendor(vendor: Vendor) {
-        console.log('vendor:', vendor);
 		vendorData = vendor;
 	}
 
-	// Function that receives a blob and returns a URL
-	function blobToUrl(blob: Blob) {
-		const imageUrl = URL.createObjectURL(blob);
-		console.log('Image URL:', imageUrl);
-		return imageUrl;
-	}
-	function bufferToBase64(buffer: any) {
-		const binary = Array.from(new Uint8Array(buffer))
-			.map((byte) => String.fromCharCode(byte))
-			.join('');
-		return `data:image/jpeg;base64,${btoa(binary)}`;
-	}
+    console.log('MarketList');
 
 	//console.log('vendors:', vendors);
-    $inspect(vendorData);
+    $inspect(basketData);
 
 	// Reactive statement to manage body overflow
 	$effect(() => {
@@ -80,8 +68,8 @@
 						onclick={() => showBasket(basket)}
 					>
 						<img
-							src={blobToUrl(basket.picture)}
-							alt={basket.name}
+							src="data:image/jpeg;base64, {basket.picture}"
+							alt="Currently no picture for {basket.name}"
 							class="w-72 h-72 mx-auto rounded-xl object-cover"
 						/>
 						<p class="font-semibold mt-2">{basket.name}</p>

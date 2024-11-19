@@ -30,7 +30,7 @@
         filters = [...filters];
 	}
 
-	const { vendors } : { vendors: Vendor[] } = $page.data;
+    let vendors: Vendor[] = $page.data.vendors;
 
 	// Function to toggle active state of location icon / button
 	function toggleActive() {

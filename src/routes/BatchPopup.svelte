@@ -1,14 +1,10 @@
 <script lang="ts">
 	import { type Basket } from '$lib/server/db/schema';
 
-	export let show = false;
-	export let data: Basket;
-	export let onClose = () => {
-		show = false;
-	};
+    let { data, onClose } : { data: Basket, onClose: () => {} } = $props();
 </script>
 
-{#if show}
+{#if data}
 	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 	<div
 		class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center"
@@ -18,7 +14,7 @@
 		on:keydown={(e) => e.key === 'Escape' && onClose()}
 	>
 		<div
-			class="bg-white pt-12 sm:pt-6 p-6 rounded-3xl shadow-lg w-full sm:w-4/5 h-full sm:h-4/5 relative flex flex-col sm:flex-row justify-start items-center"
+			class="bg-white pt-12 sm:pt-6 p-6 rounded-3xl shadow-lg w-full sm:w-3/5 h-full sm:h-3/5 relative flex flex-col sm:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Batch details"
 			on:click|stopPropagation
@@ -33,8 +29,8 @@
 				×
 			</button>
 			<img
-				src={data.picture}
-				alt={data.name}
+				src="data:image/jpeg;base64,{data.picture}"
+				alt="Currently no picture for {data.name}"
 				class="inset-y-0 left-0 w-full sm:w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
 			/>
 			<div class="w-full sm:w-1/2 pt-4 sm:pt0 h-full pl-4 flex flex-col justify-start items-start">

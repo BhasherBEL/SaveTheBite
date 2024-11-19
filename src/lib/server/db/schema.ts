@@ -48,7 +48,7 @@ export const vendors = sqliteTable('vendors', {
 	location: text('location', { length: 255 }).notNull(),
 	longitude: integer('longitude').notNull(),
 	latitude: integer('latitude').notNull(),
-	picture: blob('picture'),
+	picture: text('picture'),
 	...timestamp
 });
 
@@ -66,7 +66,7 @@ export const baskets = sqliteTable('baskets', {
 	description: text('description').notNull(),
 	initialPrice: integer('initial_price').notNull(),
 	price: integer('price').notNull(),
-	picture: blob('picture'),
+	picture: text('picture'),
 	...timestamp
 });
 
