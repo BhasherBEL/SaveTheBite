@@ -1,0 +1,264 @@
+<script>
+	let language = 'English';
+	let theme = 'Light';
+	let location = '';
+	let foodPreferences = [
+		{ name: 'Lactose-free', active: false },
+		{ name: 'Vegan', active: false },
+		{ name: 'Fish', active: false },
+		{ name: 'Vegetarian', active: false },
+		{ name: 'Eggs-free', active: false },
+		{ name: 'Gluten-free', active: false },
+		{ name: 'Soy-free', active: false },
+		{ name: 'Vegetables', active: false },
+		{ name: 'Fruits', active: false },
+		{ name: 'Bakery', active: false },
+		{ name: 'Hot', active: false },
+		{ name: 'Cold', active: false },
+		{ name: 'Bio', active: false },
+		{ name: 'Local', active: false }
+	];
+
+	function toggleFoodPreference(index) {
+		foodPreferences[index].active = !foodPreferences[index].active;
+	}
+
+	let allergies = [
+		{ name: 'Dairy', active: false },
+		{ name: 'Eggs', active: false },
+		{ name: 'Fish', active: false },
+		{ name: 'Shellfish', active: false },
+		{ name: 'Soy', active: false },
+		{ name: 'Sesame', active: false },
+		{ name: 'Wheat', active: false },
+		{ name: 'Treenuts', active: false },
+		{ name: 'Gluten', active: false },
+		{ name: 'Sulfites', active: false },
+		{ name: 'Celery', active: false },
+		{ name: 'Strawberry', active: false },
+		{ name: 'Kiwi', active: false }
+	];
+
+	function toggleAllergies(index) {
+		allergies[index].active = !allergies[index].active;
+	}
+
+	// Pop-up and Company Data
+	let showAddCompanyPopup = false;
+	let companyName = '';
+	let companyLocation = '';
+	let companyAdded = false;
+
+	function addCompany() {
+		companyAdded = true; // Simulate that the company has been added
+		showAddCompanyPopup = false; // Close the pop-up
+	}
+</script>
+
+<svelte:head>
+	<title>Account - SaveTheBite</title>
+	<meta name="description" content="Manage your account settings on SaveTheBite." />
+</svelte:head>
+
+<section class="container mx-auto p-6 space-y-12">
+	<!-- General Section -->
+	<div class="flex flex-col lg:flex-row lg:space-x-8">
+		<div class="w-full lg:w-1/2">
+			<h2 class="text-2xl font-semibold mb-4">General</h2>
+			<div class="border-l-4 border-green-500 pl-4">
+				<!-- Language Settings -->
+				<div class="mb-6">
+					<p class="font-bold mb-2">Language</p>
+					<div class="flex space-x-4">
+						<button
+							class={`px-4 py-2 rounded ${language === 'Suomi' ? 'bg-green-300' : 'bg-white'}`}
+							on:click={() => (language = 'Suomi')}>Suomi</button
+						>
+						<button
+							class={`px-4 py-2 rounded ${language === 'English' ? 'bg-green-300' : 'bg-white'}`}
+							on:click={() => (language = 'English')}>English</button
+						>
+						<button
+							class={`px-4 py-2 rounded ${language === 'Deutsch' ? 'bg-green-300' : 'bg-white'}`}
+							on:click={() => (language = 'Deutsch')}>Deutsch</button
+						>
+						<button
+							class={`px-4 py-2 rounded ${language === 'Français' ? 'bg-green-300' : 'bg-white'}`}
+							on:click={() => (language = 'Français')}>Français</button
+						>
+					</div>
+				</div>
+
+				<!-- Theme Settings -->
+				<div class="mb-6">
+					<p class="font-bold mb-2">Theme</p>
+					<div class="flex space-x-4">
+						<button
+							class={`px-4 py-2 rounded ${theme === 'Light' ? 'bg-green-300' : 'bg-white'}`}
+							on:click={() => (theme = 'Light')}>Light</button
+						>
+						<button
+							class={`px-4 py-2 rounded ${theme === 'Dark' ? 'bg-green-300' : 'bg-white'}`}
+							on:click={() => (theme = 'Dark')}>Dark</button
+						>
+					</div>
+				</div>
+
+				<!-- Default Location -->
+				<div>
+					<p class="font-bold mb-2">Default location</p>
+					<input
+						type="text"
+						bind:value={location}
+						placeholder="No default location ..."
+						class="w-full p-2 border rounded"
+					/>
+				</div>
+
+				<div class="mt-10">
+					{#if companyAdded}
+						<a
+							href="/account_vendors"
+							class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition block text-center"
+							>Go to Company Page</a
+						>
+					{:else}
+						<button
+							class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
+							on:click={() => (showAddCompanyPopup = true)}>Add a Company</button
+						>
+					{/if}
+				</div>
+			</div>
+		</div>
+
+		<!-- Food Preferences Section -->
+		<div class="w-full lg:w-1/2 mt-12 lg:mt-0">
+			<h2 class="text-2xl font-semibold mb-4">Food preferences</h2>
+			<div class="border-l-4 border-green-500 pl-4">
+				<div class="flex flex-wrap gap-2">
+					{#each foodPreferences as preference, index}
+						<button
+							class={`px-4 py-2 rounded-md ${preference.active ? 'bg-green-300' : 'bg-white border'} border-gray-300`}
+							on:click={() => toggleFoodPreference(index)}
+						>
+							{preference.name}
+						</button>
+					{/each}
+				</div>
+			</div>
+
+			<h2 class="text-2xl font-semibold mt-6 mb-4">Allergies</h2>
+			<div class="border-l-4 border-green-500 pl-4">
+				<div class="flex flex-wrap gap-2">
+					{#each allergies as allergy, index}
+						<button
+							class={`px-4 py-2 rounded-md ${allergy.active ? 'bg-green-300' : 'bg-white border'} border-gray-300`}
+							on:click={() => toggleAllergies(index)}
+						>
+							{allergy.name}
+						</button>
+					{/each}
+				</div>
+			</div>
+		</div>
+
+		<!-- Pop-up for Adding Company -->
+		{#if showAddCompanyPopup}
+			<div class="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center">
+				<div class="bg-white p-8 rounded-lg w-96">
+					<h3 class="text-xl font-semibold mb-4">Add a Company</h3>
+					<div class="mb-4">
+						<label for="companyName" class="block text-sm font-medium text-gray-700 mb-2"
+							>Company Name</label
+						>
+						<input
+							type="text"
+							id="companyName"
+							bind:value={companyName}
+							class="w-full p-2 border rounded"
+							placeholder="Enter company name"
+						/>
+					</div>
+					<div class="mb-4">
+						<label for="companyLocation" class="block text-sm font-medium text-gray-700 mb-2"
+							>Company Location</label
+						>
+						<input
+							type="text"
+							id="companyLocation"
+							bind:value={companyLocation}
+							class="w-full p-2 border rounded"
+							placeholder="Enter company location"
+						/>
+					</div>
+					<div class="mb-4">
+						<label for="companyPhoto" class="block text-sm font-medium text-gray-700 mb-2"
+							>Company Photo (Optional)</label
+						>
+						<input
+							type="file"
+							id="companyPhoto"
+							accept="image/*"
+							class="w-full p-2 border rounded text-gray-500 cursor-not-allowed"
+							placeholder="Click to upload a photo"
+						/>
+					</div>
+					<div class="flex justify-between">
+						<button
+							class="bg-gray-500 text-white px-4 py-2 rounded-md"
+							on:click={() => (showAddCompanyPopup = false)}>Cancel</button
+						>
+						<button class="bg-green-500 text-white px-4 py-2 rounded-md" on:click={addCompany}
+							>Add Company</button
+						>
+					</div>
+				</div>
+			</div>
+		{/if}
+	</div>
+
+	<!-- Favorites Section -->
+	<div>
+		<h2 class="text-2xl font-semibold mb-4">Favorites</h2>
+		<div class="border-l-4 border-green-500 pl-4 space-y-4">
+			<div>
+				<p class="font-bold">Stores</p>
+				<p class="text-gray-600">No favorite stores</p>
+			</div>
+			<div>
+				<p class="font-bold">Baskets</p>
+				<p class="text-gray-600">No favorite baskets</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Current Orders Section -->
+	<div>
+		<h2 class="text-2xl font-semibold mb-4">Current orders</h2>
+		<div class="border-l-4 border-green-500 pl-4">
+			<!-- Example of an Order Card -->
+			<div class="flex items-center border p-4 rounded-lg shadow-md mb-4">
+				<div
+					class="bg-green-300 text-2xl font-bold text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"
+				>
+					2
+				</div>
+				<div class="flex-1">
+					<p class="font-semibold">
+						K-Market Otaniemi <span class="text-gray-500">📍 Otaniementie 12, 02150 Espoo</span>
+					</p>
+					<p class="text-gray-600">19h · Collection starts in 2h45</p>
+				</div>
+			</div>
+			<a href="#" class="text-green-500 hover:underline">See past orders</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	/* Custom spacing and padding */
+	.container {
+		max-width: 1200px;
+	}
+</style>
