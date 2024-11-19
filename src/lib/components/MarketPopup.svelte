@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { type Basket, type Vendor } from '$lib/server/db/schema';
-	import BatchPopup from './BatchPopup.svelte';
+	import BatchPopup from '$lib/components/BatchPopup.svelte';
 
     let { data, onClose } : { data: Vendor, onClose: () => {} } = $props();
-
-	console.log('vendor in popup', data);
 
 	let basketData: Basket | undefined = $state(undefined);
 

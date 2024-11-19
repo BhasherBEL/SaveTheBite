@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { type Basket } from '$lib/server/db/schema';
+    import AddToCart from '$lib/components/AddToCart.svelte'
 
     let { data, onClose } : { data: Basket, onClose: () => {} } = $props();
+
+    let basketQuantity: Basket | undefined = $state(undefined);
+
+    $inspect(basketQuantity);
 </script>
 
 {#if data}
@@ -43,10 +48,15 @@
 				</p>
 				<button
 					class="mt-auto w-full mb-4 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
+                    onclick={() => basketQuantity = data}
 				>
 					Add to cart
 				</button>
 			</div>
 		</div>
 	</div>
+{/if}
+
+{#if basketQuantity}
+    <AddToCart data={basketQuantity} onClose={() => {basketQuantity = undefined}}/>    
 {/if}

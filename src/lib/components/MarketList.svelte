@@ -1,6 +1,6 @@
 <script lang="ts">
-	import BatchPopup from './BatchPopup.svelte';
-	import MarketPopup from './MarketPopup.svelte';
+	import BatchPopup from '$lib/components/BatchPopup.svelte';
+	import MarketPopup from '$lib/components/MarketPopup.svelte';
 	import { type Basket, type Vendor } from '$lib/server/db/schema';
 
 	let { vendors } : { vendors: Vendor[] } = $props(); // Receive markets as a prop
@@ -16,11 +16,6 @@
 	function showVendor(vendor: Vendor) {
 		vendorData = vendor;
 	}
-
-    console.log('MarketList');
-
-	//console.log('vendors:', vendors);
-    $inspect(basketData);
 
 	// Reactive statement to manage body overflow
 	$effect(() => {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MarketList from './MarketList.svelte'; // Import MarketList component
+	import MarketList from '$lib/components/MarketList.svelte'; // Import MarketList component
     import { page } from '$app/stores';
     import { type Vendor } from '$lib/server/db/schema';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	let data: { user: { username: string } } | null = $props();
+	let { data }: { user: { username: string } } | null = $props();
 
 	let isMenuOpen = $state(false);
 
@@ -28,6 +28,7 @@
 			document.body.style.overflow = '';
 		}
 	}
+
 </script>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
@@ -71,6 +72,18 @@
 				{/if}
 			</div>
 		</div>
+        <!-- Shopping Cart -->
+        {#if data?.user}
+            <div class="flex flex-col items-center group">
+                <div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
+                    <i class="fas fa-shopping-cart text-2xl" onclick={() => navigateTo('/cart')}></i>
+                    <a href="/cart" class="text-sm">
+                        <p>Cart</p>
+                    </a>
+                </div>
+            </div>
+        {/if}
+
 		<div class="flex flex-col items-center group">
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
 				<i class="fas fa-info-circle text-2xl" onclick={() => navigateTo('/about')}></i>
