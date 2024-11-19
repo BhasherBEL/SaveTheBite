@@ -5,8 +5,6 @@
     let { data, onClose } : { data: Basket, onClose: () => {} } = $props();
 
     let basketQuantity: Basket | undefined = $state(undefined);
-
-    $inspect(basketQuantity);
 </script>
 
 {#if data}

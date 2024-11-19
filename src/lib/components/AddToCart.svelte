@@ -34,8 +34,8 @@
 			</button>
 			<div class="w-full pt-2 sm:pt0 h-full flex flex-col justify-start items-start">
 				<div class="flex justify-between w-full mb-2">
-					<h2 class="text-base font-semibold text-black">Quantity</h2>
-					<h2 class="text-primary text-base">{quantity}q - {totalPrice}€</h2>
+					<h2 class="text-base font-semibold text-black">Quantity: {quantity}</h2>
+					<h2 class="text-primary text-base"> {totalPrice}€</h2>
 				</div>
 				<div class="flex flex-row w-full">
 					<button

@@ -16,6 +16,9 @@ export default {
                 bold: ["Inter", "sans-serif"],
                 semibold: ["Inter", "sans-serif"],
             },
+            blur: {
+                xs: '2px',
+            }
         },
     },
     plugins: []

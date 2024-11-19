@@ -82,7 +82,7 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src="data:image/jpeg;base64, {basket.picture}"
+								src="data:image/jpeg;base64, {basket.picture || vendor.picture}"
 								alt="Currently no picture for {basket.name}"
 								class="w-72 h-72 mx-auto rounded-xl object-cover"
 							/>

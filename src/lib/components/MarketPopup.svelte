@@ -1,14 +1,24 @@
 <script lang="ts">
 	import { type Basket, type Vendor } from '$lib/server/db/schema';
 	import BatchPopup from '$lib/components/BatchPopup.svelte';
+    import AddToCart from '$lib/components/AddToCart.svelte'; 
 
-    let { data, onClose } : { data: Vendor, onClose: () => {} } = $props();
+	let { data, onClose }: { data: Vendor; onClose: () => {} } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
+    let quantityShow = $state(false);
+    let basketShow = $state(false);
 
 	function showBasket(basket: Basket) {
 		basketData = basket;
+        basketShow = true;
 	}
+
+    function showQuantity(basket: Basket) {
+        event?.stopPropagation();
+        basketData = basket;
+        quantityShow = true;
+    }
 </script>
 
 {#if data}
@@ -60,11 +70,11 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src={basket.picture}
+								src="data:image/jpeg;base64,{basket.picture||data.picture}"
 								alt={basket.name}
 								class="inset-y-0 left-0 w-full sm:w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
+								class:blur-xs={!basket.picture}
 							/>
-
 							<div
 								class="relative w-full p-4 sm:p-0 pt-4 sm:pt-0 sm:w-2/3 pl-4 sm:pl-4 ml-0 sm:ml-2 flex flex-col justify-between"
 							>
@@ -73,14 +83,11 @@
 									<h2 class="text-primary text-xl">{basket.price}€</h2>
 								</div>
 								<p class="text-gray-400 text-sm flex-1 pb-4">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-									molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-									numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
-									optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
-									obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil,
+									{basket.description}
 								</p>
 								<button
 									class="w-full py-1 bg-primary text-white font-semibold rounded-xl hover:bg-green-600"
+                                    onclick={() => showQuantity(basket)}
 								>
 									Add to cart
 								</button>
@@ -94,4 +101,9 @@
 {/if}
 
 <!-- Display the batch popup -->
-<BatchPopup data={basketData} onClose={() => (basketData = undefined)} />
+{#if basketShow}
+    <BatchPopup data={basketData} onClose={() => (basketShow = false)} />
+{/if}
+{#if quantityShow}
+    <AddToCart data={basketData} onClose={() => (quantityShow = false)} />
+{/if}
