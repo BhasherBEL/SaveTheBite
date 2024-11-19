@@ -3,6 +3,7 @@ import type { RequestEvent } from './$types';
 import { db } from '$lib/server/db/client';
 import * as table from '$lib/server/db/schema';
 import { eq, or, SQL } from 'drizzle-orm';
+import { search } from '$lib/utils/search';
 
 function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
 	var R = 6371; // Radius of the earth in km
@@ -30,9 +31,11 @@ export async function GET({ locals, url }: RequestEvent) {
 	let distance: number;
 
 	if (
-		!url.searchParams.has('longitude') ||
-		!url.searchParams.has('latitude') ||
-		!url.searchParams.has('distance')
+		!url.searchParams.has('distance') ||
+		!(
+			url.searchParams.has('text') ||
+			(url.searchParams.has('longitude') && url.searchParams.has('latitude'))
+		)
 	) {
 		const sales = await db.query.sales.findMany({
 			with: {
@@ -48,10 +51,20 @@ export async function GET({ locals, url }: RequestEvent) {
 	}
 
 	try {
-		longitude = parseFloat(url.searchParams.get('longitude') || '');
-		latitude = parseFloat(url.searchParams.get('latitude') || '');
 		distance = parseFloat(url.searchParams.get('distance') || '');
+		if (!distance) throw new Error();
+
+		if (url.searchParams.has('text')) {
+			const text = url.searchParams.get('text');
+			if (!text) throw new Error();
+
+			({ longitude, latitude } = await search(text));
+		} else {
+			longitude = parseFloat(url.searchParams.get('longitude') || '');
+			latitude = parseFloat(url.searchParams.get('latitude') || '');
+		}
 	} catch (e) {
+		console.log(e);
 		return error(400, 'Invalid parameters');
 	}
 
