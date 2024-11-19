@@ -20,9 +20,11 @@
 
             <h2 class="text-2xl font-semibold mb-2">New here?</h2>
             <p class="mb-4">Create an account</p>
-            <button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
-                >Sign up</button
-            >
+
+            <a href="/registration">
+                <button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition">Sign up</button>
+            </a>
+
         </div>
 
         <!-- Login Section (Right Side) -->
