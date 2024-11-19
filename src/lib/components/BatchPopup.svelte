@@ -32,7 +32,7 @@
 				×
 			</button>
 			<img
-				src="data:image/jpeg;base64,{data.picture}"
+				src="{data.picture}"
 				alt="Currently no picture for {data.name}"
 				class="inset-y-0 left-0 w-full sm:w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
 			/>

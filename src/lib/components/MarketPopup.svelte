@@ -47,7 +47,7 @@
 			</button>
 			{#if data.picture}
 				<img
-					src="data:image/jpeg;base64,{data.picture}"
+					src="{data.picture}"
 					alt={data.name}
 					class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
 				/>
@@ -70,7 +70,7 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src="data:image/jpeg;base64,{basket.picture||data.picture}"
+								src="{basket.picture||data.picture}"
 								alt={basket.name}
 								class="inset-y-0 left-0 w-full sm:w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
 								class:blur-xs={!basket.picture}

@@ -1,6 +1,5 @@
 <script lang="ts">
-
-    import { addCompany } from "$lib/utils/company";
+	import { addCompany } from '$lib/utils/company';
 
 	let language = 'English';
 	let theme = 'Light';
@@ -52,15 +51,38 @@
 	let companyLocation = '';
 	let companyDescription = '';
 	let companyAdded = false;
-	let companyPhoto;
+	let filePhoto: File;
 
+	const toBase64 = (file) =>
+		new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => resolve(reader.result);
+			reader.onerror = reject;
+		});
 
-	function addCompanyPage() {
+    async function convertFileToBase64(photo: File) {
+        try {
+            const base64String = await toBase64(photo);
+            console.log(base64String);
+            return base64String;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+	async function addCompanyPage() {
 		companyAdded = true; // Simulate that the company has been added
 		showAddCompanyPopup = false; // Close the pop-up
 
-		console.log(companyName, companyDescription, companyLocation, companyPhoto);
-		addCompany({ companyName, companyDescription, companyLocation, companyPhoto});
+        filePhoto = (document.getElementById('companyPhoto') as HTMLInputElement).files[0];
+        
+        let companyPhoto = '';
+        if (filePhoto) {
+            companyPhoto = await convertFileToBase64(filePhoto);
+        }
+
+		addCompany({ companyName, companyDescription, companyLocation, companyPhoto });
 	}
 </script>
 
@@ -234,7 +256,6 @@
 							>Add Company</button
 						>
 					</div>
-
 				</div>
 			</div>
 		{/if}

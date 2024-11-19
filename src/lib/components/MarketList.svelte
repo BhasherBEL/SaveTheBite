@@ -13,6 +13,8 @@
 	let basketData: Basket | undefined = $state(undefined);
 	let vendorData: Vendor | undefined = $state(undefined);
 
+    $inspect(vendors);
+
 	function showBasket(basket: Basket) {
 		event?.stopPropagation();
 		basketData = basket;
@@ -82,7 +84,7 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src="data:image/jpeg;base64, {basket.picture || vendor.picture}"
+								src="{basket.picture || vendor.picture}"
 								alt="Currently no picture for {basket.name}"
 								class="w-72 h-72 mx-auto rounded-xl object-cover"
 							/>
