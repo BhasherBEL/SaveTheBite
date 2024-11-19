@@ -1,54 +1,49 @@
 <script lang="ts">
-	import Basket from '$lib/types/basket';
-	import Vendor from '$lib/types/vendor';
+	import { type Basket, type Vendor } from '$lib/server/db/schema';
 	import BatchPopup from './BatchPopup.svelte';
 
-	export let show = false;
-	export let data: Vendor;
-	export let onClose = () => {
-		show = false;
-	};
+    let { data, onClose } : { data: Vendor, onClose: () => {} } = $props();
 
 	console.log('vendor in popup', data);
 
-	let basketVisible = false;
-	let basketData: Basket;
+	let basketData: Basket | undefined = $state(undefined);
 
 	function showBasket(basket: Basket) {
 		basketData = basket;
-		basketVisible = true;
 	}
 </script>
 
-{#if show}
-	<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+{#if data}
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
 		class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center"
 		role="dialog"
 		aria-label="Show batch details"
-		on:click={onClose}
-		on:keydown={(e) => e.key === 'Escape' && onClose()}
+		onclick={onClose}
+		onkeydown={(e) => e.key === 'Escape' && onClose()}
 	>
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<div
 			class="bg-white p-6 rounded-3xl shadow-lg w-ful sm:w-4/5 h-full sm:h-4/5 relative flex flex-col sm:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Market details"
-			on:click|stopPropagation
-			on:keydown|stopPropagation={(e) => e.key === 'Enter' && onClose()}
+            onclick={e => e.stopPropagation()}
 		>
 			<!-- Close Button for small screens -->
 			<button
 				class="absolute top-4 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
-				on:click={onClose}
+				onclick={onClose}
 				aria-label="Close"
 			>
 				×
 			</button>
-			<img
-				src={data.picture}
-				alt={data.name}
-				class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
-			/>
+            {#if data.picture}
+                <img
+                    src={data.picture as any}
+                    alt={data.name}
+                    class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
+                />
+            {/if}
 			<div class="w-full sm:w-3/5 h-full pl-0 sm:pl-8 flex flex-col justify-start items-start">
 				<h2 class="text-3xl font-semibold text-primary">{data.name}</h2>
 
@@ -61,10 +56,10 @@
 						<div
 							role="button"
 							aria-label="Show batch details"
-							on:keydown={(e) => e.key === 'Enter' && showBasket(basket)}
+							onkeydown={(e) => e.key === 'Enter' && showBasket(basket)}
 							tabindex="0"
 							class="rounded-2xl mt-4 w-full p-0 sm:p-2 border border-secondary flex flex-col sm:flex-row flex-start"
-							on:click={() => showBasket(basket)}
+							onclick={() => showBasket(basket)}
 						>
 							<img
 								src={basket.picture}
@@ -101,4 +96,4 @@
 {/if}
 
 <!-- Display the batch popup -->
-<BatchPopup show={basketVisible} data={basketData} onClose={() => (basketVisible = false)} />
+<BatchPopup data={basketData} onClose={() => (basketData = undefined)} />

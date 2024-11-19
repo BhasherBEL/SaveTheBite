@@ -247,3 +247,15 @@ export const cartsRelations = relations(carts, ({ one }) => ({
 		references: [sales.id]
 	})
 }));
+
+export type Basket = typeof baskets.$inferSelect;
+export type Cart = typeof carts.$inferSelect;
+export type Favorite = typeof favorites.$inferSelect;
+export type Manager = typeof managers.$inferSelect;
+export type Order = typeof orders.$inferSelect;
+export type Review = typeof reviews.$inferSelect;
+export type Sale = typeof sales.$inferSelect;
+export type Tag = typeof tags.$inferSelect;
+export type Vendor = typeof vendors.$inferSelect;
+export type User = typeof users.$inferSelect;
+

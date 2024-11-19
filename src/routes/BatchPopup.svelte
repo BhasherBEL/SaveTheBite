@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Basket from '$lib/types/basket';
+	import { type Basket } from '$lib/server/db/schema';
 
 	export let show = false;
 	export let data: Basket;

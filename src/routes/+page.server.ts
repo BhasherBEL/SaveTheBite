@@ -3,7 +3,7 @@ import { getVendors } from '$lib/server/db/vendors';
 export async function load() {
     try {
         const vendors = await getVendors();
-        console.log("server vendors: ", vendors);
+        console.log("Fetched vendors:", vendors);
         return { vendors };
     } catch (error) {
         console.error("Error fetching vendors:", error);

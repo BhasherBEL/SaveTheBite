@@ -1,17 +1,19 @@
 <script lang="ts">
 	import MarketList from './MarketList.svelte'; // Import MarketList component
     import { page } from '$app/stores';
+    import { type Vendor } from '$lib/server/db/schema';
 
-	let isActive = false; // Track if the location button has been clicked
+	let isActive = $state(false); // Track if the location button has been clicked
 
-	let filters: { name: string; active: boolean | null }[] = [
+	let filters: { name: string; active: boolean | null }[] = $state([
 		{ name: 'Vegetarian', active: null },
 		{ name: 'Vegan', active: null },
 		{ name: 'Fish', active: null },
 		{ name: 'Gluten free', active: null },
 		{ name: 'Egg free', active: null },
 		{ name: 'Non-Dairy', active: null }
-	]; // Array to hold filter options
+	]); // Array to hold filter options
+    $inspect(filters);
 
 	// Function to toggle active state for filter buttons
 	function toggleFilter(index: number) {
@@ -25,11 +27,10 @@
 			default:
 				filters[index].active = true;
 		}
+        filters = [...filters];
 	}
 
-	const { vendors } = $page.data;
-
-    console.log("page data", vendors);
+	const { vendors } : { vendors: Vendor[] } = $page.data;
 
 	// Function to toggle active state of location icon / button
 	function toggleActive() {
@@ -55,7 +56,7 @@
 		/>
 		<button
 			class={`group p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500 hover:bg-gray-100' : 'bg-gray-100 hover:bg-green-500'} shadow-md`}
-			on:click={toggleActive}
+			onclick={toggleActive}
 		>
 			<i
 				class={`fas fa-map-marker-alt ${isActive ? 'text-white group-hover:text-gray-400' : 'text-gray-400 group-hover:text-white'} transition-colors duration-300`}
@@ -70,7 +71,7 @@
 				class="button p-2 text-xs/[8px] text-gray-900 rounded-full border-black border transition-colors duration-100 hover:scale-105"
 				class:bg-secondary={filter.active}
 				class:bg-opposite={filter.active == false}
-				on:click={() => toggleFilter(index)}
+				onclick={() => toggleFilter(index)}
 			>
 				{filter.name}
 			</button>
@@ -83,7 +84,7 @@
 	>
 		<!-- Product Cards (Left side) -->
 		<div class={`transition-all duration-500 ${isActive ? 'w-full md:col-span-2' : 'w-full'}`}>
-			<MarketList {vendors} {filters} />
+			<MarketList {vendors}/>
 			<!-- Pass markets data to MarketList -->
 		</div>
 

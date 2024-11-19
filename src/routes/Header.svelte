@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let data: { user: { username: string } } | null = null;
+	let data: { user: { username: string } } | null = $props();
 
-	let isMenuOpen = false;
+	let isMenuOpen = $state(false);
 
 	function navigateTo(path: string) {
 		isMenuOpen = false;
@@ -30,6 +30,9 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y_consider_explicit_label -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <header class="bg-white py-4 px-8 flex justify-between items-center">
 	<div class="flex items-center space-x-4">
 		<a href="/">
@@ -39,7 +42,7 @@
 
 	<!-- Hamburger Menu for small devices -->
 	<div class="lg:hidden flex items-center">
-		<button on:click={toggleMenu} class="text-gray-800">
+		<button onclick={toggleMenu} class="text-gray-800">
 			<i class="fas fa-bars text-2xl"></i>
 		</button>
 	</div>
@@ -48,7 +51,7 @@
 	<nav class="hidden lg:flex space-x-8">
 		<div class="flex flex-col items-center group">
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
-				<i class="fas fa-home text-2xl" on:click={() => navigateTo('/')}></i>
+				<i class="fas fa-home text-2xl" onclick={() => navigateTo('/')}></i>
 				<a href="/" class="text-sm">
 					<p>Home</p>
 				</a>
@@ -56,7 +59,7 @@
 		</div>
 		<div class="flex flex-col items-center group">
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
-				<i class="fas fa-user text-2xl" on:click={() => navigateToAccount()}></i>
+				<i class="fas fa-user text-2xl" onclick={() => navigateToAccount()}></i>
 				{#if data?.user}
 					<a href="/account" class="text-sm">
 						<p>{data?.user.username}</p>
@@ -70,7 +73,7 @@
 		</div>
 		<div class="flex flex-col items-center group">
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
-				<i class="fas fa-info-circle text-2xl" on:click={() => navigateTo('/about')}></i>
+				<i class="fas fa-info-circle text-2xl" onclick={() => navigateTo('/about')}></i>
 				<a href="/about" class="text-sm">
 					<p>About</p>
 				</a>
@@ -85,7 +88,7 @@
 			<!-- Close Button for small screens -->
 			<button
 				class="absolute top-2 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
-				on:click={toggleMenu}
+				onclick={toggleMenu}
 				aria-label="Close"
 			>
 				×
@@ -94,7 +97,7 @@
 			<!-- Home button -->
 			<div
 				class="flex w-full items-center justify-center bg-primary text-white p-3 text-xl font-semibold rounded-xl hover:bg-green-600 transition duration-200"
-				on:click={() => navigateTo('/')}
+				onclick={() => navigateTo('/')}
 			>
 				<i class="fas fa-home text-2xl mr-4"></i>
 				<p class="w-full text-center">Home</p>
@@ -104,7 +107,7 @@
 			<!-- Account/Login button -->
 			<div
 				class="flex w-full items-center justify-center bg-primary text-white p-3 text-xl font-semibold rounded-xl hover:bg-green-600 transition duration-200"
-				on:click={() => navigateToAccount()}
+				onclick={() => navigateToAccount()}
 			>
 				<i class="fas fa-user text-2xl mr-4"></i>
 				{#if data?.user}
@@ -118,7 +121,7 @@
 			<!-- About button -->
 			<div
 				class="flex w-full items-center justify-center bg-primary text-white p-3 text-xl font-semibold rounded-xl hover:bg-green-600 transition duration-200"
-				on:click={() => navigateTo('/about')}
+				onclick={() => navigateTo('/about')}
 			>
 				<i class="fas fa-info-circle text-2xl mr-4"></i>
 				<p class="w-full text-center">About</p>
