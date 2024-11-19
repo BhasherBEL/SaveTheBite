@@ -43,6 +43,17 @@
 		allergies[index].active = !allergies[index].active;
 	}
 
+	// Pop-up and Company Data
+	let showAddCompanyPopup = false;
+	let companyName = '';
+	let companyLocation = '';
+	let companyAdded = false;
+
+	function addCompany() {
+		companyAdded = true;  // Simulate that the company has been added
+		showAddCompanyPopup = false;  // Close the pop-up
+	}
+
 
 </script>
 
@@ -83,9 +94,15 @@
 					<input type="text" bind:value={location} placeholder="No default location ..." class="w-full p-2 border rounded" />
 				</div>
 
+
 				<div class="mt-10">
-                    <button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition">Add a Company</button>
+					{#if companyAdded}
+						<a href="/company-page" class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition block text-center">Go to Company Page</a>
+					{:else}
+						<button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition" on:click={() => showAddCompanyPopup = true}>Add a Company</button>
+					{/if}
 				</div>
+
 
 			</div>
 		</div>
@@ -121,6 +138,28 @@
              </div>
 
 		</div>
+
+
+        <!-- Pop-up for Adding Company -->
+        {#if showAddCompanyPopup}
+            <div class="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white p-8 rounded-lg w-96">
+                    <h3 class="text-xl font-semibold mb-4">Add a Company</h3>
+                    <div class="mb-4">
+                        <label for="companyName" class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                        <input type="text" id="companyName" bind:value={companyName} class="w-full p-2 border rounded" placeholder="Enter company name" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="companyLocation" class="block text-sm font-medium text-gray-700 mb-2">Company Location</label>
+                        <input type="text" id="companyLocation" bind:value={companyLocation} class="w-full p-2 border rounded" placeholder="Enter company location" />
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="bg-gray-500 text-white px-4 py-2 rounded-md" on:click={() => showAddCompanyPopup = false}>Cancel</button>
+                        <button class="bg-green-500 text-white px-4 py-2 rounded-md" on:click={addCompany}>Add Company</button>
+                    </div>
+                </div>
+            </div>
+        {/if}
 
 
 	</div>
