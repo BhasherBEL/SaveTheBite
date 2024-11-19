@@ -97,7 +97,7 @@
 
 				<div class="mt-10">
 					{#if companyAdded}
-						<a href="/company-page" class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition block text-center">Go to Company Page</a>
+						<a href="/account_vendors" class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition block text-center">Go to Company Page</a>
 					{:else}
 						<button class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition" on:click={() => showAddCompanyPopup = true}>Add a Company</button>
 					{/if}
@@ -152,6 +152,10 @@
                     <div class="mb-4">
                         <label for="companyLocation" class="block text-sm font-medium text-gray-700 mb-2">Company Location</label>
                         <input type="text" id="companyLocation" bind:value={companyLocation} class="w-full p-2 border rounded" placeholder="Enter company location" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="companyPhoto" class="block text-sm font-medium text-gray-700 mb-2">Company Photo (Optional)</label>
+                        <input type="file" id="companyPhoto" accept="image/*" class="w-full p-2 border rounded text-gray-500 cursor-not-allowed" placeholder="Click to upload a photo"/>
                     </div>
                     <div class="flex justify-between">
                         <button class="bg-gray-500 text-white px-4 py-2 rounded-md" on:click={() => showAddCompanyPopup = false}>Cancel</button>
