@@ -1,35 +1,32 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from '../$types';
 import { registerUser } from '$lib/server/db/users';
 import { setSessionTokenCookie } from '$lib/utils/cookies';
 import { createSession, generateSessionToken } from '$lib/server/auth';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
-		redirect(303, '/');
-	}
-};
-
 export const actions = {
 	default: async ({ cookies, request, url }) => {
 		const data = await request.formData();
-		const username = data.get('username')?.toString();
+		const name = data.get('name')?.toString();
 		const email = data.get('email')?.toString();
 		const password = data.get('password')?.toString();
+		const defaultLocation = data.get('defaultLocation')?.toString();
 
-		if (!username || !email || !password) {
+		if (!name || !email || !password) {
 			return fail(400, { missing: true });
 		}
 
-		const user = await registerUser(username, email, password, 'user');
+		// Register the user
+		const user = await registerUser(name, email, password, 'customer', 'en', 'light', defaultLocation);
 		if (!user) {
 			return fail(400, { invalid: true });
 		}
 
+		// Create a session for the user
 		const token = generateSessionToken();
 		const session = await createSession(token, user.id);
 		setSessionTokenCookie(cookies, token, session.expiresAt);
 
+		// Redirect after successful registration
 		redirect(303, url.searchParams.get('redirect') || '/');
 	}
 } satisfies Actions;

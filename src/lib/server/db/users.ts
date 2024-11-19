@@ -18,7 +18,10 @@ export async function registerUser(
 	username: string,
 	email: string,
 	password: string,
-	type: string
+	type: string,
+	language: string,
+	theme: string,
+	defaultLocation: string
 ): Promise<User> {
 	const hashedPassword = bcrypt.hashSync(password, 10);
 	return db
@@ -27,7 +30,10 @@ export async function registerUser(
 			username,
 			email,
 			password: hashedPassword,
-			type
+			type,
+			language,
+			theme,
+			defaultLocation
 		})
 		.onConflictDoNothing()
 		.returning()
