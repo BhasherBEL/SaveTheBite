@@ -1,53 +1,17 @@
 <script>
+    import { addBasket, deleteBasket } from '$lib/utils/company';
+
+    let { data } = $props();
+
+    $inspect(data);
+
 	// Company Details with timestamps and image
-	let company = {
-		name: 'K-Market Otaniemi',
-		location: 'Otaniementie 12, 02150 Espoo',
-		managers: ['max.mustermann@example.com', 'a.b@example.com'],
-		createdAt: '2022-06-01',
-		updatedAt: '2024-11-19',
-		image: 'https://via.placeholder.com/150'
-	};
+	let company = data?.vendor;
 
-	let foodBaskets = [
-		{
-			id: 1,
-			name: 'Vegetarian Basket',
-			initialPrice: '18.00€',
-			price: '15.99€',
-			items: ['Vegetables', 'Fruits'],
-			image: 'https://via.placeholder.com/100'
-		},
-		{
-			id: 2,
-			name: 'Mixed Basket',
-			initialPrice: '14.50€', // Initial price
-			price: '12.99€',
-			items: ['Bakery', 'Dairy'],
-			image: 'https://via.placeholder.com/100'
-		}
-	];
+    console.log(company);
 
-	// Handlers for basket actions
-	function addBasket() {
-		foodBaskets.push({
-			id: foodBaskets.length + 1,
-			name: 'New Basket',
-			initialPrice: '0.00€',
-			price: '0.00€',
-			items: [],
-			availability: 'Out of Stock',
-			image: 'https://via.placeholder.com/100' // Placeholder image for new basket
-		});
-	}
+	let foodBaskets = $state(company?.baskets || []);
 
-	function deleteBasket(id) {
-		foodBaskets = foodBaskets.filter((basket) => basket.id !== id);
-	}
-
-	function editBasket(id) {
-		alert(`Edit basket ID: ${id}`);
-	}
 </script>
 
 <svelte:head>
@@ -64,11 +28,12 @@
 		<h2 class="text-2xl font-semibold mb-4">Company Details</h2>
 		<div class="border-l-4 border-green-500 pl-4 flex items-center space-x-6">
 			<!-- Company Image -->
-			<img src={company.image} alt="Company Logo" class="w-48 h-48 object-cover rounded-full" />
+			<img src="data:image/jpeg;base64,{company.picture}"
+                alt="Company Logo" 
+                class="w-48 h-48 object-cover rounded-2xl" />
 			<div>
 				<p><strong>Name:</strong> {company.name}</p>
 				<p><strong>Location:</strong> {company.location}</p>
-				<p><strong>Managers:</strong> {company.managers.join(', ')}</p>
 				<p><strong>Created At:</strong> {company.createdAt}</p>
 				<p><strong>Last Updated:</strong> {company.updatedAt}</p>
 				<button
@@ -95,7 +60,7 @@
 								<p class="font-bold">{basket.name}</p>
 								<p class="text-gray-600">Initial Price: {basket.initialPrice}</p>
 								<p class="text-gray-600">Price: {basket.price}</p>
-								<p class="text-gray-600">Items: {basket.items.join(', ')}</p>
+								<p class="text-gray-600">Price: {basket.description}</p>
 							</div>
 							<div class="space-x-2">
 								<button
@@ -121,7 +86,6 @@
 			<!-- Add Basket Button -->
 			<button
 				class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-700 transition"
-				on:click={addBasket}
 			>
 				Add New Basket
 			</button>
