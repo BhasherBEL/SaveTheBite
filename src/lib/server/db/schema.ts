@@ -148,7 +148,7 @@ export const sales = sqliteTable('sales', {
 		.references(() => baskets.id, { onDelete: 'cascade' }),
 	quantity: integer('quantity').notNull(),
 	remain: integer('remain').notNull(),
-	timeout: integer('timeout').notNull(),
+	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
 	...timestamp
 });
 
@@ -258,4 +258,3 @@ export type Sale = typeof sales.$inferSelect;
 export type Tag = typeof tags.$inferSelect;
 export type Vendor = typeof vendors.$inferSelect;
 export type User = typeof users.$inferSelect;
-

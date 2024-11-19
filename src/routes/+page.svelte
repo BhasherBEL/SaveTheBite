@@ -1,9 +1,7 @@
 <script lang="ts">
-	import MarketList from '$lib/components/MarketList.svelte'; // Import MarketList component
-    import { page } from '$app/stores';
-    import { type Vendor } from '$lib/server/db/schema';
+	import MarketList from '$lib/components/MarketList.svelte';
 
-	let isActive = $state(false); // Track if the location button has been clicked
+	let isActive = $state(false);
 
 	let filters: { name: string; active: boolean | null }[] = $state([
 		{ name: 'Vegetarian', active: null },
@@ -12,9 +10,8 @@
 		{ name: 'Gluten free', active: null },
 		{ name: 'Egg free', active: null },
 		{ name: 'Non-Dairy', active: null }
-	]); // Array to hold filter options
+	]);
 
-	// Function to toggle active state for filter buttons
 	function toggleFilter(index: number) {
 		switch (filters[index].active) {
 			case true:
@@ -32,7 +29,7 @@
 	let { data } = $props();
 
 	function toggleActive() {
-		isActive = !isActive; // Toggle the active state
+		isActive = !isActive;
 	}
 </script>
 

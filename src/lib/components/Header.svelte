@@ -1,5 +1,7 @@
 <script lang="ts">
-	let { data }: { user: { username: string } } | null = $props();
+	import type { PageData } from '../../routes/$types';
+
+	let { data }: { data: PageData } = $props();
 
 	let isMenuOpen = $state(false);
 
@@ -28,7 +30,6 @@
 			document.body.style.overflow = '';
 		}
 	}
-
 </script>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
@@ -72,17 +73,25 @@
 				{/if}
 			</div>
 		</div>
-        <!-- Shopping Cart -->
-        {#if data?.user}
-            <div class="flex flex-col items-center group">
-                <div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
-                    <i class="fas fa-shopping-cart text-2xl" onclick={() => navigateTo('/cart')}></i>
-                    <a href="/cart" class="text-sm">
-                        <p>Cart</p>
-                    </a>
-                </div>
-            </div>
-        {/if}
+		<!-- Shopping Cart -->
+		{#if data?.user}
+			<div class="flex flex-col items-center group">
+				<div
+					class="flex flex-col relative items-center text-gray-800 hover:text-primary hover:cursor-pointer"
+				>
+					<i class="fas fa-shopping-cart text-2xl" onclick={() => navigateTo('/cart')}></i>
+					<a href="/cart" class="text-sm">
+						<p>Cart</p>
+					</a>
+					<div
+						class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2"
+						class:bg-primary={data?.cartSize > 0}
+					>
+						{data?.cartSize}
+					</div>
+				</div>
+			</div>
+		{/if}
 
 		<div class="flex flex-col items-center group">
 			<div class="flex flex-col items-center text-gray-800 hover:text-primary hover:cursor-pointer">
@@ -98,14 +107,14 @@
 	<div
 		class={`lg:hidden ${isMenuOpen ? 'block' : 'hidden'} absolute top-0 left-0 w-full h-screen bg-white flex flex-col items-center space-y-4 py-6`}
 	>
-			<!-- Close Button for small screens -->
-			<button
-				class="absolute top-2 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
-				onclick={toggleMenu}
-				aria-label="Close"
-			>
-				×
-			</button>
+		<!-- Close Button for small screens -->
+		<button
+			class="absolute top-2 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
+			onclick={toggleMenu}
+			aria-label="Close"
+		>
+			×
+		</button>
 		<div class="w-full p-4">
 			<!-- Home button -->
 			<div

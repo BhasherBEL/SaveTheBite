@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { type Basket } from '$lib/server/db/schema';
-    import AddToCart from '$lib/components/AddToCart.svelte'
+	import AddToCart from '$lib/components/AddToCart.svelte';
 
-    let { data, onClose } : { data: Basket, onClose: () => {} } = $props();
+	let { data, onClose }: { data: Basket; onClose: () => {} } = $props();
 
-    let basketQuantity: Basket | undefined = $state(undefined);
+	let show = $state(false);
 </script>
 
 {#if data}
@@ -21,7 +21,7 @@
 			class="bg-white pt-12 sm:pt-6 p-6 rounded-3xl shadow-lg w-full sm:w-3/5 h-full sm:h-3/5 relative flex flex-col sm:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Batch details"
-			onclick={e => e.stopPropagation()}
+			onclick={(e) => e.stopPropagation()}
 		>
 			<!-- Close Button for small screens -->
 			<button
@@ -42,11 +42,11 @@
 					<h2 class="text-primary text-xl">{data.price}€</h2>
 				</div>
 				<p class="text-gray-400 text-sm flex-1 pb-4">
-                    {data.description}
+					{data.description}
 				</p>
 				<button
 					class="mt-auto w-full mb-4 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
-                    onclick={() => basketQuantity = data}
+					onclick={() => (show = true)}
 				>
 					Add to cart
 				</button>
@@ -55,6 +55,11 @@
 	</div>
 {/if}
 
-{#if basketQuantity}
-    <AddToCart data={basketQuantity} onClose={() => {basketQuantity = undefined}}/>    
+{#if show}
+	<AddToCart
+		{data}
+		onClose={() => {
+			show = false;
+		}}
+	/>
 {/if}
