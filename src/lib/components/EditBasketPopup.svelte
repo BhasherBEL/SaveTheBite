@@ -1,39 +1,31 @@
 <script lang="ts">
 	import { type Basket } from '$lib/server/db/schema';
-	import { addBasket } from '$lib/utils/company';
+	import { updateBasket } from '$lib/utils/company';
     import convertPhoto from '$lib/utils/photo';
 
-	let { vendorId, onClose, onCancel }: { vendorId: number, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
+	let { basket, onClose, onCancel }: { basket: Basket, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
 
-	let basketData: Basket = $state({
-        initialPrice: 0,
-        price: 0,
-        picture: '',
-        name: '',
-        description: '',
-    });
-
-    async function addBasketHandler() {
-        if (!basketData.name || !basketData.description || !vendorId || !basketData.initialPrice) {
+    async function editBasketHandler() {
+        if (!basket.name || !basket.description || !basket.id || !basket.initialPrice) {
             return console.error('Please fill in all fields');
         }
-        basketData.price = basketData.initialPrice;
+        basket.price = basket.initialPrice;
 
         const photo = document.getElementById('basketPhoto') as HTMLInputElement;
         if (photo?.files[0]) {
-            basketData.picture = await convertPhoto(photo.files[0]);
+            basket.picture = await convertPhoto(photo.files[0]);
         }
         
         try {
-            await addBasket(vendorId, basketData);
-            onClose(basketData);
+            await updateBasket(basket);
+            onClose(basket);
         } catch (error) {
             console.error(error);                
         }
     }
 </script>
 
-<!-- Pop-up for Adding Basket -->
+<!-- Pop-up for editing Basket -->
 <div class="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center">
 	<div class="bg-white p-8 rounded-lg w-96">
 		<h3 class="text-xl font-semibold mb-4">Add a basket</h3>
@@ -44,7 +36,7 @@
 			<input
 				type="text"
 				id="basketName"
-				bind:value={basketData.name}
+				bind:value={basket.name}
 				class="w-full p-2 border rounded"
 				placeholder="Enter basket name"
 			/>
@@ -56,7 +48,7 @@
 			<input
 				type="text"
 				id="basketDescription"
-				bind:value={basketData.description}
+				bind:value={basket.description}
 				class="w-full p-2 border rounded"
 				placeholder="Enter basket description"
 			/>
@@ -68,7 +60,7 @@
             <input
                 type="number"
                 id="basketInitialPrice"
-                bind:value={basketData.initialPrice}
+                bind:value={basket.initialPrice}
                 min="0"
                 class="w-full p-2 border rounded"
                 placeholder="Enter initial price"
@@ -91,8 +83,8 @@
 				class="bg-gray-500 text-white px-4 py-2 rounded-md"
 				onclick={onCancel}>Cancel</button
 			>
-			<button class="bg-green-500 text-white px-4 py-2 rounded-md" onclick={addBasketHandler}
-				>Add Basket</button
+			<button class="bg-green-500 text-white px-4 py-2 rounded-md" onclick={editBasketHandler}
+				>Confirm</button
 			>
 		</div>
 	</div>

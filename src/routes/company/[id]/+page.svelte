@@ -1,6 +1,7 @@
 <script lang="ts">
     import { addBasket, deleteBasket } from '$lib/utils/company';
     import AddBasketPopup from '$lib/components/AddBasketPopup.svelte';
+    import EditBasketPopup from '$lib/components/EditBasketPopup.svelte';
 
     let { data } = $props();
 
@@ -12,6 +13,8 @@
 
     // Handlers for basket actions
     let showAddBasketPopup = $state(false);
+    let showEditBasketPopup = $state(false);
+    let basketData = $state({});
 
     function basketCloseHandler(basket) {
         showAddBasketPopup = false;
@@ -23,7 +26,11 @@
         foodBaskets = foodBaskets.filter((basket) => basket.id !== id);
     }
 
-    $inspect(showAddBasketPopup);
+    function editBasketHandler(id: number) {
+        showEditBasketPopup = true;
+        basketData = foodBaskets.find((basket) => basket.id === id);
+    }
+
     $inspect(foodBaskets);
 </script>
 
@@ -78,6 +85,7 @@
 							<div class="space-x-2">
 								<button
 									class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-700 transition"
+                                    onclick={() => editBasketHandler(basket.id)}
 								>
 									Edit
 								</button>
@@ -107,7 +115,11 @@
 </section>
 
 {#if showAddBasketPopup}
-    <AddBasketPopup vendorId={company.id} onClose={basketCloseHandler} /> 
+    <AddBasketPopup vendorId={company.id} onClose={basketCloseHandler} onCancel={() => {showAddBasketPopup = false}} /> 
+{/if}
+
+{#if showEditBasketPopup}
+    <EditBasketPopup basket={basketData} onClose={() => {showEditBasketPopup = false}} onCancel={() => {showEditBasketPopup = false}}/>
 {/if}
 
 <style>
