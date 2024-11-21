@@ -1,23 +1,32 @@
 <script lang="ts">
-	import { type Basket, type Vendor } from '$lib/server/db/schema';
+	import { type Basket, type Vendor, type Cart, type Order } from '$lib/server/db/schema';
 	import BatchPopup from '$lib/components/BatchPopup.svelte';
-    import AddToCart from '$lib/components/AddToCart.svelte'; 
+	import AddToCart from '$lib/components/AddToCart.svelte';
 
-	let { data, onClose }: { data: Vendor; onClose: () => {} } = $props();
+	let { data, onClose, cart }: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
-    let quantityShow = $state(false);
-    let basketShow = $state(false);
+	let quantityShow = $state(false);
+	let basketShow = $state(false);
 
 	function showBasket(basket: Basket) {
 		basketData = basket;
-        basketShow = true;
+		basketShow = true;
 	}
 
-    function showQuantity(basket: Basket) {
-        event?.stopPropagation();
-        basketData = basket;
-        quantityShow = true;
+    $inspect(cart);
+
+	function showQuantity(basket: Basket) {
+		event?.stopPropagation();
+		basketData = basket;
+		quantityShow = true;
+	}
+
+    function checkCart(basketId: number): Order {
+        // Check if the basket is already in the cart
+        let order = cart.find((order) => order.sale.basketId  === basketId);
+        console.log(order);
+        return order;
     }
 </script>
 
@@ -47,7 +56,7 @@
 			</button>
 			{#if data.picture}
 				<img
-					src="{data.picture}"
+					src={data.picture}
 					alt={data.name}
 					class="inset-y-0 left-0 w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto hidden sm:block"
 				/>
@@ -60,7 +69,7 @@
 					<span class="text-gray-400 text-sm font-bold">{data.location}</span>
 				</div>
 				<div class="overflow-y-auto h-[calc(100%-4rem)]">
-					{#each data.baskets as basket (basket.id)}
+					{#each data.baskets as basket}
 						<div
 							role="button"
 							aria-label="Show batch details"
@@ -70,7 +79,7 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src="{basket.picture||data.picture}"
+								src={basket.picture || data.picture}
 								alt={basket.name}
 								class="inset-y-0 left-0 w-full sm:w-1/3 h-full object-cover aspect-square mx-auto rounded-xl"
 								class:blur-xs={!basket.picture}
@@ -85,12 +94,21 @@
 								<p class="text-gray-400 text-sm flex-1 pb-4">
 									{basket.description}
 								</p>
-								<button
-									class="w-full py-1 bg-primary text-white font-semibold rounded-xl hover:bg-green-600"
-                                    onclick={() => showQuantity(basket)}
-								>
-									Add to cart
-								</button>
+								{#if checkCart(basket.id) !== undefined}
+									<button
+										class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
+										disabled
+									>
+										Delete from cart ({checkCart(basket.id)?.quantity})
+									</button>
+								{:else}
+									<button
+										class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
+										onclick={() => (show = true)}
+									>
+										Add to cart
+									</button>
+								{/if}
 							</div>
 						</div>
 					{/each}
@@ -102,8 +120,8 @@
 
 <!-- Display the batch popup -->
 {#if basketShow}
-    <BatchPopup data={basketData} onClose={() => (basketShow = false)} />
+	<BatchPopup data={basketData} onClose={() => (basketShow = false)} {cart} />
 {/if}
 {#if quantityShow}
-    <AddToCart data={basketData} onClose={() => (quantityShow = false)} />
+	<AddToCart data={basketData} onClose={() => (quantityShow = false)} {cart} />
 {/if}

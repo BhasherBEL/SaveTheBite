@@ -27,6 +27,7 @@
 	}
 
 	let { data } = $props();
+    let cart = data.cart;
 
 	function toggleActive() {
 		isActive = !isActive;
@@ -83,7 +84,7 @@
 	>
 		<!-- Product Cards (Left side) -->
 		<div class={`transition-all duration-500 ${isActive ? 'w-full md:col-span-2' : 'w-full'}`}>
-			<MarketList vendors={data.vendors} longitude={data.longitude} latitude={data.latitude} />
+			<MarketList vendors={data.vendors} longitude={data.longitude} latitude={data.latitude} cart={cart}/>
 			<!-- Pass markets data to MarketList -->
 		</div>
 

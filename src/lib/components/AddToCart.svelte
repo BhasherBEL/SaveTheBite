@@ -19,19 +19,19 @@
 	onkeydown={(e) => e.key === 'Escape' && onClose()}
 >
 	<div
-		class="bg-white pt-12 sm:pt-6 p-6 rounded-3xl shadow-lg w-full sm:w-1/6 sm:h-auto relative flex flex-col sm:flex-row justify-start items-center"
+		class="bg-white pt-12 lg:pt-6 p-6 rounded-3xl shadow-lg w-full lg:w-1/6 lg:h-auto relative flex flex-col lg:flex-row justify-start items-center"
 		role="dialog"
 		aria-label="Batch details"
 		onclick={(e) => e.stopPropagation()}
 	>
 		<button
-			class="absolute top-2 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
+			class="absolute top-2 right-4 lg:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
 			onclick={onClose}
 			aria-label="Close"
 		>
 			×
 		</button>
-		<div class="w-full pt-2 sm:pt0 h-full flex flex-col justify-start items-start">
+		<div class="w-full pt-2 lg:pt0 h-full flex flex-col justify-start items-start">
 			<div class="flex justify-between w-full mb-2">
 				<h2 class="text-base font-semibold text-black">Quantity</h2>
 				<h2 class="text-primary text-base">{quantity}q - {totalPrice}€</h2>

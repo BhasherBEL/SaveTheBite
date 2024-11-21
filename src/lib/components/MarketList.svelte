@@ -1,19 +1,20 @@
 <script lang="ts">
 	import BatchPopup from '$lib/components/BatchPopup.svelte';
 	import MarketPopup from '$lib/components/MarketPopup.svelte';
-	import { type Basket, type Vendor } from '$lib/server/db/schema';
+	import { type Basket, type Vendor, type Cart } from '$lib/server/db/schema';
 	import { getDistanceFromLatLonInKm } from '$lib/utils/search';
 
 	let {
 		vendors,
 		longitude,
-		latitude
-	}: { vendors: Vendor[]; longitude?: number; latitude?: number } = $props();
+		latitude,
+        cart
+	}: { vendors: Vendor[]; longitude?: number; latitude?: number, cart: Cart[] } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
 	let vendorData: Vendor | undefined = $state(undefined);
 
-    $inspect(vendors);
+    $inspect(cart);
 
 	function showBasket(basket: Basket) {
 		event?.stopPropagation();
@@ -44,11 +45,11 @@
 				onclick={() => showVendor(vendor)}
 			>
 				<div class="flex justify-between items-center mb-4">
-					<div class="flex flex-col sm:flex-row justify-start">
+					<div class="flex flex-col lg:flex-row justify-start">
 						<span class="font-bold text-lg">{vendor.name}</span>
 
 						<!-- Display the address of the market with a map logo before -->
-						<div class="inline-flex items-center space-x-2 pt-2 sm:pt-0 sm:ml-6">
+						<div class="inline-flex items-center space-x-2 pt-2 lg:pt-0 lg:ml-6">
 							<i class="fas fa-map-marker-alt text-gray-400"></i>
 							<span class="text-gray-400 text-sm font-bold">
 								{vendor.location}
@@ -73,7 +74,7 @@
 				</div>
 
 				<!-- Display the batches of the market -->
-				<div class="gap-4 mt-4 flex flex-col sm:flex-row overflow-x-auto">
+				<div class="gap-4 mt-4 flex flex-col lg:flex-row overflow-x-auto">
 					{#each vendor.baskets as basket (basket.id)}
 						<div
 							role="button"
@@ -86,7 +87,7 @@
 							<img
 								src="{basket.picture || vendor.picture}"
 								alt="Currently no picture for {basket.name}"
-								class="w-72 h-72 mx-auto rounded-xl object-cover"
+								class="lg:w-72 lg:h-72 mx-auto rounded-xl object-cover"
 							/>
 							<p class="font-semibold mt-2">{basket.name}</p>
 							<p>{basket.price}€</p>
@@ -104,10 +105,10 @@
 
 <!-- Display the batch popup -->
 {#if basketData}
-	<BatchPopup data={basketData} onClose={() => (basketData = undefined)} />
+	<BatchPopup data={basketData} onClose={() => (basketData = undefined)} cart={cart}/>
 {/if}
 {#if vendorData}
-	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} />
+	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} cart={cart}/>
 {/if}
 
 <style>

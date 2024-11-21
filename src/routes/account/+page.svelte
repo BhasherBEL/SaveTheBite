@@ -61,26 +61,26 @@
 			reader.onerror = reject;
 		});
 
-    async function convertFileToBase64(photo: File) {
-        try {
-            const base64String = await toBase64(photo);
-            console.log(base64String);
-            return base64String;
-        } catch (error) {
-            console.error(error);
-        }
-    }
+	async function convertFileToBase64(photo: File) {
+		try {
+			const base64String = await toBase64(photo);
+			console.log(base64String);
+			return base64String;
+		} catch (error) {
+			console.error(error);
+		}
+	}
 
 	async function addCompanyPage() {
 		companyAdded = true; // Simulate that the company has been added
 		showAddCompanyPopup = false; // Close the pop-up
 
-        filePhoto = (document.getElementById('companyPhoto') as HTMLInputElement).files[0];
-        
-        let companyPhoto = '';
-        if (filePhoto) {
-            companyPhoto = await convertFileToBase64(filePhoto);
-        }
+		filePhoto = (document.getElementById('companyPhoto') as HTMLInputElement).files[0];
+
+		let companyPhoto = '';
+		if (filePhoto) {
+			companyPhoto = await convertFileToBase64(filePhoto);
+		}
 
 		addCompany({ companyName, companyDescription, companyLocation, companyPhoto });
 	}
@@ -145,20 +145,17 @@
 						class="w-full p-2 border rounded"
 					/>
 				</div>
-
-				<div class="mt-10">
-					{#if companyAdded}
-						<a
-							href="/account_vendors"
-							class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition block text-center"
-							>Go to Company Page</a
-						>
-					{:else}
+			</div>
+			<!-- Company Section -->
+			<div class="w-full mt-12 lg:mt-6">
+				<h2 class="text-2xl font-semibold mb-4">Company</h2>
+				<div class="border-l-4 border-green-500 pl-4">
+					<div class="flex flex-wrap gap-2">
 						<button
 							class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
 							on:click={() => (showAddCompanyPopup = true)}>Add a Company</button
 						>
-					{/if}
+					</div>
 				</div>
 			</div>
 		</div>

@@ -1,10 +1,19 @@
 <script lang="ts">
-	import { type Basket } from '$lib/server/db/schema';
+	import { type Basket, type Cart, type Sale, type Order } from '$lib/server/db/schema';
 	import AddToCart from '$lib/components/AddToCart.svelte';
 
-	let { data, onClose }: { data: Basket; onClose: () => {} } = $props();
+	let { data, onClose, cart }: { data: Basket; onClose: () => {}, cart: Cart } = $props();
 
 	let show = $state(false);
+
+    $inspect(cart);
+
+    function checkCart(basketId: number): Order {
+        // Check if the basket is already in the cart
+        let order = cart.find((order) => order.sale.basketId  === basketId);
+        console.log(order);
+        return order;
+    }
 </script>
 
 {#if data}
@@ -18,14 +27,14 @@
 		onkeydown={(e) => e.key === 'Escape' && onClose()}
 	>
 		<div
-			class="bg-white pt-12 sm:pt-6 p-6 rounded-3xl shadow-lg w-full sm:w-3/5 h-full sm:h-3/5 relative flex flex-col sm:flex-row justify-start items-center"
+			class="bg-white pt-12 lg:pt-6 p-6 lg:rounded-3xl shadow-lg w-full lg:w-3/5 h-full lg:h-3/5 relative flex flex-col lg:flex-row justify-start items-center"
 			role="dialog"
 			aria-label="Batch details"
 			onclick={(e) => e.stopPropagation()}
 		>
 			<!-- Close Button for small screens -->
 			<button
-				class="absolute top-2 right-4 sm:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
+				class="absolute top-2 right-4 lg:hidden text-3xl font-semibold text-gray-600 hover:text-gray-800"
 				onclick={onClose}
 				aria-label="Close"
 			>
@@ -34,9 +43,9 @@
 			<img
 				src="{data.picture}"
 				alt="Currently no picture for {data.name}"
-				class="inset-y-0 left-0 w-full sm:w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
+				class="inset-y-0 left-0 w-full lg:w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
 			/>
-			<div class="w-full sm:w-1/2 pt-4 sm:pt0 h-full pl-4 flex flex-col justify-start items-start">
+			<div class="w-full lg:w-1/2 pt-4 lg:pt-0 h-full pl-4 flex flex-col justify-start items-start">
 				<div class="flex justify-between w-full mb-2">
 					<h2 class="text-2xl font-semibold text-black">{data.name}</h2>
 					<h2 class="text-primary text-xl">{data.price}€</h2>
@@ -44,12 +53,21 @@
 				<p class="text-gray-400 text-sm flex-1 pb-4">
 					{data.description}
 				</p>
-				<button
-					class="mt-auto w-full mb-4 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
-					onclick={() => (show = true)}
-				>
-					Add to cart
-				</button>
+                {#if checkCart(data.id) !== undefined}
+                    <button
+                        class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
+                        disabled
+                    >
+                        Delete from cart ({checkCart(data.id).quantity})
+                    </button>
+                {:else}
+                    <button
+                        class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
+                        onclick={() => (show = true)}
+                    >
+                        Add to cart
+                    </button>
+                {/if}
 			</div>
 		</div>
 	</div>

@@ -27,7 +27,7 @@
 <!-- Shopping cart list -->
 <section class="p-1 h-full w-full flex flex-col flex-1">
 	<h1 class="text-6xl text-center font-bold mb-12">Shopping Cart</h1>
-	<ul class="divide-y h-full w-full divide-gray-200 flex-1 overflow-y-scroll space-y-4">
+	<ul class="divide-y h-full w-full divide-gray-200 flex-1 space-y-4">
 		{#if emptyCart}
 			<li class="text-2xl text-green-800 h-full flex items-center justify-center text-center">
 				Your cart is empty
