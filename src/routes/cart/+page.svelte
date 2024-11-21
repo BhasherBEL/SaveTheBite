@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { type Order } from '$lib/server/db/schema';
+    import { deleteSale, deleteAllSales } from '$lib/utils/cart';
 
 	let { data } = $props();
-	let { cart } = data;
+	let { cart } = $state(data);
 
 	$inspect(cart);
 
 	// Handlers for basket actions
-	function deleteBasketHandler(id: number) {
-		deleteBasket(id);
-		cart = cart.filter((basket) => basket.id !== id);
+	function deleteSaleHandler(saleId: number) {
+        console.log("Deleting sale with id: ", saleId);
+        deleteSale(saleId);
+		cart = cart.filter((order) => order.saleId !== saleId);
 	}
 
 	function emptyCartHandler() {
+        deleteAllSales();
 		cart = [];
 	}
 
@@ -21,7 +24,7 @@
 		console.log('Order confirmed');
 	}
 
-	let emptyCart = cart.length === 0;
+	let emptyCart = $derived(cart.length === 0);
 </script>
 
 <!-- Shopping cart list -->
@@ -48,7 +51,7 @@
 					>
 				</div>
 			</div>
-			{#each cart as { sale: { basket }, quantity }}
+			{#each cart as { sale: { basket }, quantity, saleId }}
 				<div
 					class="border p-4 rounded-lg shadow-md flex flex-col md:flex-row space-x-0 md:space-x-6"
 				>
@@ -67,7 +70,7 @@
 						<div class="flex justify-between md:justify-end space-x-2">
 							<button
 								class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-700 transition"
-								onclick={() => deleteBasketHandler(basket.id)}
+								onclick={() => deleteSaleHandler(saleId)}
 							>
 								Delete
 							</button>

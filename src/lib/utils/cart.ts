@@ -38,3 +38,15 @@ export async function deleteSale(saleId: number) {
         throw error;
     }
 }
+
+// Delete all sales from cart
+export async function deleteAllSales() {
+    try {
+        const response = await fetch(`/api/carts/`, {
+            method: 'DELETE',
+        });
+    } catch (error: any) {
+        console.error('An error occurred:', error.message);
+        throw error;
+    }
+}

@@ -86,12 +86,14 @@
 					<div
 						class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2 animate-ping"
 						class:bg-primary={data?.cartSize > 0}
+						onclick={() => navigateTo('/cart')}
 					>
 						{data?.cartSize}
 					</div>
 					<div
 						class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2"
 						class:bg-primary={data?.cartSize > 0}
+						onclick={() => navigateTo('/cart')}
 					>
 						{data?.cartSize}
 					</div>
@@ -145,28 +147,28 @@
 				{/if}
 			</div>
 		</div>
-        <div class="w-full p-4">
-            <!-- Shopping Cart button -->
-            <div
-                class="flex w-full items-center justify-center bg-primary text-white p-3 text-xl font-semibold rounded-xl hover:bg-green-600 transition duration-200"
-                onclick={() => navigateTo('/cart')}
-            >
-                <i class="fas fa-shopping-cart text-2xl mr-4"></i>
-                <p class="w-full text-center">Cart</p>
-                <div
-                    class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2 animate-ping"
-                    class:bg-primary={data?.cartSize > 0}
-                >
-                    {data?.cartSize}
-                </div>
-                <div
-                    class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2"
-                    class:bg-primary={data?.cartSize > 0}
-                >
-                    {data?.cartSize}
-                </div>
-            </div>
-        </div>
+		<div class="w-full p-4">
+			<!-- Shopping Cart button -->
+			<div
+				class="flex w-full items-center justify-center bg-primary text-white p-3 text-xl font-semibold rounded-xl hover:bg-green-600 transition duration-200"
+				onclick={() => navigateTo('/cart')}
+			>
+				<i class="fas fa-shopping-cart text-2xl mr-4"></i>
+				<p class="w-full text-center">Cart</p>
+				<div
+					class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2 animate-ping"
+					class:bg-primary={data?.cartSize > 0}
+				>
+					{data?.cartSize}
+				</div>
+				<div
+					class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2"
+					class:bg-primary={data?.cartSize > 0}
+				>
+					{data?.cartSize}
+				</div>
+			</div>
+		</div>
 		<div class="w-full p-4">
 			<!-- About button -->
 			<div

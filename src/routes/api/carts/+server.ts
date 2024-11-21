@@ -21,17 +21,21 @@ export async function GET({ locals }: RequestEvent) {
     return json(cart);
 }
 
-export async function DELETE({ locals, params }: RequestEvent) {
+export async function DELETE({ locals, request }: RequestEvent) {
     if (!locals.user) {
         return error(401, 'Unauthorized');
     }
 
-    if (!params.saleId) {
+    if (!request.body) {
+        console.log('Deleting all items from cart');
         return json(await db.delete(table.carts).where(eq(table.carts.userId, locals.user.id)));
     } else {
+        const { saleId } = await request.json();
+        console.log('Deleting item from cart');
+        const saleIdInt = parseInt(saleId);
         return json(
-            await db.delete(table.carts).where(and(eq(table.carts.userId, locals.user.id), eq(table.carts.saleId, params.saleId)))
-        );
+            await db.delete(table.carts).where(and(eq(table.carts.userId, locals.user.id), eq(table.carts.saleId, saleId)))
+        )
     }
 }
 
