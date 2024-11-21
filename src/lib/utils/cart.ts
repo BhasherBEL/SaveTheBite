@@ -50,3 +50,15 @@ export async function deleteAllSales() {
         throw error;
     }
 }
+
+// Pay for the cart
+export async function payCart() {
+    try {
+        const response = await fetch(`/api/carts/pay`, {
+            method: 'POST',
+        });
+    } catch (error: any) {
+        console.error('An error occurred:', error.message);
+        throw error;
+    }
+}

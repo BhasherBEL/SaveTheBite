@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Order } from '$lib/server/db/schema';
-    import { deleteSale, deleteAllSales } from '$lib/utils/cart';
+    import { deleteSale, deleteAllSales, payCart } from '$lib/utils/cart';
 
 	let { data } = $props();
 	let { cart } = $state(data);
@@ -21,7 +21,8 @@
 
 	function confirmOrderHandler() {
 		// Send the order to the server
-		console.log('Order confirmed');
+        payCart(cart);
+        cart = [];
 	}
 
 	let emptyCart = $derived(cart.length === 0);
