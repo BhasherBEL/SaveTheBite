@@ -3,7 +3,7 @@
 	import AddBasketPopup from '$lib/components/AddBasketPopup.svelte';
 	import EditBasketPopup from '$lib/components/EditBasketPopup.svelte';
 	import EditCompanyPopup from '$lib/components/EditCompanyPopup.svelte';
-    import AddSalePopup from '$lib/components/AddSalePopup.svelte';
+	import AddSalePopup from '$lib/components/AddSalePopup.svelte';
 
 	let { data } = $props();
 
@@ -19,7 +19,7 @@
 	let showEditBasketPopup = $state(false);
 	let basketData = $state({});
 	let showEditCompanyPopup = $state(false);
-    let showAddSalePopup = $state(false);
+	let showAddSalePopup = $state(false);
 
 	function basketCloseHandler(basket) {
 		showAddBasketPopup = false;
@@ -41,18 +41,42 @@
 		company = vendor;
 	}
 
-    function saleCloseHandler(sale) {
-        showAddSalePopup = false;
-        foodBaskets.find(basket => basket.id === sale.basketId).sales.push(sale);
-    }
+	function saleCloseHandler(sale) {
+		showAddSalePopup = false;
+		foodBaskets.find((basket) => basket.id === sale.basketId).sales.push(sale);
+	}
 
-    function createSaleHandler(basket: Basket) {
-        showAddSalePopup = true;
-        basketData = basket;
-    }
+	function createSaleHandler(basket: Basket) {
+		showAddSalePopup = true;
+		basketData = basket;
+	}
 
-    $inspect(basketData);
+	// Utility function to inspect the data
+	function timeBetween(now, future) {
+		const diffMs = future - now; // Difference in milliseconds
 
+		if (diffMs <= 0) {
+			return 'Time has already passed!';
+		}
+
+		// Convert milliseconds to units
+		const seconds = Math.floor((diffMs / 1000) % 60);
+		const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+		const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+		const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+		if (days > 0) {
+			return `${days} days, ${hours} hours`;
+		} else if (hours > 0) {
+			return `${hours} hours, ${minutes} minutes`;
+		} else if (minutes > 0) {
+			return `${minutes} minutes and ${seconds} seconds`;
+		} else {
+			return `${seconds} seconds`;
+		}
+	}
+
+	$inspect(foodBaskets);
 </script>
 
 <svelte:head>
@@ -69,7 +93,11 @@
 		<h2 class="text-2xl font-semibold mb-4">Company Details</h2>
 		<div class="border-l-4 border-green-500 pl-4 flex flex-col md:flex-row items-center space-x-6">
 			<!-- Company Image -->
-			<img src={company.picture} alt="Company Logo" class="md:w-48 md:h-48 mb-4 md:mb-0 object-cover rounded-2xl" />
+			<img
+				src={company.picture}
+				alt="Company Logo"
+				class="md:w-48 md:h-48 mb-4 md:mb-0 object-cover rounded-2xl"
+			/>
 			<div class="w-full">
 				<p><strong>Name:</strong> {company.name}</p>
 				<p><strong>Location:</strong> {company.location}</p>
@@ -93,7 +121,9 @@
 			{#if foodBaskets.length > 0}
 				<div class="space-y-4">
 					{#each foodBaskets as basket}
-						<div class="border p-4 rounded-lg shadow-md flex flex-col md:flex-row space-x-0 md:space-x-6">
+						<div
+							class="border p-4 rounded-lg shadow-md flex flex-col md:flex-row space-x-0 md:space-x-6"
+						>
 							<img
 								src={basket.picture}
 								alt={basket.name}
@@ -120,13 +150,33 @@
 										Delete
 									</button>
 								</div>
-                                <button
-                                    class="bg-green-500 w-full text-white py-1 mt-4 md:mt-0 rounded-md hover:bg-green-700 transition"
-                                    onclick={() => createSaleHandler(basket)}
-                                >
-                                    Create sales 
-                                </button>
+								<button
+									class="bg-green-500 w-full text-white py-1 mt-4 md:mt-0 rounded-md hover:bg-green-700 transition"
+									onclick={() => createSaleHandler(basket)}
+								>
+									Create sales
+								</button>
 							</div>
+						</div>
+
+						<div
+							class="flex flex-col justify-between mt-10 border ml-6 md:ml-16 rounded-lg shadow-md p-2"
+						>
+							{#each basket.sales as sale, index}
+								<div class="flex flex-col justify-between">
+									<div class="flex flex-col md:flex-row space-x-2">
+										<h3 class="font-bold">Sale {index + 1}:</h3>
+										<div class="flex flex-grow justify-between">
+											<p class="text-gray-600">
+												Quantity {sale.remain} out of {sale.quantity}
+											</p>
+											<p class="text-gray-600">
+												End in {timeBetween(new Date(), sale.expiresAt)}
+											</p>
+										</div>
+									</div>
+								</div>
+							{/each}
 						</div>
 					{/each}
 				</div>
@@ -178,15 +228,14 @@
 {/if}
 
 {#if showAddSalePopup}
-    <AddSalePopup
-        basket={basketData}
-        onClose={saleCloseHandler}
-        onCancel={() => {
-            showAddSalePopup = false;
-        }}
-    />
+	<AddSalePopup
+		basket={basketData}
+		onClose={saleCloseHandler}
+		onCancel={() => {
+			showAddSalePopup = false;
+		}}
+	/>
 {/if}
-
 
 <style>
 	/* Styling similar to user account page */
