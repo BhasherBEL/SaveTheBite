@@ -84,6 +84,12 @@
 						<p>Cart</p>
 					</a>
 					<div
+						class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2 animate-ping"
+						class:bg-primary={data?.cartSize > 0}
+					>
+						{data?.cartSize}
+					</div>
+					<div
 						class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gray-500 border-2 border-white rounded-full -top-2 -end-2"
 						class:bg-primary={data?.cartSize > 0}
 					>

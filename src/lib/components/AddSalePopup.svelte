@@ -52,7 +52,7 @@
                 >Expires At</label
             >
             <input
-                type="date"
+                type="datetime-local"
                 id="saleExpiresAt"
                 bind:value={sale.expiresAt}
                 class="w-full p-2 border rounded"
