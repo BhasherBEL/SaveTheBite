@@ -22,3 +22,19 @@ export async function addSale(saleId: number, quantity: number) {
 		throw error;
 	}
 }
+// Delete sale form cart
+export async function deleteSale(saleId: number) {
+    try {
+        const response = await fetch(`/api/carts/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ saleId })
+        });
+
+    } catch (error: any) {
+        console.error('An error occurred:', error.message);
+        throw error;
+    }
+}

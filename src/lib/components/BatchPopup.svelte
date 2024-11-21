@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type Basket, type Cart, type Sale, type Order } from '$lib/server/db/schema';
 	import AddToCart from '$lib/components/AddToCart.svelte';
+    import { deleteSale } from '$lib/utils/cart';
 
 	let { data, onClose, cart }: { data: Basket; onClose: () => {}, cart: Cart } = $props();
 
@@ -13,6 +14,12 @@
         let order = cart.find((order) => order.sale.basketId  === basketId);
         console.log(order);
         return order;
+    }
+
+    function deleteFromCart(basketId: number) {
+        event?.stopPropagation();
+        deleteSale(basketId, cart);
+        cart = cart.filter((order) => order.sale.basketId === basketId);
     }
 </script>
 
@@ -56,7 +63,7 @@
                 {#if checkCart(data.id) !== undefined}
                     <button
                         class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-                        disabled
+                        onclick={() => deleteFromCart(data.id)}
                     >
                         Delete from cart ({checkCart(data.id).quantity})
                     </button>

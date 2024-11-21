@@ -2,6 +2,7 @@
 	import { type Basket, type Vendor, type Cart, type Order } from '$lib/server/db/schema';
 	import BatchPopup from '$lib/components/BatchPopup.svelte';
 	import AddToCart from '$lib/components/AddToCart.svelte';
+    import { deleteSale } from '$lib/utils/cart';
 
 	let { data, onClose, cart }: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
 
@@ -25,9 +26,15 @@
     function checkCart(basketId: number): Order {
         // Check if the basket is already in the cart
         let order = cart.find((order) => order.sale.basketId  === basketId);
-        console.log(order);
         return order;
     }
+
+    function deleteFromCart(basketId: number) {
+        event?.stopPropagation();
+        deleteSale(basketId, cart);
+        cart = cart.filter((order) => order.sale.basketId === basketId);
+    }
+
 </script>
 
 {#if data}
@@ -97,14 +104,14 @@
 								{#if checkCart(basket.id) !== undefined}
 									<button
 										class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-										disabled
+                                        onclick={() => deleteFromCart(basket.id)}
 									>
 										Delete from cart ({checkCart(basket.id)?.quantity})
 									</button>
 								{:else}
 									<button
 										class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
-										onclick={() => (show = true)}
+										onclick={() => {showQuantity(basket)}}
 									>
 										Add to cart
 									</button>

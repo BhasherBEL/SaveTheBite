@@ -48,7 +48,9 @@ export async function load({ url }: LoadEvent) {
 						distance
 				);
 			}
-		} catch (e) {}
+		} catch (e) {
+            console.error('Error fetching coordinates', e);
+        }
 	}
 
 	return { vendors: vendors, longitude, latitude };
