@@ -11,5 +11,4 @@ export const load: PageLoad = async({ params }) => {
         console.log('Error fetching vendor:', error);
         return { vendor: null };
     }
-        
 }

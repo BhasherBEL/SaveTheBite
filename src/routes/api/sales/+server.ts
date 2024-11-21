@@ -101,6 +101,7 @@ export async function POST({ locals, request }: RequestEvent) {
 	}
 
 	const { basketId, quantity, remain, timeout } = await request.json();
+    console.log(basketId, quantity, remain, timeout);
 
 	const basket = await db.query.baskets.findFirst({
 		where: eq(table.baskets.id, basketId),
@@ -125,6 +126,9 @@ export async function POST({ locals, request }: RequestEvent) {
 		return error(403, 'Forbidden');
 	}
 
+    const timestamp = timeout ? new Date(timeout) : Date.now();
+    console.log(timestamp);
+
 	return json(
 		await db
 			.insert(table.sales)
@@ -132,7 +136,7 @@ export async function POST({ locals, request }: RequestEvent) {
 				basketId,
 				quantity,
 				remain,
-				timeout
+				expiresAt: timestamp
 			})
 			.onConflictDoNothing()
 			.returning()

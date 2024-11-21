@@ -1,3 +1,4 @@
+import type { Vendor } from "$lib/server/db/schema";
 
 export async function addBasket(vendorId: number, basket: Basket): Promise<void> {
     try {
@@ -81,4 +82,35 @@ export async function addCompany({
 		console.error('Error adding company:', err);
 		throw err;
 	}
+}
+
+export async function updateCompany(company: Vendor) {
+    // Validate required fields
+    if (!company.name || !company.description || !company.location) {
+        throw new Error('Name, Description, and Location are required');
+    }
+
+    // Prepare data payload
+    const payload = {
+        name: company.name,
+        description: company.description,
+        location: company.location,
+        picture: company.picture || 'No picture' // Default to an empty string if no photo
+    };
+
+    try {
+        const response = await fetch(`/api/vendors/${company.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Failed to update the company');
+        }
+    } catch (err) {
+        console.error('Error updating company:', err);
+        throw err;
+    }
 }
