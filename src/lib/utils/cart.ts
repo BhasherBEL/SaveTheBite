@@ -24,41 +24,40 @@ export async function addSale(saleId: number, quantity: number) {
 }
 // Delete sale form cart
 export async function deleteSale(saleId: number) {
-    try {
-        const response = await fetch(`/api/carts/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ saleId })
-        });
-
-    } catch (error: any) {
-        console.error('An error occurred:', error.message);
-        throw error;
-    }
+	try {
+		const response = await fetch(`/api/carts/`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ saleId })
+		});
+	} catch (error: any) {
+		console.error('An error occurred:', error.message);
+		throw error;
+	}
 }
 
 // Delete all sales from cart
 export async function deleteAllSales() {
-    try {
-        const response = await fetch(`/api/carts/`, {
-            method: 'DELETE',
-        });
-    } catch (error: any) {
-        console.error('An error occurred:', error.message);
-        throw error;
-    }
+	try {
+		const response = await fetch(`/api/carts/`, {
+			method: 'DELETE'
+		});
+	} catch (error: any) {
+		console.error('An error occurred:', error.message);
+		throw error;
+	}
 }
 
 // Pay for the cart
 export async function payCart() {
-    try {
-        const response = await fetch(`/api/carts/pay`, {
-            method: 'POST',
-        });
-    } catch (error: any) {
-        console.error('An error occurred:', error.message);
-        throw error;
-    }
+	try {
+		const response = await fetch(`/api/carts/pay`, {
+			method: 'POST'
+		});
+	} catch (error: any) {
+		console.error('An error occurred:', error.message);
+		throw error;
+	}
 }
