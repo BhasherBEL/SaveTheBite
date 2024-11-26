@@ -1,5 +1,4 @@
 <script lang="ts">
-	// Create an array of FAQ categories containing a header and its related FAQs
 	let faqSections = [
 		{
 			header: "General Questions",
@@ -149,7 +148,6 @@
 		}
 	];
 
-	// Toggle function to expand/collapse FAQ answers
 	function toggleFAQ(sectionIndex: number, faqIndex: number) {
 		faqSections = faqSections.map((section, sIndex) => {
 			if (sIndex === sectionIndex) {
@@ -169,7 +167,7 @@
 </svelte:head>
 
 <section class="p-8 max-w-4xl mx-auto">
-	<h1 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h1> <!-- Adjusted margin-bottom -->
+	<h1 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h1>
 
 	<!-- FAQ sections -->
 	<div class="space-y-8">
@@ -184,7 +182,6 @@
 								on:click={() => toggleFAQ(sectionIndex, faqIndex)}
 							>
 								<h3 class="text-lg font-semibold">{faq.question}</h3>
-								<!-- Icon to show expand/collapse -->
 								<span class="text-gray-600">{faq.open ? '−' : '+'}</span>
 							</div>
 							{#if faq.open}
@@ -201,19 +198,16 @@
 </section>
 
 <style>
-	/* Smooth accordion animation */
 	section div {
 		transition: max-height 0.3s ease;
 		overflow: hidden;
 	}
 
-	/* Additional spacing for the FAQ header and items */
 	h1 {
-		margin-bottom: 2rem; /* Add more space below the header */
+		margin-bottom: 2rem;
 	}
 
-	/* Space between FAQ items */
 	.border {
-		margin-top: 1rem; /* Space between each FAQ item */
+		margin-top: 1rem;
 	}
 </style>
