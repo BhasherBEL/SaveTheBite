@@ -4,6 +4,21 @@ import { db } from '$lib/server/db/client';
 import * as table from '$lib/server/db/schema';
 import { eq, or, SQL } from 'drizzle-orm';
 import { addressToCoordinates, getDistanceFromLatLonInKm } from '$lib/utils/search';
+import type { Sale } from '$lib/server/db/schema';
+
+function filterTags(sales: Sale[], tags: number[]): Sale[] {
+	if (tags.length == 0) return sales;
+
+	const tagFilter = tags.reduce(
+		(a, b) => or(a, eq(table.basketTags.tagId, b)),
+		eq(table.basketTags.tagId, tags[0]!)
+	);
+
+	const filteredSales = [];
+
+	for (const sale of sales) {
+	}
+}
 
 export async function GET({ locals, url }: RequestEvent) {
 	if (!locals.user) {
@@ -13,6 +28,18 @@ export async function GET({ locals, url }: RequestEvent) {
 	let longitude: number;
 	let latitude: number;
 	let distance: number;
+	let tags: number[] = [];
+
+	if (url.searchParams.has('tags')) {
+		try {
+			tags = url.searchParams
+				.get('tags')!
+				.split(',')
+				.map((sTag) => parseInt(sTag));
+		} catch (e) {
+			return error(400, 'Invalid parameters');
+		}
+	}
 
 	if (
 		!url.searchParams.has('distance') ||
@@ -25,13 +52,14 @@ export async function GET({ locals, url }: RequestEvent) {
 			with: {
 				basket: {
 					with: {
-						vendor: true
+						vendor: true,
+						tags: true
 					}
 				}
 			}
 		});
 
-		return json(sales);
+		return json(filterTags(sales, tags));
 	}
 
 	try {
@@ -92,7 +120,7 @@ export async function GET({ locals, url }: RequestEvent) {
 		}
 	});
 
-	return json(sales);
+	return json(filterTags(sales, tags));
 }
 
 export async function POST({ locals, request }: RequestEvent) {
@@ -101,7 +129,7 @@ export async function POST({ locals, request }: RequestEvent) {
 	}
 
 	const { basketId, quantity, remain, timeout } = await request.json();
-    console.log(basketId, quantity, remain, timeout);
+	console.log(basketId, quantity, remain, timeout);
 
 	const basket = await db.query.baskets.findFirst({
 		where: eq(table.baskets.id, basketId),
@@ -126,8 +154,8 @@ export async function POST({ locals, request }: RequestEvent) {
 		return error(403, 'Forbidden');
 	}
 
-    const timestamp = timeout ? new Date(timeout) : Date.now();
-    console.log(timestamp);
+	const timestamp = timeout ? new Date(timeout) : Date.now();
+	console.log(timestamp);
 
 	return json(
 		await db

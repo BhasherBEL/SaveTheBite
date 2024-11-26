@@ -61,9 +61,9 @@ export async function PUT({ locals, params, request }: RequestEvent) {
 	} catch (e) {
 		return error(400, 'Invalid parameters');
 	}
-	const { quantity, remain, timeout } = await request.json();
+	const { quantity, remain, expiresAt } = await request.json();
 
-	if (!quantity || !remain || !timeout) {
+	if (!quantity || !remain || !expiresAt) {
 		return error(400, 'Invalid parameters');
 	}
 
@@ -101,7 +101,7 @@ export async function PUT({ locals, params, request }: RequestEvent) {
 			.set({
 				quantity,
 				remain,
-				timeout
+				expiresAt
 			})
 			.where(eq(table.sales.id, nId))
 			.returning()
