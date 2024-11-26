@@ -84,6 +84,7 @@
 
 		addCompany({ companyName, companyDescription, companyLocation, companyPhoto });
 	}
+
 </script>
 
 <svelte:head>
