@@ -3,14 +3,6 @@
 
 	let isActive = $state(false);
 
-	let filters: { name: string; active: boolean | null }[] = $state([
-		{ name: 'Vegetarian', active: null },
-		{ name: 'Vegan', active: null },
-		{ name: 'Fish', active: null },
-		{ name: 'Gluten free', active: null },
-		{ name: 'Egg free', active: null },
-		{ name: 'Non-Dairy', active: null }
-	]);
 
 	function toggleFilter(index: number) {
 		switch (filters[index].active) {
@@ -28,6 +20,7 @@
 
 	let { data = $bindable() } = $props();
     let cart = data.cart;
+    let filters = $state(data.filters);
 
     console.log("data in main page: ", data);
 

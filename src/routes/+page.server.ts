@@ -53,5 +53,13 @@ export async function load({ url }: LoadEvent) {
         }
 	}
 
-	return { vendors: vendors, longitude, latitude };
+    let filters = [];
+    try {
+        filters = await db.query.tags.findMany();
+        console.log('filters', filters);
+    } catch (error) {
+        console.log('Error fetching filters:', error);
+    }
+
+	return { vendors: vendors, longitude, latitude, filters };
 }

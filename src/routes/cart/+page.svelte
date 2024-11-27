@@ -12,7 +12,11 @@
 	function deleteSaleHandler(saleId: number) {
         console.log("Deleting sale with id: ", saleId);
         try {
-            deleteSale(saleId);
+            toast.promise(deleteSale(saleId), {
+                loading: 'Deleting sale...',
+                success: 'Sale deleted',
+                error: 'Error deleting sale'
+            });
             cart = cart.filter((order) => order.saleId !== saleId);
         } catch (err) {
             let message = err.message || 'Error deleting sale';
@@ -22,7 +26,11 @@
 
 	function emptyCartHandler() {
         try {
-            deleteAllSales();
+            toast.promise(deleteAllSales(), {
+                loading: 'Emptying cart...',
+                success: 'Cart emptied',
+                error: 'Error emptying cart'
+            });
             cart = [];
         } catch (err) {
             let message = err.message || 'Error emptying cart';
@@ -44,6 +52,8 @@
 	}
 
 	let emptyCart = $derived(cart.length === 0);
+
+    let total = $derived(cart.reduce((acc, { sale: { basket }, quantity }) => acc + basket.price * quantity, 0));
 </script>
 
 <!-- Shopping cart list -->
@@ -99,6 +109,9 @@
 					</div>
 				</div>
 			{/each}
+            <div class="flex justify-end">
+                <p class="text-2xl font-semibold">Total: {total}€</p>
+            </div>
 		{/if}
 	</ul>
 </section>
