@@ -10,10 +10,12 @@ export async function GET({ locals, url }: RequestEvent) {
 	}
 
 	const includeClaimed = url.searchParams.get('includeClaimed') === 'true';
+    console.log('includeClaimed', includeClaimed);
 
 	let cond: SQL | undefined = eq(table.orders.userId, locals.user.id);
+
 	if (!includeClaimed) {
-		cond = and(cond, eq(table.orders.claimed, 1));
+		cond = and(cond, eq(table.orders.claimed, 0));
 	}
 
 	const orders = await db.query.orders.findMany({

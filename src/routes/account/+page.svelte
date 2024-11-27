@@ -360,6 +360,14 @@
 			{/each}
 		</div>
 	</div>
+
+	<!-- Logout Section -->
+	<div>
+		<button
+			class="bg-red-500 text-white w-full px-4 py-2 rounded-md"
+			on:click={() => navigateTo('/logout')}>Logout</button
+		>
+	</div>
 </section>
 
 <style>
