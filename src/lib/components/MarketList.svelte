@@ -8,22 +8,23 @@
 		vendors,
 		longitude,
 		latitude,
-        cart
+        cart = $bindable()
 	}: { vendors: Vendor[]; longitude?: number; latitude?: number, cart: Cart[] } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
 	let vendorData: Vendor | undefined = $state(undefined);
-
-    $inspect(cart);
 
 	function showBasket(basket: Basket) {
 		event?.stopPropagation();
 		basketData = basket;
 	}
 
+
 	function showVendor(vendor: Vendor) {
 		vendorData = vendor;
 	}
+
+    console.log("cart in MarketList: ", cart);
 
 	// Reactive statement to manage body overflow
 	$effect(() => {
@@ -31,6 +32,9 @@
 			document.body.style.overflow = basketData || vendorData ? 'hidden' : 'auto';
 		}
 	});
+
+    $inspect(cart);
+
 </script>
 
 <div class="p-4">
@@ -105,10 +109,10 @@
 
 <!-- Display the batch popup -->
 {#if basketData}
-	<BatchPopup data={basketData} onClose={() => (basketData = undefined)} cart={cart}/>
+	<BatchPopup bind:data={basketData} onClose={() => (basketData = undefined)} bind:cart={cart}/>
 {/if}
 {#if vendorData}
-	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} cart={cart}/>
+	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} bind:cart={cart}/>
 {/if}
 
 <style>

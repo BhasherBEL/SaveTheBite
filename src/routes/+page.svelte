@@ -26,8 +26,10 @@
 		filters = [...filters];
 	}
 
-	let { data } = $props();
+	let { data = $bindable() } = $props();
     let cart = data.cart;
+
+    console.log("data in main page: ", data);
 
 	function toggleActive() {
 		isActive = !isActive;
@@ -84,7 +86,7 @@
 	>
 		<!-- Product Cards (Left side) -->
 		<div class={`transition-all duration-500 ${isActive ? 'w-full md:col-span-2' : 'w-full'}`}>
-			<MarketList vendors={data.vendors} longitude={data.longitude} latitude={data.latitude} cart={cart}/>
+			<MarketList vendors={data.vendors} longitude={data.longitude} latitude={data.latitude} bind:cart={cart}/>
 			<!-- Pass markets data to MarketList -->
 		</div>
 

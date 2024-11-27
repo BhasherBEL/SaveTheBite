@@ -3,7 +3,7 @@
 	import { updateBasket } from '$lib/utils/company';
     import convertPhoto from '$lib/utils/photo';
 
-	let { basket, onClose, onCancel }: { basket: Basket, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
+	let { basket = $bindable(), onClose, onCancel }: { basket: Basket, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
 
     async function editBasketHandler() {
         if (!basket.name || !basket.description || !basket.id || !basket.initialPrice) {

@@ -4,23 +4,24 @@
 	import AddToCart from '$lib/components/AddToCart.svelte';
     import { deleteSale } from '$lib/utils/cart';
 
-	let { data, onClose, cart }: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
+	let { data, onClose, cart = $bindable() }: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
 	let quantityShow = $state(false);
 	let basketShow = $state(false);
+    let basketId: number;
 
-	function showBasket(basket: Basket) {
+	function showBasket(basket: Basket, index: number) {
 		basketData = basket;
 		basketShow = true;
+        basketId = index;
 	}
 
-    $inspect(cart);
-
-	function showQuantity(basket: Basket) {
+	function showQuantity(basket: Basket, index: number) {
 		event?.stopPropagation();
 		basketData = basket;
 		quantityShow = true;
+        basketId = index;
 	}
 
     function checkCart(basketId: number): Order {
@@ -29,11 +30,20 @@
         return order;
     }
 
-    function deleteFromCart(basketId: number) {
+    function deleteFromCart(basketId: number, index: number) {
         event?.stopPropagation();
         deleteSale(basketId, cart);
         cart = cart.filter((order) => order.sale.basketId === basketId);
+        inCart[index] = undefined;
     }
+
+    let inCart = $state([]);
+    // Fill the inCart array with the orders in the cart
+    for (let i = 0; i < data.baskets.length; i++) {
+        inCart.push(checkCart(data.baskets[i].id));
+    }
+
+    $inspect(inCart);
 
 </script>
 
@@ -76,7 +86,7 @@
 					<span class="text-gray-400 text-sm font-bold">{data.location}</span>
 				</div>
 				<div class="overflow-y-auto h-[calc(100%-4rem)]">
-					{#each data.baskets as basket}
+					{#each data.baskets as basket, index}
 						<div
 							role="button"
 							aria-label="Show batch details"
@@ -101,17 +111,17 @@
 								<p class="text-gray-400 text-sm flex-1 pb-4">
 									{basket.description}
 								</p>
-								{#if checkCart(basket.id) !== undefined}
+								{#if inCart[index] !== undefined}
 									<button
 										class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-                                        onclick={() => deleteFromCart(basket.id)}
+                                        onclick={() => deleteFromCart(inCart[index].saleId, index)}
 									>
-										Delete from cart ({checkCart(basket.id)?.quantity})
+										Delete from cart ({inCart[index]?.quantity})
 									</button>
 								{:else}
 									<button
 										class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
-										onclick={() => {showQuantity(basket)}}
+										onclick={() => {showQuantity(basket, index)}}
 									>
 										Add to cart
 									</button>
@@ -127,8 +137,14 @@
 
 <!-- Display the batch popup -->
 {#if basketShow}
-	<BatchPopup data={basketData} onClose={() => (basketShow = false)} {cart} />
+	<BatchPopup data={basketData} onClose={() => {
+        basketShow = false;
+        inCart[basketId] = checkCart(basketData.id);
+    }} bind:cart={cart} />
 {/if}
 {#if quantityShow}
-	<AddToCart data={basketData} onClose={() => (quantityShow = false)} {cart} />
+	<AddToCart data={basketData} onClose={() => {
+        quantityShow = false;
+        inCart[basketId] = checkCart(basketData.id);
+    }} bind:cart={cart} />
 {/if}

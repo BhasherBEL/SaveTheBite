@@ -3,12 +3,13 @@
 	import '../app.css';
 
 	let { data } = $props();
+
 </script>
 
 
 <div class="app h-screen min-h-screen flex flex-col">
 	<div class="flex flex-grow flex-col ">
-		<Header {data} />
+		<Header bind:data={data} />
 
 		<main class="container flex-grow mx-auto p-4">
 			<slot/>

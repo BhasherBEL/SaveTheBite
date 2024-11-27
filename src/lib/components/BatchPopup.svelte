@@ -3,24 +3,31 @@
 	import AddToCart from '$lib/components/AddToCart.svelte';
     import { deleteSale } from '$lib/utils/cart';
 
-	let { data, onClose, cart }: { data: Basket; onClose: () => {}, cart: Cart } = $props();
+	let { data = $bindable(), onClose, cart = $bindable([]) }: { data: Basket; onClose: () => {}, cart: Cart } = $props();
 
 	let show = $state(false);
 
-    $inspect(cart);
+    console.log("In basket popup: ", cart);
 
-    function checkCart(basketId: number): Order {
+
+    function checkCart(basketId: number) {
         // Check if the basket is already in the cart
         let order = cart.find((order) => order.sale.basketId  === basketId);
-        console.log(order);
-        return order;
+        if (order) {
+            console.log("In cart: ", order);
+            return order;
+        }
+        return false;
     }
 
-    function deleteFromCart(basketId: number) {
+    async function deleteFromCart(basketId: number) {
         event?.stopPropagation();
-        deleteSale(basketId, cart);
+        await deleteSale(basketId);
         cart = cart.filter((order) => order.sale.basketId === basketId);
+        inCart = false;
     }
+
+    let inCart = $state(checkCart(data.id));
 </script>
 
 {#if data}
@@ -60,12 +67,12 @@
 				<p class="text-gray-400 text-sm flex-1 pb-4">
 					{data.description}
 				</p>
-                {#if checkCart(data.id) !== undefined}
+                {#if inCart}
                     <button
                         class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-                        onclick={() => deleteFromCart(data.id)}
+                        onclick={() => deleteFromCart(inCart.saleId)}
                     >
-                        Delete from cart ({checkCart(data.id).quantity})
+                        Delete from cart ({inCart.quantity})
                     </button>
                 {:else}
                     <button
@@ -82,9 +89,11 @@
 
 {#if show}
 	<AddToCart
-		{data}
+        data={data}
+        bind:cart={cart}
 		onClose={() => {
 			show = false;
+            inCart = checkCart(data.id);
 		}}
 	/>
 {/if}

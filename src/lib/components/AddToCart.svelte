@@ -1,12 +1,23 @@
 <script lang="ts">
-	import { type Basket } from '$lib/server/db/schema';
+	import { type Basket, type Cart } from '$lib/server/db/schema';
 	import { addSale } from '$lib/utils/cart';
 
-	let { data, onClose }: { data: Basket; onClose: () => void } = $props();
+	let { data, onClose, cart = $bindable() }: { data: Basket; onClose: () => void; cart: Cart[] } = $props();
 
 	let quantity = $state(1);
 	let totalPrice = $derived(quantity * data.price);
 	let sale = data.sales ? data.sales[0] : null;
+
+    $inspect(cart);
+
+    async function addSaleHandler(saleId: number, quantity: number) {
+        let newCart: Cart[] = await addSale(saleId, quantity);
+        // Add new sale to the cart
+        console.log("New cart: ", newCart);
+        cart = newCart;
+		onClose();
+    }
+
 </script>
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -53,8 +64,7 @@
 			<button
 				class=" w-full mt-2 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
 				onclick={() => {
-					addSale(sale.id, quantity);
-					onClose();
+					addSaleHandler(sale.id, quantity);
 				}}
 			>
 				Confirm

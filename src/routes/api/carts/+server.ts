@@ -27,12 +27,11 @@ export async function DELETE({ locals, request }: RequestEvent) {
     }
 
     if (!request.body) {
-        console.log('Deleting all items from cart');
         return json(await db.delete(table.carts).where(eq(table.carts.userId, locals.user.id)));
     } else {
         const { saleId } = await request.json();
-        console.log('Deleting item from cart');
-        const saleIdInt = parseInt(saleId);
+        console.log(saleId);
+        console.log(locals.user.id);
         return json(
             await db.delete(table.carts).where(and(eq(table.carts.userId, locals.user.id), eq(table.carts.saleId, saleId)))
         )
@@ -49,23 +48,28 @@ export async function POST({ locals, request }: RequestEvent) {
         where: and(eq(table.carts.userId, locals.user.id), eq(table.carts.saleId, saleId))
     });
     if (cart) {
-        return json(
-            await db
-                .update(table.carts)
-                .set({ quantity: quantity })
-                .where(eq(table.carts.id, cart.id))
-                .returning()
-        );
+        await db
+            .update(table.carts)
+            .set({ quantity: quantity })
+            .where(eq(table.carts.id, cart.id))
+            .returning()
     } else {
-        return json(
-            await db
-                .insert(table.carts)
-                .values({
-                    userId: locals.user.id,
-                    saleId,
-                    quantity
-                })
-                .returning()
-        );
+        await db
+            .insert(table.carts)
+            .values({
+                userId: locals.user.id,
+                saleId,
+                quantity
+            })
+            .returning()
     }
+
+    return json(await db.query.carts.findMany({
+        where: eq(table.carts.userId, locals.user.id),
+        with: {
+            sale: {
+                with: { basket: true }
+            }
+        }
+    }));
 }
