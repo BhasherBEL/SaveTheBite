@@ -4,7 +4,6 @@ import { getVendor } from '$lib/server/db/vendors';
 
 export const load: PageLoad = async({ params }) => {
     try { 
-        console.log('param:', params);
         const vendor: Vendor = await getVendor(params.id);
         return { vendor };
     } catch (error) {

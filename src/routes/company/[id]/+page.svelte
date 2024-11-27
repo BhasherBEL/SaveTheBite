@@ -4,6 +4,7 @@
 	import EditBasketPopup from '$lib/components/EditBasketPopup.svelte';
 	import EditCompanyPopup from '$lib/components/EditCompanyPopup.svelte';
 	import AddSalePopup from '$lib/components/AddSalePopup.svelte';
+	//import { sales, type Basket } from '$lib/server/db/schema';
 
 	let { data } = $props();
 
@@ -75,8 +76,6 @@
 			return `${seconds} seconds`;
 		}
 	}
-
-	$inspect(foodBaskets);
 </script>
 
 <svelte:head>
@@ -159,25 +158,28 @@
 							</div>
 						</div>
 
-						<div
-							class="flex flex-col justify-between mt-10 border ml-6 md:ml-16 rounded-lg shadow-md p-2"
-						>
-							{#each basket.sales as sale, index}
-								<div class="flex flex-col justify-between">
-									<div class="flex flex-col md:flex-row space-x-2">
-										<h3 class="font-bold">Sale {index + 1}:</h3>
-										<div class="flex flex-grow justify-between">
-											<p class="text-gray-600">
-												Quantity {sale.remain} out of {sale.quantity}
-											</p>
-											<p class="text-gray-600">
-												End in {timeBetween(new Date(), sale.expiresAt)}
-											</p>
+						<!-- Sales Section -->
+						{#if basket.sales?.length > 0}
+							<div
+								class="flex flex-col justify-between mt-10 border ml-6 md:ml-16 rounded-lg shadow-md p-2"
+							>
+								{#each basket.sales as sale, index}
+									<div class="flex flex-col justify-between">
+										<div class="flex flex-col md:flex-row space-x-2">
+											<h3 class="font-bold">Sale {index + 1}:</h3>
+											<div class="flex flex-grow justify-between">
+												<p class="text-gray-600">
+													Quantity {sale.remain} out of {sale.quantity}
+												</p>
+												<p class="text-gray-600">
+													End in {timeBetween(new Date(), sale.expiresAt)}
+												</p>
+											</div>
 										</div>
 									</div>
-								</div>
-							{/each}
-						</div>
+								{/each}
+							</div>
+						{/if}
 					{/each}
 				</div>
 			{:else}
@@ -207,7 +209,7 @@
 
 {#if showEditBasketPopup}
 	<EditBasketPopup
-		basket={basketData}
+		bind:basket={basketData}
 		onClose={() => {
 			showEditBasketPopup = false;
 		}}
@@ -219,7 +221,7 @@
 
 {#if showEditCompanyPopup}
 	<EditCompanyPopup
-		vendor={company}
+		bind:vendor={company}
 		onClose={vendorCloseHandler}
 		onCancel={() => {
 			showEditCompanyPopup = false;
