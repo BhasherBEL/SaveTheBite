@@ -1,6 +1,14 @@
 <script lang="ts">
 	import { addCompany } from '$lib/utils/company';
 
+    // Props
+    let { data } = $props();
+    let { orders, user, ...other } = data;
+    let { managers } = user;
+
+    console.log("managers", managers);
+    console.log("orders", orders);
+
 	let language = 'English';
 	let theme = 'Light';
 	let location = '';
@@ -20,6 +28,11 @@
 		{ name: 'Bio', active: false },
 		{ name: 'Local', active: false }
 	];
+    
+	function navigateTo(path: string) {
+		document.body.style.overflow = '';
+		window.location.href = path;
+	}
 
 	function toggleFoodPreference(index) {
 		foodPreferences[index].active = !foodPreferences[index].active;
@@ -85,6 +98,13 @@
 		addCompany({ companyName, companyDescription, companyLocation, companyPhoto });
 	}
 
+    function companyNavigateHandler(vendor) {
+        console.log('Navigating to company:', vendor);
+        // Navigate to the company page
+        let pageId = vendor.id;
+        navigateTo(`/company/${pageId}`);
+    }
+
 </script>
 
 <svelte:head>
@@ -149,11 +169,22 @@
 			</div>
 			<!-- Company Section -->
 			<div class="w-full mt-12 lg:mt-6">
-				<h2 class="text-2xl font-semibold mb-4">Company</h2>
+				<h2 class="text-2xl font-semibold mb-4">Your companies</h2>
 				<div class="border-l-4 border-green-500 pl-4">
-					<div class="flex flex-wrap gap-2">
+					<div class="flex flex-col gap-2">
+                        {#if managers.length === 0}
+                            <p class="text-gray-600">No companies added</p>
+                        {/if}
+                        {#each managers as manager}
+                            <button
+                                class="px-4 py-2 rounded-lg bg-white border border-gray-300"
+                                on:click={() => companyNavigateHandler(manager.vendor)}
+                            >
+                                {manager.vendor.name}
+                            </button>
+                        {/each}
 						<button
-							class="w-full bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
+							class="w-full mt-8 bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
 							on:click={() => (showAddCompanyPopup = true)}>Add a Company</button
 						>
 					</div>
@@ -278,20 +309,26 @@
 	<div>
 		<h2 class="text-2xl font-semibold mb-4">Current orders</h2>
 		<div class="border-l-4 border-green-500 pl-4">
-			<!-- Example of an Order Card -->
-			<div class="flex items-center border p-4 rounded-lg shadow-md mb-4">
-				<div
-					class="bg-green-300 text-2xl font-bold text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"
-				>
-					2
-				</div>
-				<div class="flex-1">
-					<p class="font-semibold">
-						K-Market Otaniemi <span class="text-gray-500">📍 Otaniementie 12, 02150 Espoo</span>
-					</p>
-					<p class="text-gray-600">19h · Collection starts in 2h45</p>
-				</div>
-			</div>
+
+            {#if orders.length === 0}
+                <p class="text-gray-600">No current orders</p>
+            {/if}
+            {#each orders as order}
+                <!-- Example of an Order Card -->
+                <div class="flex items-center border p-4 rounded-lg shadow-md mb-4">
+                    <div
+                        class="bg-green-300 text-2xl font-bold text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"
+                    >
+                        2
+                    </div>
+                    <div class="flex-1">
+                        <p class="font-semibold">
+                            K-Market Otaniemi <span class="text-gray-500">📍 Otaniementie 12, 02150 Espoo</span>
+                        </p>
+                        <p class="text-gray-600">19h · Collection starts in 2h45</p>
+                    </div>
+                </div>
+            {/each}
 			<a href="/" class="text-green-500 hover:underline">See past orders</a>
 		</div>
 	</div>

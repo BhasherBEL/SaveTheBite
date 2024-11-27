@@ -2,7 +2,7 @@
 	import { type Order } from '$lib/server/db/schema';
     import { deleteSale, deleteAllSales, payCart } from '$lib/utils/cart';
 
-	let { data } = $props();
+	let { data = $bindable() } = $props();
 	let { cart } = $state(data);
 
 	$inspect(cart);
