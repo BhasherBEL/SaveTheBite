@@ -2,6 +2,7 @@
 	import { type Basket } from '$lib/server/db/schema';
 	import { addBasket } from '$lib/utils/company';
     import convertPhoto from '$lib/utils/photo';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { vendorId, onClose, onCancel }: { vendorId: number, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
 
@@ -25,7 +26,11 @@
         }
         
         try {
-            await addBasket(vendorId, basketData);
+            toast.promise(addBasket(vendorId, basketData), {
+                loading: 'Adding basket...',
+                success: 'Basket added',
+                error: 'Error adding basket'
+            });
             onClose(basketData);
         } catch (error) {
             console.error(error);                

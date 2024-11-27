@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type Basket, type Cart } from '$lib/server/db/schema';
 	import { addSale } from '$lib/utils/cart';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { data, onClose, cart = $bindable() }: { data: Basket; onClose: () => void; cart: Cart[] } = $props();
 
@@ -11,11 +12,16 @@
     $inspect(cart);
 
     async function addSaleHandler(saleId: number, quantity: number) {
-        let newCart: Cart[] = await addSale(saleId, quantity);
-        // Add new sale to the cart
-        console.log("New cart: ", newCart);
-        cart = newCart;
-		onClose();
+        let newCart: Cart[];
+        try {
+            newCart = await addSale(saleId, quantity);
+            cart = newCart;
+            toast.success('Sale added to cart');
+            onClose();
+        } catch (err) {
+            let message = err.message || 'Error adding sale to cart';
+            toast.error(message);
+        }
     }
 
 </script>

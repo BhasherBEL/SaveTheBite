@@ -2,6 +2,7 @@
 	import { type Vendor } from '$lib/server/db/schema';
 	import { updateCompany } from '$lib/utils/company';
     import convertPhoto from '$lib/utils/photo';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { vendor = $bindable(), onClose, onCancel }: { vendor: Vendor, onClose: (vendor: Vendor) => {}, onCancel: () => {} } = $props();
 
@@ -16,7 +17,11 @@
         }
         
         try {
-            await updateCompany(vendor);
+            toast.promise(updateCompany(vendor), {
+                loading: 'Updating company...',
+                success: 'Company updated',
+                error: 'Error updating company'
+            });
             onClose(vendor);
         } catch (error) {
             console.error(error);                

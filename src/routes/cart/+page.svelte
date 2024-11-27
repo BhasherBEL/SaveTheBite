@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type Order } from '$lib/server/db/schema';
     import { deleteSale, deleteAllSales, payCart } from '$lib/utils/cart';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { data = $bindable() } = $props();
 	let { cart } = $state(data);
@@ -10,19 +11,36 @@
 	// Handlers for basket actions
 	function deleteSaleHandler(saleId: number) {
         console.log("Deleting sale with id: ", saleId);
-        deleteSale(saleId);
-		cart = cart.filter((order) => order.saleId !== saleId);
+        try {
+            deleteSale(saleId);
+            cart = cart.filter((order) => order.saleId !== saleId);
+        } catch (err) {
+            let message = err.message || 'Error deleting sale';
+            toast.error(message);
+        }
 	}
 
 	function emptyCartHandler() {
-        deleteAllSales();
-		cart = [];
+        try {
+            deleteAllSales();
+            cart = [];
+        } catch (err) {
+            let message = err.message || 'Error emptying cart';
+            toast.error(message);
+        }
 	}
 
-	function confirmOrderHandler() {
+	async function confirmOrderHandler() {
 		// Send the order to the server
-        payCart(cart);
-        cart = [];
+        console.log("Confirming order: ", cart);
+        try {
+            await payCart(cart);
+            toast.success('Order confirmed');
+            cart = [];
+        } catch (err) {
+            let message = err.message || 'Error confirming order';
+            toast.error(message);
+        }
 	}
 
 	let emptyCart = $derived(cart.length === 0);

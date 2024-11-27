@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type Sale, type Basket } from '$lib/server/db/schema';
     import { addSale } from '$lib/utils/sales';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { basket, onClose, onCancel }: { basket: Basket, onClose: (sale: Sale) => {}, onCancel: () => {} } = $props();
 
@@ -21,7 +22,11 @@
         sale.remain = sale.quantity;
 
         try {
-            await addSale(sale);
+            toast.promise(addSale(sale), {
+                loading: 'Adding sale...',
+                success: 'Sale added',
+                error: 'Error adding sale'
+            });
             onClose(sale);
         } catch (error) {
             console.error(error); 

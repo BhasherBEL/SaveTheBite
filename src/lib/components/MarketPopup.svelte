@@ -3,6 +3,7 @@
 	import BatchPopup from '$lib/components/BatchPopup.svelte';
 	import AddToCart from '$lib/components/AddToCart.svelte';
     import { deleteSale } from '$lib/utils/cart';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { data, onClose, cart = $bindable() }: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
 
@@ -32,7 +33,11 @@
 
     function deleteFromCart(basketId: number, index: number) {
         event?.stopPropagation();
-        deleteSale(basketId, cart);
+        toast.promise(deleteSale(basketId), {
+            loading: 'Deleting from cart...',
+            success: 'Deleted from cart',
+            error: 'Error deleting from cart'
+        });
         cart = cart.filter((order) => order.sale.basketId === basketId);
         inCart[index] = undefined;
     }

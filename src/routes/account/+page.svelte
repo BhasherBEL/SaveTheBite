@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { addCompany } from '$lib/utils/company';
+	import { toast } from 'svelte-hot-french-toast';
 
 	// Props
 	let { data } = $props();
@@ -86,11 +87,11 @@
 	}
 
 	// Pop-up and Company Data
-	let showAddCompanyPopup = false;
-	let companyName = '';
-	let companyLocation = '';
-	let companyDescription = '';
-	let companyAdded = false;
+	let showAddCompanyPopup = $state(false);
+	let companyName = $state('');
+	let companyLocation = $state('');
+	let companyDescription = $state('');
+	let companyAdded = $state(false);
 	let filePhoto: File;
 	let showBasketPopup = $state(false);
 
@@ -123,7 +124,11 @@
 			companyPhoto = await convertFileToBase64(filePhoto);
 		}
 
-		addCompany({ companyName, companyDescription, companyLocation, companyPhoto });
+		toast.promise(addCompany({ companyName, companyDescription, companyLocation, companyPhoto }), {
+			loading: 'Adding company...',
+			success: 'Company added successfully!',
+			error: 'Failed to add company',
+		});
 	}
 
 	function companyNavigateHandler(vendor) {
@@ -151,19 +156,19 @@
 					<div class="flex space-x-4">
 						<button
 							class={`px-4 py-2 rounded ${language === 'Suomi' ? 'bg-green-300' : 'bg-white'}`}
-							on:click={() => (language = 'Suomi')}>Suomi</button
+							onclick={() => (language = 'Suomi')}>Suomi</button
 						>
 						<button
 							class={`px-4 py-2 rounded ${language === 'English' ? 'bg-green-300' : 'bg-white'}`}
-							on:click={() => (language = 'English')}>English</button
+							onclick={() => (language = 'English')}>English</button
 						>
 						<button
 							class={`px-4 py-2 rounded ${language === 'Deutsch' ? 'bg-green-300' : 'bg-white'}`}
-							on:click={() => (language = 'Deutsch')}>Deutsch</button
+							onclick={() => (language = 'Deutsch')}>Deutsch</button
 						>
 						<button
 							class={`px-4 py-2 rounded ${language === 'Français' ? 'bg-green-300' : 'bg-white'}`}
-							on:click={() => (language = 'Français')}>Français</button
+							onclick={() => (language = 'Français')}>Français</button
 						>
 					</div>
 				</div>
@@ -174,11 +179,11 @@
 					<div class="flex space-x-4">
 						<button
 							class={`px-4 py-2 rounded ${theme === 'Light' ? 'bg-green-300' : 'bg-white'}`}
-							on:click={() => (theme = 'Light')}>Light</button
+							onclick={() => (theme = 'Light')}>Light</button
 						>
 						<button
 							class={`px-4 py-2 rounded ${theme === 'Dark' ? 'bg-green-300' : 'bg-white'}`}
-							on:click={() => (theme = 'Dark')}>Dark</button
+							onclick={() => (theme = 'Dark')}>Dark</button
 						>
 					</div>
 				</div>
@@ -205,14 +210,14 @@
 						{#each managers as manager}
 							<button
 								class="px-4 py-2 rounded-lg bg-white border border-gray-300"
-								on:click={() => companyNavigateHandler(manager.vendor)}
+								onclick={() => companyNavigateHandler(manager.vendor)}
 							>
 								{manager.vendor.name}
 							</button>
 						{/each}
 						<button
 							class="w-full mt-8 bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
-							on:click={() => (showAddCompanyPopup = true)}>Add a Company</button
+							onclick={() => (showAddCompanyPopup = true)}>Add a Company</button
 						>
 					</div>
 				</div>
@@ -227,7 +232,7 @@
 					{#each foodPreferences as preference, index}
 						<button
 							class={`px-4 py-2 rounded-md ${preference.active ? 'bg-green-300' : 'bg-white border'} border-gray-300`}
-							on:click={() => toggleFoodPreference(index)}
+							onclick={() => toggleFoodPreference(index)}
 						>
 							{preference.name}
 						</button>
@@ -241,7 +246,7 @@
 					{#each allergies as allergy, index}
 						<button
 							class={`px-4 py-2 rounded-md ${allergy.active ? 'bg-green-300' : 'bg-white border'} border-gray-300`}
-							on:click={() => toggleAllergies(index)}
+							onclick={() => toggleAllergies(index)}
 						>
 							{allergy.name}
 						</button>
@@ -321,9 +326,9 @@
 					<div class="flex justify-between">
 						<button
 							class="bg-gray-500 text-white px-4 py-2 rounded-md"
-							on:click={() => (showAddCompanyPopup = false)}>Cancel</button
+							onclick={() => (showAddCompanyPopup = false)}>Cancel</button
 						>
-						<button class="bg-green-500 text-white px-4 py-2 rounded-md" on:click={addCompanyPage}
+						<button class="bg-green-500 text-white px-4 py-2 rounded-md" onclick={addCompanyPage}
 							>Add Company</button
 						>
 					</div>
@@ -365,7 +370,7 @@
 	<div>
 		<button
 			class="bg-red-500 text-white w-full px-4 py-2 rounded-md"
-			on:click={() => navigateTo('/logout')}>Logout</button
+			onclick={() => navigateTo('/logout')}>Logout</button
 		>
 	</div>
 </section>

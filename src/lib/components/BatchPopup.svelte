@@ -2,6 +2,7 @@
 	import { type Basket, type Cart, type Sale, type Order } from '$lib/server/db/schema';
 	import AddToCart from '$lib/components/AddToCart.svelte';
     import { deleteSale } from '$lib/utils/cart';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { data = $bindable(), onClose, cart = $bindable([]) }: { data: Basket; onClose: () => {}, cart: Cart } = $props();
 
@@ -22,7 +23,12 @@
 
     async function deleteFromCart(basketId: number) {
         event?.stopPropagation();
-        await deleteSale(basketId);
+        toast.promise(deleteSale(basketId), {
+            loading: 'Deleting from cart...',
+            success: 'Deleted from cart',
+            error: 'Error deleting from cart'
+        });
+
         cart = cart.filter((order) => order.sale.basketId === basketId);
         inCart = false;
     }

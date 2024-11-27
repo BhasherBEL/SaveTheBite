@@ -2,6 +2,7 @@
 	import { type Basket } from '$lib/server/db/schema';
 	import { updateBasket } from '$lib/utils/company';
     import convertPhoto from '$lib/utils/photo';
+    import { toast } from 'svelte-hot-french-toast';
 
 	let { basket = $bindable(), onClose, onCancel }: { basket: Basket, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
 
@@ -17,7 +18,11 @@
         }
         
         try {
-            await updateBasket(basket);
+            toast.promise(updateBasket(basket), {
+                loading: 'Updating basket...',
+                success: 'Basket updated',
+                error: 'Error updating basket'
+            });
             onClose(basket);
         } catch (error) {
             console.error(error);                

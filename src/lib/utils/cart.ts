@@ -32,6 +32,15 @@ export async function deleteSale(saleId: number) {
 			},
 			body: JSON.stringify({ saleId })
 		});
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to delete sale from cart:', errorData);
+            throw new Error(errorData.message || 'Failed to delete sale from cart');
+        }
+
+        const data = await response.json();
+        return data; // Return the response data if needed
 	} catch (error: any) {
 		console.error('An error occurred:', error.message);
 		throw error;
@@ -44,6 +53,15 @@ export async function deleteAllSales() {
 		const response = await fetch(`/api/carts/`, {
 			method: 'DELETE'
 		});
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to delete all sales from cart:', errorData);
+            throw new Error(errorData.message || 'Failed to delete all sales from cart');
+        }
+
+        const data = await response.json();
+        return data; // Return the response data if needed
 	} catch (error: any) {
 		console.error('An error occurred:', error.message);
 		throw error;
@@ -56,6 +74,15 @@ export async function payCart() {
 		const response = await fetch(`/api/carts/pay`, {
 			method: 'POST'
 		});
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to pay for cart:', errorData);
+            throw new Error(errorData.message || 'Failed to pay for cart');
+        }
+
+        const data = await response.json();
+        return data; // Return the response data if needed
 	} catch (error: any) {
 		console.error('An error occurred:', error.message);
 		throw error;
