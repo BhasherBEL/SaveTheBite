@@ -20,7 +20,13 @@ export async function GET({ locals, url }: RequestEvent) {
 		where: cond,
 		with: {
 			sale: {
-				with: { basket: true }
+				with: { 
+                    basket: {
+                        with: {
+                            vendor: true,
+                        }
+                    }
+                }
 			}
 		}
 	});

@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { addCompany } from '$lib/utils/company';
 
-    // Props
-    let { data } = $props();
-    let { orders, user, ...other } = data;
-    let { managers } = user;
+	// Props
+	let { data } = $props();
+	let { orders, user, ...other } = data;
+	let { managers } = user;
 
-    console.log("managers", managers);
-    console.log("orders", orders);
+	console.log('managers', managers);
+	console.log('orders', orders);
+	console.log('other', other);
 
 	let language = 'English';
 	let theme = 'Light';
@@ -28,10 +29,36 @@
 		{ name: 'Bio', active: false },
 		{ name: 'Local', active: false }
 	];
-    
+
 	function navigateTo(path: string) {
 		document.body.style.overflow = '';
 		window.location.href = path;
+	}
+
+	// Utility function to inspect the data
+	function timeBetween(now, future) {
+		future = new Date(future);
+		const diffMs = future - now; // Difference in milliseconds
+
+		if (diffMs <= 0) {
+			return 'Time has already passed!';
+		}
+
+		// Convert milliseconds to units
+		const seconds = Math.floor((diffMs / 1000) % 60);
+		const minutes = Math.floor((diffMs / (1000 * 60)) % 60);
+		const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+		const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+		if (days > 0) {
+			return `${days} days, ${hours} hours`;
+		} else if (hours > 0) {
+			return `${hours} hours, ${minutes} minutes`;
+		} else if (minutes > 0) {
+			return `${minutes} minutes and ${seconds} seconds`;
+		} else {
+			return `${seconds} seconds`;
+		}
 	}
 
 	function toggleFoodPreference(index) {
@@ -65,6 +92,7 @@
 	let companyDescription = '';
 	let companyAdded = false;
 	let filePhoto: File;
+	let showBasketPopup = $state(false);
 
 	const toBase64 = (file) =>
 		new Promise((resolve, reject) => {
@@ -98,13 +126,12 @@
 		addCompany({ companyName, companyDescription, companyLocation, companyPhoto });
 	}
 
-    function companyNavigateHandler(vendor) {
-        console.log('Navigating to company:', vendor);
-        // Navigate to the company page
-        let pageId = vendor.id;
-        navigateTo(`/company/${pageId}`);
-    }
-
+	function companyNavigateHandler(vendor) {
+		console.log('Navigating to company:', vendor);
+		// Navigate to the company page
+		let pageId = vendor.id;
+		navigateTo(`/company/${pageId}`);
+	}
 </script>
 
 <svelte:head>
@@ -172,17 +199,17 @@
 				<h2 class="text-2xl font-semibold mb-4">Your companies</h2>
 				<div class="border-l-4 border-green-500 pl-4">
 					<div class="flex flex-col gap-2">
-                        {#if managers.length === 0}
-                            <p class="text-gray-600">No companies added</p>
-                        {/if}
-                        {#each managers as manager}
-                            <button
-                                class="px-4 py-2 rounded-lg bg-white border border-gray-300"
-                                on:click={() => companyNavigateHandler(manager.vendor)}
-                            >
-                                {manager.vendor.name}
-                            </button>
-                        {/each}
+						{#if managers.length === 0}
+							<p class="text-gray-600">No companies added</p>
+						{/if}
+						{#each managers as manager}
+							<button
+								class="px-4 py-2 rounded-lg bg-white border border-gray-300"
+								on:click={() => companyNavigateHandler(manager.vendor)}
+							>
+								{manager.vendor.name}
+							</button>
+						{/each}
 						<button
 							class="w-full mt-8 bg-black text-white py-2 rounded-md mb-4 hover:bg-gray-800 transition"
 							on:click={() => (showAddCompanyPopup = true)}>Add a Company</button
@@ -219,6 +246,21 @@
 							{allergy.name}
 						</button>
 					{/each}
+				</div>
+			</div>
+
+			<!-- Favorites Section -->
+			<div class="mt-6">
+				<h2 class="text-2xl font-semibold mb-4">Favorites</h2>
+				<div class="border-l-4 border-green-500 pl-4 space-y-4">
+					<div>
+						<p class="font-bold">Stores</p>
+						<p class="text-gray-600">No favorite stores</p>
+					</div>
+					<div>
+						<p class="font-bold">Baskets</p>
+						<p class="text-gray-600">No favorite baskets</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -290,46 +332,32 @@
 		{/if}
 	</div>
 
-	<!-- Favorites Section -->
-	<div>
-		<h2 class="text-2xl font-semibold mb-4">Favorites</h2>
-		<div class="border-l-4 border-green-500 pl-4 space-y-4">
-			<div>
-				<p class="font-bold">Stores</p>
-				<p class="text-gray-600">No favorite stores</p>
-			</div>
-			<div>
-				<p class="font-bold">Baskets</p>
-				<p class="text-gray-600">No favorite baskets</p>
-			</div>
-		</div>
-	</div>
-
 	<!-- Current Orders Section -->
 	<div>
-		<h2 class="text-2xl font-semibold mb-4">Current orders</h2>
+		<h2 class="text-2xl font-semibold mb-4">Your basket to collect</h2>
 		<div class="border-l-4 border-green-500 pl-4">
-
-            {#if orders.length === 0}
-                <p class="text-gray-600">No current orders</p>
-            {/if}
-            {#each orders as order}
-                <!-- Example of an Order Card -->
-                <div class="flex items-center border p-4 rounded-lg shadow-md mb-4">
-                    <div
-                        class="bg-green-300 text-2xl font-bold text-white rounded-full h-12 w-12 flex items-center justify-center mr-4"
-                    >
-                        2
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-semibold">
-                            K-Market Otaniemi <span class="text-gray-500">📍 Otaniementie 12, 02150 Espoo</span>
-                        </p>
-                        <p class="text-gray-600">19h · Collection starts in 2h45</p>
-                    </div>
-                </div>
-            {/each}
-			<a href="/" class="text-green-500 hover:underline">See past orders</a>
+			{#if orders.length === 0}
+				<p class="text-gray-600">No current orders</p>
+			{/if}
+			{#each orders as order, index}
+				<!-- Example of an Order Card -->
+				<div class="flex items-center border p-4 rounded-lg shadow-md mb-4">
+					<img
+						class="w-0 h-0 md:w-24 md:h-24 mb-2 md:mb-0 object-cover rounded-md flex items-center justify-center mr-4"
+						src={order.sale.basket.picture}
+					/>
+					<div class="flex flex-col flex-grow justify-between">
+						<p class="font-semibold">
+							{order.sale.basket.name}<span class="text-gray-500"
+								>📍 {order.sale.basket.vendor.name}</span
+							>
+						</p>
+						<p class="text-gray-600">
+							Collection stops in {timeBetween(new Date(), order.sale.expiresAt)}
+						</p>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</div>
 </section>
