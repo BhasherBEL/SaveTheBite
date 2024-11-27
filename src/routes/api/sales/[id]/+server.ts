@@ -47,7 +47,9 @@ export async function DELETE({ locals, params }: RequestEvent) {
 		return error(403, 'Forbidden');
 	}
 
-	await db.delete(table.sales).where(eq(table.sales.id, nId));
+	return json(
+        await db.delete(table.sales).where(eq(table.sales.id, nId))
+    );
 }
 
 export async function PUT({ locals, params, request }: RequestEvent) {
@@ -63,8 +65,10 @@ export async function PUT({ locals, params, request }: RequestEvent) {
 	}
 	const { quantity, remain, expiresAt } = await request.json();
 
+    console.log(quantity, remain, expiresAt);
+
 	if (!quantity || !remain || !expiresAt) {
-		return error(400, 'Invalid parameters');
+		return error(400, 'Invalid parameters or missing fields');
 	}
 
 	const sale = await db.query.sales.findFirst({

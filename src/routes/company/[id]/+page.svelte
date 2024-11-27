@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { deleteBasket } from '$lib/utils/company';
+    import { deleteSale } from '$lib/utils/sales';
+
 	import AddBasketPopup from '$lib/components/AddBasketPopup.svelte';
 	import EditBasketPopup from '$lib/components/EditBasketPopup.svelte';
 	import EditCompanyPopup from '$lib/components/EditCompanyPopup.svelte';
 	import AddSalePopup from '$lib/components/AddSalePopup.svelte';
+	import EditSalePopup from '$lib/components/EditSalePopup.svelte';
+    import { toast } from 'svelte-hot-french-toast';
 	//import { sales, type Basket } from '$lib/server/db/schema';
 
 	let { data } = $props();
@@ -18,9 +22,12 @@
 	// Handlers for basket actions
 	let showAddBasketPopup = $state(false);
 	let showEditBasketPopup = $state(false);
-	let basketData = $state({});
 	let showEditCompanyPopup = $state(false);
 	let showAddSalePopup = $state(false);
+	let showEditSalePopup = $state(false);
+
+	let basketData = $state({});
+	let saleData = $state({});
 
 	function basketCloseHandler(basket) {
 		showAddBasketPopup = false;
@@ -28,8 +35,16 @@
 	}
 
 	function deleteBasketHandler(id: number) {
-		deleteBasket(id);
-		foodBaskets = foodBaskets.filter((basket) => basket.id !== id);
+        try {
+            toast.promise(deleteBasket(id), {
+                loading: 'Deleting basket...',
+                success: 'Basket deleted',
+                error: 'Error deleting basket'
+            });
+            foodBaskets = foodBaskets.filter((basket) => basket.id !== id);
+        } catch (error) {
+            console.error(error);
+        }
 	}
 
 	function editBasketHandler(id: number) {
@@ -51,6 +66,26 @@
 		showAddSalePopup = true;
 		basketData = basket;
 	}
+
+    function editSaleHandler(sale) {
+        showEditSalePopup = true;
+        saleData = sale;
+    }
+
+    function deleteSaleHandler(sale) {
+        try {
+            toast.promise(deleteSale(sale.id), {
+                loading: 'Deleting sale...',
+                success: 'Sale deleted',
+                error: 'Error deleting sale'
+            });
+            foodBaskets.find((basket) => basket.id === sale.basketId).sales = foodBaskets
+                .find((basket) => basket.id === sale.basketId)
+                .sales.filter((s) => s.id !== sale.id);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 	// Utility function to inspect the data
 	function timeBetween(now, future) {
@@ -165,16 +200,31 @@
 							>
 								{#each basket.sales as sale, index}
 									<div class="flex flex-col justify-between">
-										<div class="flex flex-col md:flex-row space-x-2">
-											<h3 class="font-bold">Sale {index + 1}:</h3>
-											<div class="flex flex-grow justify-between">
-												<p class="text-gray-600">
-													Quantity {sale.remain} out of {sale.quantity}
-												</p>
-												<p class="text-gray-600">
-													End in {timeBetween(new Date(), sale.expiresAt)}
-												</p>
+										<div class="flex flex-row flex-grow justify-between space-x-2 mb-4">
+											<h3 class="font-bold">Sale {index + 1}</h3>
+											<div class="flex justify-end space-x-2">
+												<button
+													class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-700 transition"
+													onclick={() => editSaleHandler(sale)}
+												>
+													Edit
+												</button>
+												<button
+													class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-700 transition"
+													onclick={() => deleteSaleHandler(sale)}
+												>
+													Delete
+												</button>
 											</div>
+										</div>
+
+										<div class="flex flex-grow justify-between">
+											<p class="text-gray-600">
+												Quantity {sale.remain} out of {sale.quantity}
+											</p>
+											<p class="text-gray-600">
+												End in {timeBetween(new Date(), sale.expiresAt)}
+											</p>
 										</div>
 									</div>
 								{/each}
@@ -235,6 +285,18 @@
 		onClose={saleCloseHandler}
 		onCancel={() => {
 			showAddSalePopup = false;
+		}}
+	/>
+{/if}
+
+{#if showEditSalePopup}
+	<EditSalePopup
+		bind:sale={saleData}
+		onClose={() => {
+			showEditSalePopup = false;
+		}}
+		onCancel={() => {
+			showEditSalePopup = false;
 		}}
 	/>
 {/if}

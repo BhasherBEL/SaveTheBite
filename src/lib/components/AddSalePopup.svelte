@@ -17,7 +17,7 @@
 
     async function addSaleHandler() {
         if (!sale.quantity || !sale.basketId || !sale.expiresAt) {
-            return console.error('Please fill in all fields');
+            toast.error('Please fill in all fields');
         }
         sale.remain = sale.quantity;
 
@@ -29,7 +29,7 @@
             });
             onClose(sale);
         } catch (error) {
-            console.error(error); 
+            toast.error('Error adding sale: ' + error);
         }
     }
     $inspect(sale);

@@ -1,87 +1,91 @@
 import type { Vendor } from "$lib/server/db/schema";
 
 export async function addBasket(vendorId: number, basket: Basket): Promise<void> {
-    try {
-        const { name, description, initialPrice, price, picture } = basket;
-        await fetch('/api/baskets', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, description, vendorId, initialPrice, price, picture })
-        });
-    } catch (error) {
-        console.log('Error adding basket:', error);
+    const { name, description, initialPrice, price, picture } = basket;
+    const res = await fetch('/api/baskets', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, vendorId, initialPrice, price, picture })
+    });
+
+    if (!res.ok) {
+        const message = "Error adding basket: " + res.status;
+        throw new Error(message);
     }
+
+    return;
 }
 
 export async function updateBasket(basket: Basket): Promise<void> {
-    try {
-        const { id, name, description, initialPrice, price, picture } = basket;
-        await fetch(`/api/baskets/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, description, initialPrice, price, picture })
-        });
-    } catch (error) {
-        console.log('Error updating basket:', error);
+    const { id, name, description, initialPrice, price, picture } = basket;
+    const res = await fetch(`/api/baskets/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, initialPrice, price, picture })
+    });
+
+    if (!res.ok) {
+        const message = "Error updating basket: " + res.status;
+        throw new Error(message);
     }
+
+    return;
 }
 
 export async function deleteBasket(id: number): Promise<void> {
-    try {
-        await fetch(`/api/baskets/${id}`, {
-            method: 'DELETE'
-        });
-        console.log('Basket deleted');
-    } catch (error) {
-        console.log('Error deleting basket:', error);
+    const res = await fetch(`/api/baskets/${id}`, {
+        method: 'DELETE'
+    });
+
+    if (!res.ok) {
+        const message = "Error deleting basket: " + res.status;
+        throw new Error(message);
     }
+
+    return;
 }
 
 export async function addCompany({
-	companyName,
-	companyDescription,
-	companyLocation,
-	companyPhoto
+    companyName,
+    companyDescription,
+    companyLocation,
+    companyPhoto
 }: {
-	companyName: string;
-	companyDescription: string;
-	companyLocation: string;
-	companyPhoto?: string | null;
+    companyName: string;
+    companyDescription: string;
+    companyLocation: string;
+    companyPhoto?: string | null;
 }) {
-    console.log(companyName, companyDescription, companyLocation, companyPhoto);
 
-	// Validate required fields
-	if (!companyName || !companyDescription || !companyLocation) {
-		throw new Error('Name, Description, and Location are required');
-	}
+    // Validate required fields
+    if (!companyName || !companyDescription || !companyLocation) {
+        throw new Error('Name, Description, and Location are required');
+    }
 
-	// Prepare data payload
-	const payload = {
-		name: companyName,
-		description: companyDescription,
-		location: companyLocation,
-		picture: companyPhoto || 'No picture' // Default to an empty string if no photo
-	};
+    // Prepare data payload
+    const payload = {
+        name: companyName,
+        description: companyDescription,
+        location: companyLocation,
+        picture: companyPhoto || 'No picture' // Default to an empty string if no photo
+    };
 
-	try {
-		const response = await fetch('/api/vendors', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
-		});
+    const response = await fetch('/api/vendors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
 
-		if (!response.ok) {
-			const error = await response.json();
-			throw new Error(error.message || 'Failed to add the company');
-		}
-	} catch (err) {
-		console.error('Error adding company:', err);
-		throw err;
-	}
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to add the company');
+    }
+
+    return await response.json();
 }
 
 export async function updateCompany(company: Vendor) {
@@ -98,19 +102,14 @@ export async function updateCompany(company: Vendor) {
         picture: company.picture || 'No picture' // Default to an empty string if no photo
     };
 
-    try {
-        const response = await fetch(`/api/vendors/${company.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
+    const response = await fetch(`/api/vendors/${company.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Failed to update the company');
-        }
-    } catch (err) {
-        console.error('Error updating company:', err);
-        throw err;
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update the company');
     }
 }
