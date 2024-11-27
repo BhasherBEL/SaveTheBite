@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { addCompany } from '$lib/utils/company';
 	import { toast } from 'svelte-hot-french-toast';
+    import convertPhoto from '$lib/utils/photo';
 
 	// Props
 	let { data } = $props();
@@ -95,24 +96,6 @@
 	let filePhoto: File;
 	let showBasketPopup = $state(false);
 
-	const toBase64 = (file) =>
-		new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = () => resolve(reader.result);
-			reader.onerror = reject;
-		});
-
-	async function convertFileToBase64(photo: File) {
-		try {
-			const base64String = await toBase64(photo);
-			console.log(base64String);
-			return base64String;
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
 	async function addCompanyPage() {
 		companyAdded = true; // Simulate that the company has been added
 		showAddCompanyPopup = false; // Close the pop-up
@@ -121,7 +104,11 @@
 
 		let companyPhoto = '';
 		if (filePhoto) {
-			companyPhoto = await convertFileToBase64(filePhoto);
+            companyPhoto = toast.promise(convertPhoto(filePhoto), {
+                loading: 'Uploading photo...',
+                success: 'Photo uploaded',
+                error: 'Error uploading photo'
+            });
 		}
 
 		toast.promise(addCompany({ companyName, companyDescription, companyLocation, companyPhoto }), {

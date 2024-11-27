@@ -7,13 +7,11 @@ export default async function convertPhoto(photo: File) {
             reader.onerror = reject;
         });
 
-    async function convertFileToBase64(photo: File) {
+    async function convertFileToBase64(photo: File): Promise<string> {
         const base64String = await toBase64(photo);
         console.log(base64String);
         return base64String;
     }
 
-    const base64String = await convertFileToBase64(photo);
-
-    return base64String;
+    return convertFileToBase64(photo);
 }
