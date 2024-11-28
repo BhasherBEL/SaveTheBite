@@ -320,19 +320,18 @@
 		{/if}
 	</div>
 
-	<!-- Current Orders Section -->
 	<div>
 		<h2 class="text-2xl font-semibold mb-4">Your basket to collect</h2>
 		<div class="border-l-4 border-green-500 pl-4">
 			{#if orders.length === 0}
 				<p class="text-gray-600">No current orders</p>
 			{/if}
-			{#each orders as order, index}
-				<!-- Example of an Order Card -->
+			{#each orders as order}
 				<div class="flex items-center border p-4 rounded-lg shadow-md mb-4">
 					<img
 						class="w-0 h-0 md:w-24 md:h-24 mb-2 md:mb-0 object-cover rounded-md flex items-center justify-center mr-4"
-						src={order.sale.basket.picture}
+						src={order.sale.basket.picture || order.sale.basket.vendor.picture || '/no-company.svg'}
+						alt="Basket {order.sale.basket.name}"
 					/>
 					<div class="flex flex-col flex-grow justify-between">
 						<p class="font-semibold">

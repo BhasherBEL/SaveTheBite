@@ -23,7 +23,6 @@
 		vendorData = vendor;
 	}
 
-	// Reactive statement to manage body overflow
 	$effect(() => {
 		if (typeof window !== 'undefined') {
 			document.body.style.overflow = basketData || vendorData ? 'hidden' : 'auto';
@@ -46,7 +45,6 @@
 					<div class="flex flex-col lg:flex-row justify-start">
 						<span class="font-bold text-lg">{vendor.name}</span>
 
-						<!-- Display the address of the market with a map logo before -->
 						<div class="inline-flex items-center space-x-2 pt-2 lg:pt-0 lg:ml-6">
 							<i class="fas fa-map-marker-alt text-gray-400"></i>
 							<span class="text-gray-400 text-sm font-bold">
@@ -65,13 +63,11 @@
 							</span>
 						</div>
 					</div>
-					<!-- Display the save button at the end of the flex -->
 					<div class="inline-flex justify-end">
 						<i class="fa-regular hover:scale-105 fa-bookmark text-gray-100 text-2xl"></i>
 					</div>
 				</div>
 
-				<!-- Display the batches of the market -->
 				<div class="gap-4 mt-4 flex flex-col lg:flex-row overflow-x-auto">
 					{#each vendor.baskets as basket (basket.id)}
 						<div
@@ -83,7 +79,7 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src={basket.picture || vendor.picture}
+								src={basket.picture || vendor.picture || '/no-company.svg'}
 								alt="Currently no picture for {basket.name}"
 								class="lg:w-72 lg:h-72 mx-auto rounded-xl object-cover"
 							/>
@@ -108,13 +104,3 @@
 {#if vendorData}
 	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} bind:cart />
 {/if}
-
-<style>
-	/* Ensuring the list takes full height of the viewport */
-	.max-h-screen {
-		max-height: 100vh;
-	}
-	.no-scroll {
-		overflow: hidden;
-	}
-</style>

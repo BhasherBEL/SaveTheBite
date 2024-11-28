@@ -1,33 +1,37 @@
 <script lang="ts">
 	import { type Basket } from '$lib/server/db/schema';
 	import { updateBasket } from '$lib/utils/company';
-    import convertPhoto from '$lib/utils/photo';
-    import { toast } from 'svelte-hot-french-toast';
+	import convertPhoto from '$lib/utils/photo';
+	import { toast } from 'svelte-hot-french-toast';
 
-	let { basket = $bindable(), onClose, onCancel }: { basket: Basket, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
+	let {
+		basket = $bindable(),
+		onClose,
+		onCancel
+	}: { basket: Basket; onClose: (basket: Basket) => {}; onCancel: () => {} } = $props();
 
-    async function editBasketHandler() {
-        if (!basket.name || !basket.description || !basket.id || !basket.initialPrice) {
-            return console.error('Please fill in all fields');
-        }
-        basket.price = basket.initialPrice;
+	async function editBasketHandler() {
+		if (!basket.name || !basket.description || !basket.id || !basket.initialPrice) {
+			return console.error('Please fill in all fields');
+		}
+		basket.price = basket.initialPrice;
 
-        const photo = document.getElementById('basketPhoto') as HTMLInputElement;
-        if (photo?.files[0]) {
-            basket.picture = await convertPhoto(photo.files[0]);
-        }
-        
-        try {
-            toast.promise(updateBasket(basket), {
-                loading: 'Updating basket...',
-                success: 'Basket updated',
-                error: 'Error updating basket'
-            });
-            onClose(basket);
-        } catch (error) {
-            console.error(error);                
-        }
-    }
+		const photo = document.getElementById('basketPhoto') as HTMLInputElement;
+		if (photo?.files[0]) {
+			basket.picture = await convertPhoto(photo.files[0]);
+		}
+
+		try {
+			toast.promise(updateBasket(basket), {
+				loading: 'Updating basket...',
+				success: 'Basket updated',
+				error: 'Error updating basket'
+			});
+			onClose(basket);
+		} catch (error) {
+			console.error(error);
+		}
+	}
 </script>
 
 <!-- Pop-up for editing Basket -->
@@ -58,19 +62,19 @@
 				placeholder="Enter basket description"
 			/>
 		</div>
-        <div class="mb-4">
-            <label for="basketInitialPrice" class="block text-sm font-medium text-gray-700 mb-2"
-                >Initial Price</label
-            >
-            <input
-                type="number"
-                id="basketInitialPrice"
-                bind:value={basket.initialPrice}
-                min="0"
-                class="w-full p-2 border rounded"
-                placeholder="Enter initial price"
-            />
-        </div>
+		<div class="mb-4">
+			<label for="basketInitialPrice" class="block text-sm font-medium text-gray-700 mb-2"
+				>Initial Price</label
+			>
+			<input
+				type="number"
+				id="basketInitialPrice"
+				bind:value={basket.initialPrice}
+				min="0"
+				class="w-full p-2 border rounded"
+				placeholder="Enter initial price"
+			/>
+		</div>
 		<div class="mb-4">
 			<label for="basketPhoto" class="block text-sm font-medium text-gray-700 mb-2"
 				>Basket Photo (Optional)</label
@@ -84,10 +88,7 @@
 			/>
 		</div>
 		<div class="flex justify-between">
-			<button
-				class="bg-gray-500 text-white px-4 py-2 rounded-md"
-				onclick={onCancel}>Cancel</button
-			>
+			<button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick={onCancel}>Cancel</button>
 			<button class="bg-green-500 text-white px-4 py-2 rounded-md" onclick={editBasketHandler}
 				>Confirm</button
 			>

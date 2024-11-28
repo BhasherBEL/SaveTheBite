@@ -85,7 +85,7 @@
 					class="border p-4 rounded-lg shadow-md flex flex-col md:flex-row space-x-0 md:space-x-6"
 				>
 					<img
-						src={basket.picture}
+						src={basket.picture || '/no-company.svg'}
 						alt={basket.name}
 						class="md:w-36 md:h-36 mb-2 md:mb-0 object-cover rounded-md"
 					/>

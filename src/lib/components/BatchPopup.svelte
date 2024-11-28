@@ -1,39 +1,42 @@
 <script lang="ts">
 	import { type Basket, type Cart, type Sale, type Order } from '$lib/server/db/schema';
 	import AddToCart from '$lib/components/AddToCart.svelte';
-    import { deleteSale } from '$lib/utils/cart';
-    import { toast } from 'svelte-hot-french-toast';
+	import { deleteSale } from '$lib/utils/cart';
+	import { toast } from 'svelte-hot-french-toast';
 
-	let { data = $bindable(), onClose, cart = $bindable([]) }: { data: Basket; onClose: () => {}, cart: Cart } = $props();
+	let {
+		data = $bindable(),
+		onClose,
+		cart = $bindable([])
+	}: { data: Basket; onClose: () => {}; cart: Cart } = $props();
 
 	let show = $state(false);
 
-    console.log("In basket popup: ", cart);
+	console.log('In basket popup: ', cart);
 
+	function checkCart(basketId: number) {
+		// Check if the basket is already in the cart
+		let order = cart.find((order) => order.sale.basketId === basketId);
+		if (order) {
+			console.log('In cart: ', order);
+			return order;
+		}
+		return false;
+	}
 
-    function checkCart(basketId: number) {
-        // Check if the basket is already in the cart
-        let order = cart.find((order) => order.sale.basketId  === basketId);
-        if (order) {
-            console.log("In cart: ", order);
-            return order;
-        }
-        return false;
-    }
+	async function deleteFromCart(basketId: number) {
+		event?.stopPropagation();
+		toast.promise(deleteSale(basketId), {
+			loading: 'Deleting from cart...',
+			success: 'Deleted from cart',
+			error: 'Error deleting from cart'
+		});
 
-    async function deleteFromCart(basketId: number) {
-        event?.stopPropagation();
-        toast.promise(deleteSale(basketId), {
-            loading: 'Deleting from cart...',
-            success: 'Deleted from cart',
-            error: 'Error deleting from cart'
-        });
+		cart = cart.filter((order) => order.sale.basketId === basketId);
+		inCart = false;
+	}
 
-        cart = cart.filter((order) => order.sale.basketId === basketId);
-        inCart = false;
-    }
-
-    let inCart = $state(checkCart(data.id));
+	let inCart = $state(checkCart(data.id));
 </script>
 
 {#if data}
@@ -61,7 +64,7 @@
 				×
 			</button>
 			<img
-				src="{data.picture}"
+				src={data.picture || '/no-company.svg'}
 				alt="Currently no picture for {data.name}"
 				class="inset-y-0 left-0 w-full lg:w-1/2 h-full rounded-3xl object-cover aspect-square mx-auto"
 			/>
@@ -73,21 +76,21 @@
 				<p class="text-gray-400 text-sm flex-1 pb-4">
 					{data.description}
 				</p>
-                {#if inCart}
-                    <button
-                        class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-                        onclick={() => deleteFromCart(inCart.saleId)}
-                    >
-                        Delete from cart ({inCart.quantity})
-                    </button>
-                {:else}
-                    <button
-                        class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
-                        onclick={() => (show = true)}
-                    >
-                        Add to cart
-                    </button>
-                {/if}
+				{#if inCart}
+					<button
+						class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
+						onclick={() => deleteFromCart(inCart.saleId)}
+					>
+						Delete from cart ({inCart.quantity})
+					</button>
+				{:else}
+					<button
+						class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
+						onclick={() => (show = true)}
+					>
+						Add to cart
+					</button>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -95,11 +98,11 @@
 
 {#if show}
 	<AddToCart
-        data={data}
-        bind:cart={cart}
+		{data}
+		bind:cart
 		onClose={() => {
 			show = false;
-            inCart = checkCart(data.id);
+			inCart = checkCart(data.id);
 		}}
 	/>
 {/if}

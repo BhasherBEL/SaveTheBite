@@ -128,7 +128,7 @@
 		<div class="border-l-4 border-green-500 pl-4 flex flex-col md:flex-row items-center space-x-6">
 			<!-- Company Image -->
 			<img
-				src={company.picture}
+				src={company.picture || '/no-company.svg'}
 				alt="Company Logo"
 				class="md:w-48 md:h-48 mb-4 md:mb-0 object-cover rounded-2xl"
 			/>
@@ -159,7 +159,7 @@
 							class="border p-4 rounded-lg shadow-md flex flex-col md:flex-row space-x-0 md:space-x-6"
 						>
 							<img
-								src={basket.picture}
+								src={basket.picture || '/no-company.svg'}
 								alt={basket.name}
 								class="md:w-36 md:h-36 mb-2 md:mb-0 object-cover rounded-md"
 							/>
