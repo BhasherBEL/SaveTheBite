@@ -1,7 +1,7 @@
 <script>
 	import Header from '$lib/components/Header.svelte';
 	import '../app.css';
-    import { Toaster } from 'svelte-hot-french-toast';
+	import { Toaster } from 'svelte-hot-french-toast';
 
 	let { data } = $props();
 </script>
@@ -20,7 +20,7 @@
 	</footer>
 </div>
 
-<Toaster/>
+<Toaster />
 
 <style>
 </style>

@@ -2,54 +2,55 @@
 	import { type Basket, type Vendor, type Cart, type Order } from '$lib/server/db/schema';
 	import BatchPopup from '$lib/components/BatchPopup.svelte';
 	import AddToCart from '$lib/components/AddToCart.svelte';
-    import { deleteSale } from '$lib/utils/cart';
-    import { toast } from 'svelte-hot-french-toast';
+	import { deleteSale } from '$lib/utils/cart';
+	import { toast } from 'svelte-hot-french-toast';
 
-	let { data, onClose, cart = $bindable() }: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
+	let {
+		data,
+		onClose,
+		cart = $bindable()
+	}: { data: Vendor; onClose: () => {}; cart: Cart } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
 	let quantityShow = $state(false);
 	let basketShow = $state(false);
-    let basketId: number;
+	let basketId: number;
 
 	function showBasket(basket: Basket, index: number) {
 		basketData = basket;
 		basketShow = true;
-        basketId = index;
+		basketId = index;
 	}
 
 	function showQuantity(basket: Basket, index: number) {
 		event?.stopPropagation();
 		basketData = basket;
 		quantityShow = true;
-        basketId = index;
+		basketId = index;
 	}
 
-    function checkCart(basketId: number): Order {
-        // Check if the basket is already in the cart
-        let order = cart.find((order) => order.sale.basketId  === basketId);
-        return order;
-    }
+	function checkCart(basketId: number): Order {
+		// Check if the basket is already in the cart
+		let order = cart.find((order) => order.sale.basketId === basketId);
+		return order;
+	}
 
-    function deleteFromCart(basketId: number, index: number) {
-        event?.stopPropagation();
-        toast.promise(deleteSale(basketId), {
-            loading: 'Deleting from cart...',
-            success: 'Deleted from cart',
-            error: 'Error deleting from cart'
-        });
-        cart = cart.filter((order) => order.sale.basketId === basketId);
-        inCart[index] = undefined;
-    }
+	function deleteFromCart(basketId: number, index: number) {
+		event?.stopPropagation();
+		toast.promise(deleteSale(basketId), {
+			loading: 'Deleting from cart...',
+			success: 'Deleted from cart',
+			error: 'Error deleting from cart'
+		});
+		cart = cart.filter((order) => order.sale.basketId === basketId);
+		inCart[index] = undefined;
+	}
 
-    let inCart = $state([]);
-    // Fill the inCart array with the orders in the cart
-    for (let i = 0; i < data.baskets.length; i++) {
-        inCart.push(checkCart(data.baskets[i].id));
-    }
-
-    $inspect(inCart);
-
+	let inCart = $state([]);
+	// Fill the inCart array with the orders in the cart
+	for (let i = 0; i < data.baskets.length; i++) {
+		inCart.push(checkCart(data.baskets[i].id));
+	}
 </script>
 
 {#if data}
@@ -119,14 +120,16 @@
 								{#if inCart[index] !== undefined}
 									<button
 										class="mt-auto w-full mb-0 py-2 bg-red-500 text-white font-semibold rounded-2xl hover:bg-red-600"
-                                        onclick={() => deleteFromCart(inCart[index].saleId, index)}
+										onclick={() => deleteFromCart(inCart[index].saleId, index)}
 									>
 										Delete from cart ({inCart[index]?.quantity})
 									</button>
 								{:else}
 									<button
 										class="mt-auto w-full mb-0 py-2 bg-primary text-white font-semibold rounded-2xl hover:bg-green-600"
-										onclick={() => {showQuantity(basket, index)}}
+										onclick={() => {
+											showQuantity(basket, index);
+										}}
 									>
 										Add to cart
 									</button>
@@ -142,14 +145,22 @@
 
 <!-- Display the batch popup -->
 {#if basketShow}
-	<BatchPopup data={basketData} onClose={() => {
-        basketShow = false;
-        inCart[basketId] = checkCart(basketData.id);
-    }} bind:cart={cart} />
+	<BatchPopup
+		data={basketData}
+		onClose={() => {
+			basketShow = false;
+			inCart[basketId] = checkCart(basketData.id);
+		}}
+		bind:cart
+	/>
 {/if}
 {#if quantityShow}
-	<AddToCart data={basketData} onClose={() => {
-        quantityShow = false;
-        inCart[basketId] = checkCart(basketData.id);
-    }} bind:cart={cart} />
+	<AddToCart
+		data={basketData}
+		onClose={() => {
+			quantityShow = false;
+			inCart[basketId] = checkCart(basketData.id);
+		}}
+		bind:cart
+	/>
 {/if}

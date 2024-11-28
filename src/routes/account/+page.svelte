@@ -5,12 +5,8 @@
 
 	// Props
 	let { data } = $props();
-	let { orders, user, ...other } = data;
+	let { orders, user } = data;
 	let { managers } = user;
-
-	console.log('managers', managers);
-	console.log('orders', orders);
-	console.log('other', other);
 
 	let language = $state('English');
 	let theme = $state('Light');

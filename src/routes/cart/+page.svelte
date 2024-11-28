@@ -1,59 +1,59 @@
 <script lang="ts">
 	import { type Order } from '$lib/server/db/schema';
-    import { deleteSale, deleteAllSales, payCart } from '$lib/utils/cart';
-    import { toast } from 'svelte-hot-french-toast';
+	import { deleteSale, deleteAllSales, payCart } from '$lib/utils/cart';
+	import { toast } from 'svelte-hot-french-toast';
 
 	let { data = $bindable() } = $props();
 	let { cart } = $state(data);
 
-	$inspect(cart);
-
 	// Handlers for basket actions
 	function deleteSaleHandler(saleId: number) {
-        console.log("Deleting sale with id: ", saleId);
-        try {
-            toast.promise(deleteSale(saleId), {
-                loading: 'Deleting sale...',
-                success: 'Sale deleted',
-                error: 'Error deleting sale'
-            });
-            cart = cart.filter((order) => order.saleId !== saleId);
-        } catch (err) {
-            let message = err.message || 'Error deleting sale';
-            toast.error(message);
-        }
+		console.log('Deleting sale with id: ', saleId);
+		try {
+			toast.promise(deleteSale(saleId), {
+				loading: 'Deleting sale...',
+				success: 'Sale deleted',
+				error: 'Error deleting sale'
+			});
+			cart = cart.filter((order) => order.saleId !== saleId);
+		} catch (err) {
+			let message = err.message || 'Error deleting sale';
+			toast.error(message);
+		}
 	}
 
 	function emptyCartHandler() {
-        try {
-            toast.promise(deleteAllSales(), {
-                loading: 'Emptying cart...',
-                success: 'Cart emptied',
-                error: 'Error emptying cart'
-            });
-            cart = [];
-        } catch (err) {
-            let message = err.message || 'Error emptying cart';
-            toast.error(message);
-        }
+		try {
+			toast.promise(deleteAllSales(), {
+				loading: 'Emptying cart...',
+				success: 'Cart emptied',
+				error: 'Error emptying cart'
+			});
+			cart = [];
+		} catch (err) {
+			let message = err.message || 'Error emptying cart';
+			toast.error(message);
+		}
 	}
 
 	async function confirmOrderHandler() {
 		// Send the order to the server
-        console.log("Confirming order: ", cart);
-        try {
-            await payCart(cart);
-            toast.success('Order confirmed');
-            cart = [];
-        } catch (err) {
-            let message = err.message || 'Error confirming order';
-            toast.error(message);
-        }
+		console.log('Confirming order: ', cart);
+		try {
+			await payCart(cart);
+			toast.success('Order confirmed');
+			cart = [];
+		} catch (err) {
+			let message = err.message || 'Error confirming order';
+			toast.error(message);
+		}
 	}
 
 	let emptyCart = $derived(cart.length === 0);
 
-    let total = $derived(cart.reduce((acc, { sale: { basket }, quantity }) => acc + basket.price * quantity, 0));
+	let total = $derived(
+		cart.reduce((acc, { sale: { basket }, quantity }) => acc + basket.price * quantity, 0)
+	);
 </script>
 
 <!-- Shopping cart list -->
@@ -109,9 +109,9 @@
 					</div>
 				</div>
 			{/each}
-            <div class="flex justify-end">
-                <p class="text-2xl font-semibold">Total: {total}€</p>
-            </div>
+			<div class="flex justify-end">
+				<p class="text-2xl font-semibold">Total: {total}€</p>
+			</div>
 		{/if}
 	</ul>
 </section>

@@ -1,41 +1,45 @@
 <script lang="ts">
 	import { type Basket } from '$lib/server/db/schema';
 	import { addBasket } from '$lib/utils/company';
-    import convertPhoto from '$lib/utils/photo';
-    import { toast } from 'svelte-hot-french-toast';
+	import convertPhoto from '$lib/utils/photo';
+	import { toast } from 'svelte-hot-french-toast';
 
-	let { vendorId, onClose, onCancel }: { vendorId: number, onClose: (basket: Basket) => {}, onCancel: () => {} } = $props();
+	let {
+		vendorId,
+		onClose,
+		onCancel
+	}: { vendorId: number; onClose: (basket: Basket) => {}; onCancel: () => {} } = $props();
 
 	let basketData: Basket = $state({
-        initialPrice: 0,
-        price: 0,
-        picture: '',
-        name: '',
-        description: '',
-    });
+		initialPrice: 0,
+		price: 0,
+		picture: '',
+		name: '',
+		description: ''
+	});
 
-    async function addBasketHandler() {
-        if (!basketData.name || !basketData.description || !vendorId || !basketData.initialPrice) {
-            return console.error('Please fill in all fields');
-        }
-        basketData.price = basketData.initialPrice;
+	async function addBasketHandler() {
+		if (!basketData.name || !basketData.description || !vendorId || !basketData.initialPrice) {
+			return console.error('Please fill in all fields');
+		}
+		basketData.price = basketData.initialPrice;
 
-        const photo = document.getElementById('basketPhoto') as HTMLInputElement;
-        if (photo?.files[0]) {
-            basketData.picture = await convertPhoto(photo.files[0]);
-        }
-        
-        try {
-            toast.promise(addBasket(vendorId, basketData), {
-                loading: 'Adding basket...',
-                success: 'Basket added',
-                error: 'Error adding basket'
-            });
-            onClose(basketData);
-        } catch (error) {
-            console.error(error);                
-        }
-    }
+		const photo = document.getElementById('basketPhoto') as HTMLInputElement;
+		if (photo?.files && photo.files.length > 0 && photo.files[0]) {
+			basketData.picture = await convertPhoto(photo.files[0]);
+		}
+
+		try {
+			await toast.promise(addBasket(vendorId, basketData), {
+				loading: 'Adding basket...',
+				success: 'Basket added',
+				error: 'Error adding basket'
+			});
+			onClose(basketData);
+		} catch (error) {
+			console.error(error);
+		}
+	}
 </script>
 
 <!-- Pop-up for Adding Basket -->
@@ -66,19 +70,19 @@
 				placeholder="Enter basket description"
 			/>
 		</div>
-        <div class="mb-4">
-            <label for="basketInitialPrice" class="block text-sm font-medium text-gray-700 mb-2"
-                >Initial Price</label
-            >
-            <input
-                type="number"
-                id="basketInitialPrice"
-                bind:value={basketData.initialPrice}
-                min="0"
-                class="w-full p-2 border rounded"
-                placeholder="Enter initial price"
-            />
-        </div>
+		<div class="mb-4">
+			<label for="basketInitialPrice" class="block text-sm font-medium text-gray-700 mb-2"
+				>Initial Price</label
+			>
+			<input
+				type="number"
+				id="basketInitialPrice"
+				bind:value={basketData.initialPrice}
+				min="0"
+				class="w-full p-2 border rounded"
+				placeholder="Enter initial price"
+			/>
+		</div>
 		<div class="mb-4">
 			<label for="basketPhoto" class="block text-sm font-medium text-gray-700 mb-2"
 				>Basket Photo (Optional)</label
@@ -92,10 +96,7 @@
 			/>
 		</div>
 		<div class="flex justify-between">
-			<button
-				class="bg-gray-500 text-white px-4 py-2 rounded-md"
-				onclick={onCancel}>Cancel</button
-			>
+			<button class="bg-gray-500 text-white px-4 py-2 rounded-md" onclick={onCancel}>Cancel</button>
 			<button class="bg-green-500 text-white px-4 py-2 rounded-md" onclick={addBasketHandler}
 				>Add Basket</button
 			>

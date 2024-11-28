@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { deleteBasket } from '$lib/utils/company';
-    import { deleteSale } from '$lib/utils/sales';
+	import { deleteSale } from '$lib/utils/sales';
 
 	import AddBasketPopup from '$lib/components/AddBasketPopup.svelte';
 	import EditBasketPopup from '$lib/components/EditBasketPopup.svelte';
 	import EditCompanyPopup from '$lib/components/EditCompanyPopup.svelte';
 	import AddSalePopup from '$lib/components/AddSalePopup.svelte';
 	import EditSalePopup from '$lib/components/EditSalePopup.svelte';
-    import { toast } from 'svelte-hot-french-toast';
+	import { toast } from 'svelte-hot-french-toast';
 	//import { sales, type Basket } from '$lib/server/db/schema';
 
 	let { data } = $props();
@@ -34,17 +34,17 @@
 		foodBaskets = [...foodBaskets, basket];
 	}
 
-	function deleteBasketHandler(id: number) {
-        try {
-            toast.promise(deleteBasket(id), {
-                loading: 'Deleting basket...',
-                success: 'Basket deleted',
-                error: 'Error deleting basket'
-            });
-            foodBaskets = foodBaskets.filter((basket) => basket.id !== id);
-        } catch (error) {
-            console.error(error);
-        }
+	async function deleteBasketHandler(id: number) {
+		try {
+			await toast.promise(deleteBasket(id), {
+				loading: 'Deleting basket...',
+				success: 'Basket deleted',
+				error: 'Error deleting basket'
+			});
+			foodBaskets = foodBaskets.filter((basket) => basket.id !== id);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	function editBasketHandler(id: number) {
@@ -67,25 +67,25 @@
 		basketData = basket;
 	}
 
-    function editSaleHandler(sale) {
-        showEditSalePopup = true;
-        saleData = sale;
-    }
+	function editSaleHandler(sale) {
+		showEditSalePopup = true;
+		saleData = sale;
+	}
 
-    function deleteSaleHandler(sale) {
-        try {
-            toast.promise(deleteSale(sale.id), {
-                loading: 'Deleting sale...',
-                success: 'Sale deleted',
-                error: 'Error deleting sale'
-            });
-            foodBaskets.find((basket) => basket.id === sale.basketId).sales = foodBaskets
-                .find((basket) => basket.id === sale.basketId)
-                .sales.filter((s) => s.id !== sale.id);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+	function deleteSaleHandler(sale) {
+		try {
+			toast.promise(deleteSale(sale.id), {
+				loading: 'Deleting sale...',
+				success: 'Sale deleted',
+				error: 'Error deleting sale'
+			});
+			foodBaskets.find((basket) => basket.id === sale.basketId).sales = foodBaskets
+				.find((basket) => basket.id === sale.basketId)
+				.sales.filter((s) => s.id !== sale.id);
+		} catch (error) {
+			console.error(error);
+		}
+	}
 
 	// Utility function to inspect the data
 	function timeBetween(now, future) {

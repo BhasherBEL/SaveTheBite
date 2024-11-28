@@ -10,7 +10,8 @@ export async function getVendors() {
 					sales: {
 						limit: 1,
 						orderBy: (sales, { desc }) => [desc(sales.expiresAt)]
-					}
+					},
+					tags: true
 				}
 			}
 		}
@@ -28,7 +29,8 @@ export async function getVendor(id: number) {
 					sales: {
 						limit: 1,
 						orderBy: (sales, { desc }) => [desc(sales.expiresAt)]
-					}
+					},
+					tags: true
 				}
 			}
 		}

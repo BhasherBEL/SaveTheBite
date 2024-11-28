@@ -23,7 +23,10 @@ export const load: ServerLoad = async ({ locals, params }) => {
 
 	const vendor = await db.query.vendors.findFirst({
 		where: eq(table.vendors.id, nId),
-		with: { managers: true }
+		with: {
+			managers: true,
+			baskets: { with: { sales: true } }
+		}
 	});
 
 	if (!vendor) {

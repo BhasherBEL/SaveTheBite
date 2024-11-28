@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db/client';
 import { getVendors } from '$lib/server/db/vendors';
 import { addressToCoordinates, getDistanceFromLatLonInKm } from '$lib/utils/search';
-import type { LoadEvent } from '@sveltejs/kit';
+import { type LoadEvent, error } from '@sveltejs/kit';
 
 export async function load({ url }: LoadEvent) {
 	const search = url.searchParams.get('search');
@@ -28,10 +28,29 @@ export async function load({ url }: LoadEvent) {
 		return { vendors: [] };
 	}
 
+	let currentTagsText = url.searchParams.get('tags');
+	let currentTagsString = currentTagsText ? currentTagsText.split(',') : [];
+
+	let tags;
+	try {
+		tags = await db.query.tags.findMany();
+	} catch (e: any) {
+		console.warn('Error fetching tags:', e);
+		error(500, 'Error fetching tags');
+	}
+
+	let currentTags = tags.filter((tag) => currentTagsString.includes(tag.name));
+
 	let filteredVendors = [];
 
 	for (const vendor of vendors) {
 		for (const basket of vendor.baskets) {
+			for (const tag of currentTags) {
+				if (!basket.tags.find((t) => t.tagId === tag.id)) {
+					basket.sales = [];
+					continue;
+				}
+			}
 			basket.sales = basket.sales.filter((sale) => sale.remain > 0 && sale.expiresAt > new Date());
 		}
 		vendor.baskets = vendor.baskets.filter((basket) => basket.sales.length > 0);
@@ -56,13 +75,5 @@ export async function load({ url }: LoadEvent) {
 		}
 	}
 
-	let filters = [];
-	try {
-		filters = await db.query.tags.findMany();
-		console.log('filters', filters);
-	} catch (error) {
-		console.log('Error fetching filters:', error);
-	}
-
-	return { vendors: vendors, longitude, latitude, filters };
+	return { vendors: vendors, longitude, latitude, tags, currentTags };
 }
