@@ -31,6 +31,9 @@ export async function load({ url }: LoadEvent) {
 	let filteredVendors = [];
 
 	for (const vendor of vendors) {
+		for (const basket of vendor.baskets) {
+			basket.sales = basket.sales.filter((sale) => sale.remain > 0 && sale.expiresAt > new Date());
+		}
 		vendor.baskets = vendor.baskets.filter((basket) => basket.sales.length > 0);
 		if (vendor.baskets.length === 0) continue;
 		filteredVendors.push(vendor);
@@ -49,17 +52,17 @@ export async function load({ url }: LoadEvent) {
 				);
 			}
 		} catch (e) {
-            console.error('Error fetching coordinates', e);
-        }
+			console.error('Error fetching coordinates', e);
+		}
 	}
 
-    let filters = [];
-    try {
-        filters = await db.query.tags.findMany();
-        console.log('filters', filters);
-    } catch (error) {
-        console.log('Error fetching filters:', error);
-    }
+	let filters = [];
+	try {
+		filters = await db.query.tags.findMany();
+		console.log('filters', filters);
+	} catch (error) {
+		console.log('Error fetching filters:', error);
+	}
 
 	return { vendors: vendors, longitude, latitude, filters };
 }
