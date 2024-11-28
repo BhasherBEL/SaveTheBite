@@ -129,7 +129,6 @@ export async function POST({ locals, request }: RequestEvent) {
 	}
 
 	const { basketId, quantity, remain, timeout } = await request.json();
-	console.log(basketId, quantity, remain, timeout);
 
 	const basket = await db.query.baskets.findFirst({
 		where: eq(table.baskets.id, basketId),
@@ -155,7 +154,6 @@ export async function POST({ locals, request }: RequestEvent) {
 	}
 
 	const timestamp = timeout ? new Date(timeout) : Date.now();
-	console.log(timestamp);
 
 	return json(
 		await db

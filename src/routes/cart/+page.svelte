@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { type Order } from '$lib/server/db/schema';
 	import { deleteSale, deleteAllSales, payCart } from '$lib/utils/cart';
 	import { toast } from 'svelte-hot-french-toast';
 
 	let { data = $bindable() } = $props();
 	let { cart } = $state(data);
 
-	// Handlers for basket actions
 	function deleteSaleHandler(saleId: number) {
-		console.log('Deleting sale with id: ', saleId);
 		try {
 			toast.promise(deleteSale(saleId), {
 				loading: 'Deleting sale...',
@@ -37,8 +34,6 @@
 	}
 
 	async function confirmOrderHandler() {
-		// Send the order to the server
-		console.log('Confirming order: ', cart);
 		try {
 			await payCart(cart);
 			toast.success('Order confirmed');

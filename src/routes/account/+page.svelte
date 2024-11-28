@@ -115,8 +115,6 @@
 	}
 
 	function companyNavigateHandler(vendor) {
-		console.log('Navigating to company:', vendor);
-		// Navigate to the company page
 		let pageId = vendor.id;
 		navigateTo(`/company/${pageId}`);
 	}

@@ -10,7 +10,6 @@ export async function GET({ locals, url }: RequestEvent) {
 	}
 
 	const includeClaimed = url.searchParams.get('includeClaimed') === 'true';
-    console.log('includeClaimed', includeClaimed);
 
 	let cond: SQL | undefined = eq(table.orders.userId, locals.user.id);
 
@@ -22,13 +21,13 @@ export async function GET({ locals, url }: RequestEvent) {
 		where: cond,
 		with: {
 			sale: {
-				with: { 
-                    basket: {
-                        with: {
-                            vendor: true,
-                        }
-                    }
-                }
+				with: {
+					basket: {
+						with: {
+							vendor: true
+						}
+					}
+				}
 			}
 		}
 	});

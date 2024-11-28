@@ -12,13 +12,9 @@
 
 	let show = $state(false);
 
-	console.log('In basket popup: ', cart);
-
 	function checkCart(basketId: number) {
-		// Check if the basket is already in the cart
 		let order = cart.find((order) => order.sale.basketId === basketId);
 		if (order) {
-			console.log('In cart: ', order);
 			return order;
 		}
 		return false;

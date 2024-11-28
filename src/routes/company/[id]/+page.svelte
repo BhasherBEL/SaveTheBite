@@ -8,18 +8,15 @@
 	import AddSalePopup from '$lib/components/AddSalePopup.svelte';
 	import EditSalePopup from '$lib/components/EditSalePopup.svelte';
 	import { toast } from 'svelte-hot-french-toast';
-	//import { sales, type Basket } from '$lib/server/db/schema';
 
 	let { data } = $props();
 
-	// Company Details with timestamps and image
 	let company = $state(
 		data?.vendor || { picture: '', name: '', location: '', createdAt: '', updatedAt: '' }
 	);
 
 	let foodBaskets = $state(company?.baskets || []);
 
-	// Handlers for basket actions
 	let showAddBasketPopup = $state(false);
 	let showEditBasketPopup = $state(false);
 	let showEditCompanyPopup = $state(false);
