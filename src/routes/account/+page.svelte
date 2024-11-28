@@ -12,9 +12,9 @@
 	console.log('orders', orders);
 	console.log('other', other);
 
-	let language = 'English';
-	let theme = 'Light';
-	let location = '';
+	let language = $state('English');
+	let theme = $state('Light');
+	let location = $state('');
 	let foodPreferences = [
 		{ name: 'Lactose-free', active: false },
 		{ name: 'Vegan', active: false },
