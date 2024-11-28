@@ -8,8 +8,8 @@
 		vendors,
 		longitude,
 		latitude,
-        cart = $bindable()
-	}: { vendors: Vendor[]; longitude?: number; latitude?: number, cart: Cart[] } = $props();
+		cart = $bindable()
+	}: { vendors: Vendor[]; longitude?: number; latitude?: number; cart: Cart[] } = $props();
 
 	let basketData: Basket | undefined = $state(undefined);
 	let vendorData: Vendor | undefined = $state(undefined);
@@ -19,12 +19,9 @@
 		basketData = basket;
 	}
 
-
 	function showVendor(vendor: Vendor) {
 		vendorData = vendor;
 	}
-
-    console.log("cart in MarketList: ", cart);
 
 	// Reactive statement to manage body overflow
 	$effect(() => {
@@ -32,9 +29,6 @@
 			document.body.style.overflow = basketData || vendorData ? 'hidden' : 'auto';
 		}
 	});
-
-    $inspect(cart);
-
 </script>
 
 <div class="p-4">
@@ -89,7 +83,7 @@
 							onclick={() => showBasket(basket)}
 						>
 							<img
-								src="{basket.picture || vendor.picture}"
+								src={basket.picture || vendor.picture}
 								alt="Currently no picture for {basket.name}"
 								class="lg:w-72 lg:h-72 mx-auto rounded-xl object-cover"
 							/>
@@ -109,10 +103,10 @@
 
 <!-- Display the batch popup -->
 {#if basketData}
-	<BatchPopup bind:data={basketData} onClose={() => (basketData = undefined)} bind:cart={cart}/>
+	<BatchPopup bind:data={basketData} onClose={() => (basketData = undefined)} bind:cart />
 {/if}
 {#if vendorData}
-	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} bind:cart={cart}/>
+	<MarketPopup data={vendorData} onClose={() => (vendorData = undefined!)} bind:cart />
 {/if}
 
 <style>

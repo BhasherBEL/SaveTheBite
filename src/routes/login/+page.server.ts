@@ -30,6 +30,6 @@ export const actions = {
 		const session = await createSession(token, user.id);
 		setSessionTokenCookie(cookies, token, session.expiresAt);
 
-		redirect(303, url.searchParams.get('redirect') || '/');
+		redirect(303, '/');
 	}
 } satisfies Actions;

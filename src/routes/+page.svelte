@@ -3,7 +3,6 @@
 
 	let isActive = $state(false);
 
-
 	function toggleFilter(index: number) {
 		switch (filters[index].active) {
 			case true:
@@ -19,10 +18,10 @@
 	}
 
 	let { data = $bindable() } = $props();
-    let cart = data.cart;
-    let filters = $state(data.filters);
+	let cart = $state(data.cart || []);
+	let filters = $state(data.filters);
 
-    console.log("data in main page: ", data);
+	console.log('data in main page: ', data);
 
 	function toggleActive() {
 		isActive = !isActive;
@@ -48,15 +47,6 @@
 				placeholder="City, region, address, ..."
 			/>
 		</form>
-		<button
-			class={`group p-4 ml-2 rounded-full transition-colors duration-300 ${isActive ? 'bg-green-500 hover:bg-gray-100' : 'bg-gray-100 hover:bg-green-500'} shadow-md`}
-			onclick={toggleActive}
-			aria-label="Toggle map"
-		>
-			<i
-				class={`fas fa-map-marker-alt ${isActive ? 'text-white group-hover:text-gray-400' : 'text-gray-400 group-hover:text-white'} transition-colors duration-300`}
-			></i>
-		</button>
 	</div>
 
 	<!-- Filter Options -->
@@ -79,26 +69,14 @@
 	>
 		<!-- Product Cards (Left side) -->
 		<div class={`transition-all duration-500 ${isActive ? 'w-full md:col-span-2' : 'w-full'}`}>
-			<MarketList vendors={data.vendors} longitude={data.longitude} latitude={data.latitude} bind:cart={cart}/>
+			<MarketList
+				vendors={data.vendors}
+				longitude={data.longitude}
+				latitude={data.latitude}
+				bind:cart
+			/>
 			<!-- Pass markets data to MarketList -->
 		</div>
-
-		<!-- Map (Right side) - Display map only when isActive is true -->
-		{#if isActive}
-			<div class="transition-all duration-500">
-				<div class="sticky top-4">
-					<iframe
-						src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d53741.55755073594!2d24.772337437262063!3d60.19087801280934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sfi!4v1728405815704!5m2!1sde!2sfi"
-						width="100%"
-						height="500"
-						style="border:0;"
-						loading="lazy"
-						referrerpolicy="no-referrer-when-downgrade"
-						class="rounded-3xl"
-					></iframe>
-				</div>
-			</div>
-		{/if}
 	</div>
 </section>
 

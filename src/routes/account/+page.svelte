@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { addCompany } from '$lib/utils/company';
 	import { toast } from 'svelte-hot-french-toast';
-    import convertPhoto from '$lib/utils/photo';
+	import convertPhoto from '$lib/utils/photo';
 
 	// Props
 	let { data } = $props();
@@ -104,17 +104,17 @@
 
 		let companyPhoto = '';
 		if (filePhoto) {
-            companyPhoto = toast.promise(convertPhoto(filePhoto), {
-                loading: 'Uploading photo...',
-                success: 'Photo uploaded',
-                error: 'Error uploading photo'
-            });
+			companyPhoto = toast.promise(convertPhoto(filePhoto), {
+				loading: 'Uploading photo...',
+				success: 'Photo uploaded',
+				error: 'Error uploading photo'
+			});
 		}
 
 		toast.promise(addCompany({ companyName, companyDescription, companyLocation, companyPhoto }), {
 			loading: 'Adding company...',
 			success: 'Company added successfully!',
-			error: 'Failed to add company',
+			error: 'Failed to add company'
 		});
 	}
 
@@ -354,12 +354,9 @@
 	</div>
 
 	<!-- Logout Section -->
-	<div>
-		<button
-			class="bg-red-500 text-white w-full px-4 py-2 rounded-md"
-			onclick={() => navigateTo('/logout')}>Logout</button
-		>
-	</div>
+	<form action="/logout" method="POST">
+		<button class="bg-red-500 text-white w-full px-4 py-2 rounded-md">Logout</button>
+	</form>
 </section>
 
 <style>
