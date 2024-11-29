@@ -164,7 +164,7 @@
 								<p class="font-bold">{basket.name}</p>
 								<p class="text-gray-600">Initial Price: {basket.initialPrice}</p>
 								<p class="text-gray-600">Price: {basket.price}</p>
-								<p class="text-gray-600">Price: {basket.description}</p>
+								<p class="text-gray-600">Description: {basket.description}</p>
 							</div>
 							<div class="flex flex-col justify-between">
 								<div class="flex justify-between md:justify-end space-x-2">
