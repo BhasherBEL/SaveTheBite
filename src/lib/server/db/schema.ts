@@ -1,5 +1,5 @@
 import { relations, type InferSelectModel } from 'drizzle-orm';
-import { blob, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 const timestamp = {
 	createdAt: integer('created_at', { mode: 'timestamp' })

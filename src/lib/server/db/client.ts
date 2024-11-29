@@ -1,12 +1,12 @@
-import Database from 'better-sqlite3';
 import * as dotenv from 'dotenv';
-import { BetterSQLite3Database, drizzle } from 'drizzle-orm/better-sqlite3';
+import { createClient } from '@libsql/client';
 import * as schema from './schema';
+import { drizzle, type LibSQLDatabase } from 'drizzle-orm/libsql';
 
 dotenv.config();
 
-const sqlite = new Database(process.env.DB_URL);
+if (!process.env.DB_URL) throw new Error('DATABASE_URL is not set');
 
-export const db: BetterSQLite3Database<typeof schema> = drizzle(sqlite, {
-	schema
-});
+const client = createClient({ url: process.env.DB_URL, authToken: process.env.DB_TOKEN });
+
+export const db: LibSQLDatabase<typeof schema> = drizzle(client, { schema });

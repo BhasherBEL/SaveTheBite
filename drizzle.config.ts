@@ -14,5 +14,6 @@ export default defineConfig({
 
 	verbose: true,
 	strict: true,
-	dialect: process.env.DB_TOKEN ? 'turso' : 'sqlite'
+	dialect: 'sqlite',
+	driver: process.env.DB_TOKEN ? 'turso' : undefined
 });
