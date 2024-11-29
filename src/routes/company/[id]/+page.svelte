@@ -193,7 +193,7 @@
 						<!-- Sales Section -->
 						{#if basket.sales?.length > 0}
 							<div
-								class="flex flex-col justify-between mt-10 border ml-6 md:ml-16 rounded-lg shadow-md p-2"
+								class="flex flex-col justify-between mt-10 border ml-6 md:ml-16 rounded-lg shadow-md p-2 space-y-5"
 							>
 								{#each basket.sales as sale, index}
 									<div class="flex flex-col justify-between">

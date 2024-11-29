@@ -168,17 +168,6 @@
 						>
 					</div>
 				</div>
-
-				<!-- Default Location -->
-				<div>
-					<p class="font-bold mb-2">Default location</p>
-					<input
-						type="text"
-						bind:value={location}
-						placeholder="No default location ..."
-						class="w-full p-2 border rounded"
-					/>
-				</div>
 			</div>
 			<!-- Company Section -->
 			<div class="w-full mt-12 lg:mt-6">
