@@ -108,7 +108,7 @@
 			});
 		}
 
-		await toast.promise(
+		const response = await toast.promise(
 			addCompany({ companyName, companyDescription, companyLocation, companyPhoto }),
 			{
 				loading: 'Adding company...',
@@ -116,6 +116,8 @@
 				error: 'Failed to add company'
 			}
 		);
+
+		navigateTo(`/company/${response[0].vendorId}`);
 	}
 
 	function companyNavigateHandler(vendor) {
