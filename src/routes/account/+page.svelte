@@ -2,11 +2,12 @@
 	import { addCompany } from '$lib/utils/company';
 	import { toast } from 'svelte-hot-french-toast';
 	import convertPhoto from '$lib/utils/photo';
+	import type { PageData } from './$types';
+	import { redirect } from '@sveltejs/kit';
 
 	// Props
-	let { data } = $props();
+	let { data }: { data: PageData } = $props();
 	let { orders, user } = data;
-	let { managers } = user;
 
 	let language = $state('English');
 	let theme = $state('Light');
@@ -107,11 +108,14 @@
 			});
 		}
 
-		toast.promise(addCompany({ companyName, companyDescription, companyLocation, companyPhoto }), {
-			loading: 'Adding company...',
-			success: 'Company added successfully!',
-			error: 'Failed to add company'
-		});
+		await toast.promise(
+			addCompany({ companyName, companyDescription, companyLocation, companyPhoto }),
+			{
+				loading: 'Adding company...',
+				success: 'Company added successfully!',
+				error: 'Failed to add company'
+			}
+		);
 	}
 
 	function companyNavigateHandler(vendor) {
@@ -174,10 +178,10 @@
 				<h2 class="text-2xl font-semibold mb-4">Your companies</h2>
 				<div class="border-l-4 border-green-500 pl-4">
 					<div class="flex flex-col gap-2">
-						{#if managers.length === 0}
+						{#if user.managers.length === 0}
 							<p class="text-gray-600">No companies added</p>
 						{/if}
-						{#each managers as manager}
+						{#each user.managers as manager}
 							<button
 								class="px-4 py-2 rounded-lg bg-white border border-gray-300"
 								onclick={() => companyNavigateHandler(manager.vendor)}

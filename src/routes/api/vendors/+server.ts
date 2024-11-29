@@ -18,17 +18,17 @@ export async function POST({ locals, request }: RequestEvent) {
 	}
 	const { name, description, location, picture } = await request.json();
 
-	if (!name || !description || !location || !picture) {
+	if (!name || !description || !location) {
 		return error(400, 'Invalid parameters');
 	}
 
-    let longitude, latitude;
+	let longitude, latitude;
 
-    try {
-        ({ longitude, latitude } = await addressToCoordinates(location));
-    } catch (e) {
-        return error(400, 'Invalid location');
-    }
+	try {
+		({ longitude, latitude } = await addressToCoordinates(location));
+	} catch (e) {
+		return error(400, 'Invalid location');
+	}
 
 	const vendor = (
 		await db
