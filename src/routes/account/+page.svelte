@@ -101,7 +101,7 @@
 
 		let companyPhoto = '';
 		if (filePhoto) {
-			companyPhoto = toast.promise(convertPhoto(filePhoto), {
+			companyPhoto = await toast.promise(convertPhoto(filePhoto), {
 				loading: 'Uploading photo...',
 				success: 'Photo uploaded',
 				error: 'Error uploading photo'
